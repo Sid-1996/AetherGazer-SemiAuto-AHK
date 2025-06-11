@@ -1,11 +1,9 @@
 ;===========================================================
-;  深空之眼 ‧ Sid半自動遊戲腳本 v3.1 
+;  深空之眼 ‧ Sid半自動遊戲腳本 v3.2 
 ;-----------------------------------------------------------
 ;  修改重點：
-;    - 完全移除技能就緒狀態顯示
-;    - 強化實際動作偵測回報
-;    - 即時顯示腳本發送的按鍵指令
-;    - 簡化狀態介面只顯示關鍵資訊
+;    - 微調烤肉小遊戲偵測間隔與動態色差
+;    - 新增遊戲關閉時詢問是否關閉腳本功能
 ;===========================================================
 
 #NoEnv
@@ -50,6 +48,7 @@ global LastAction         := "尚未執行任何動作"
 global HoldSkillTimes     := {"q":0,"e":0,"f":0,"r":0}
 global MaxHoldAttempts    := 5
 global HoldInterval       := 80
+global GameProcessName    := "AetherGazer.exe"  ; 新增遊戲進程名稱
 
 ;-----------------------------------------------------------
 ;  起始 GUI
@@ -63,7 +62,7 @@ CreateStartupGUI:
     Gui, Startup:Font, c00FF99 s14 bold
     Gui, Startup:Add, Text, x20 y40  w360 Center, Sid半自動遊戲腳本
     Gui, Startup:Font, cCCCCCC s10 norm
-    Gui, Startup:Add, Text, x20 y80  w360 Center, 版本 v3.1 | 1600×900專用
+    Gui, Startup:Add, Text, x20 y80  w360 Center, 版本 v3.2 | 1600×900專用
     Gui, Startup:Add, Text, x20 y110 w360 Center, 製作 by Sid
     Gui, Startup:Font, cFF9900 s9
     Gui, Startup:Add, Text, x20 y150 w360 Center, ⚠️ 請將「戰鬥判定.png」放在腳本同目錄
@@ -71,6 +70,29 @@ CreateStartupGUI:
     Gui, Startup:Add, Text, x20 y190 w360 Center, 按任意鍵開始自動偵測...
     Gui, Startup:Show, w400 h230, 深空之眼助手
     OnMessage(0x0100, "StartupKeyPressed")
+    
+    ; 新增遊戲進程監控
+    SetTimer, CheckGameProcess, 3000
+return
+
+;-----------------------------------------------------------
+;  新增遊戲進程檢查
+;-----------------------------------------------------------
+CheckGameProcess:
+    Process, Exist, %GameProcessName%
+    if (!ErrorLevel) {
+        SetTimer, CheckGameProcess, Off
+        MsgBox, 0x24, 遊戲已關閉, 偵測到遊戲已關閉，是否要關閉腳本？
+        IfMsgBox Yes
+        {
+            ExitApp
+        }
+        else
+        {
+            ; 如果用戶選擇不關閉腳本，繼續監控遊戲是否重新開啟
+            SetTimer, CheckGameProcess, 3000
+        }
+    }
 return
 
 StartupKeyPressed(wParam, lParam, msg, hwnd) {
@@ -193,12 +215,12 @@ F6::
             break
 
         if (!WinActive(gameWindow)) {
-            Sleep, 50
+            Sleep, 25
             continue
         }
 
         ;── 烤肉「紅」判定 ──
-        ImageSearch, FoundX, FoundY, 811, 188, 874, 237, *50 %A_ScriptDir%\烤肉紅判定.png
+        ImageSearch, FoundX, FoundY, 811, 188, 874, 237, *80 %A_ScriptDir%\烤肉紅判定.png
         if (ErrorLevel = 0) {
             LastAction := "偵測到紅色烤肉 → 已發送 E 鍵"
             Send, {e}
@@ -207,7 +229,7 @@ F6::
         }
 
         ;── 烤肉「藍」判定 ──
-        ImageSearch, FoundX, FoundY, 811, 188, 874, 237, *50 %A_ScriptDir%\烤肉藍判定.png
+        ImageSearch, FoundX, FoundY, 811, 188, 874, 237, *80 %A_ScriptDir%\烤肉藍判定.png
         if (ErrorLevel = 0) {
             LastAction := "偵測到藍色烤肉 → 已發送 Q 鍵"
             Send, {q}
@@ -215,8 +237,6 @@ F6::
             continue
         }
 
-        LastAction := "掃描烤肉顏色中...(如使用完，F6退出)"
-        Sleep, 10
     }
 
     LastAction := "退出烤肉模式"
@@ -396,7 +416,7 @@ return
 UpdateStatusDisplay:
     combatStatus := isInCombat ? "●戰鬥中" : "○非戰鬥"
     pauseStatus  := UserPaused ? "●手動暫停" : "○自動模式"
-    modeStatus   := isBBQMode ? "●烤肉模式" : (isScriptPaused ? "○戰鬥暫停" : "○戰鬥模式")
+    modeStatus   := isBBQMode ? "●烤肉模式 (結束請F6退出)" : (isScriptPaused ? "○戰鬥暫停" : "○戰鬥模式")
 
     if (!IsStatusGUICreated) {
         Gui, StatusGUI:New
