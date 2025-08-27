@@ -79,3 +79,19 @@
 
 本專案採用 MIT 授權，歡迎自由 fork、修改與分享。  
 ⚠️ **原作者目前已停止維護，若有興趣擴充功能，歡迎接棒維護與開發！**
+
+---
+
+## ☕ 贊助我一杯咖啡
+如果你喜歡這些小作品，歡迎小額贊助支持。  
+這會是我繼續搞新東西的動力 💪
+
+- [贊助 US$ 5](https://www.paypal.com/ncp/payment/ARWX3ZS893UKU)  
+- [贊助 US$ 15](https://www.paypal.com/ncp/payment/4YCFVARX3ADGW)  
+- [贊助 NT$ 30](https://p.ecpay.com.tw/E0E3A)
+
+---
+
+### 📬 找我
+GitHub: [@Sid-1996](https://github.com/Sid-1996)  
+Youtube: [@SID-v7t](https://www.youtube.com/@SID-v7t)  
