@@ -83,8 +83,8 @@ YouTube：[@SID-v7t](https://www.youtube.com/@SID-v7t)
 ---
 
 ## ☕ 支持作者
-- [☕ Buy Me a Coffee](https://p.ecpay.com.tw/E0E3A)  
-- [🔗 Sponsor for $5](https://www.paypal.com/ncp/payment/ARWX3ZS893UKU)  
-- [🔗 Sponsor for $15](https://www.paypal.com/ncp/payment/4YCFVARX3ADGW)  
+- [💚 綠界科技贊助（支持作者）](https://p.ecpay.com.tw/E0E3A)  
+- [☕ Buy Me a Coffee](https://www.paypal.com/ncp/payment/ARWX3ZS893UKU)  
+- [🔗 Support This Project](https://www.paypal.com/ncp/payment/4YCFVARX3ADGW](https://www.paypal.com/ncp/payment/GJS4D5VTSVWG4))  
 
 感謝每一位支持者！💖
