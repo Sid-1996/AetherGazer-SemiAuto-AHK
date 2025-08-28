@@ -92,3 +92,28 @@ YouTube：[@SID-v7t](https://www.youtube.com/@SID-v7t)
 - [🔗 Support This Project](https://www.paypal.com/ncp/payment/4YCFVARX3ADGW](https://www.paypal.com/ncp/payment/GJS4D5VTSVWG4))  
 
 感謝每一位支持者！💖
+
+---
+
+Sid Custom License v1.0
+=======================
+
+Copyright (c) 2025 Sid
+
+Permission is hereby granted, free of charge, to any individual
+obtaining a copy of this software (the “Software”), to use the
+Software strictly under the following conditions:
+
+1) Permission is granted solely for **personal use, study, and research**.
+2) Redistribution of the Software, in original or modified form,
+   is **strictly prohibited** without prior written consent from the author.
+3) Commercial use, including but not limited to selling, licensing,
+   bundling, or monetizing the Software in any form, is **strictly prohibited**.
+4) Modification for private use is allowed, but **publishing or redistributing
+   modified versions** requires explicit authorization from the author.
+5) Any derivative works, forks, or public releases based on the Software
+   must first obtain written approval from the author.
+
+Violation of these terms may result in revocation of usage rights
+and potential legal action.
+
