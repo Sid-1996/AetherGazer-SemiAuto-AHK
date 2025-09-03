@@ -86,11 +86,15 @@ YouTube：[@SID-v7t](https://www.youtube.com/@SID-v7t)
 
 ---
 
-## ☕ 支持作者
-- [💚 綠界科技贊助（支持作者）](https://p.ecpay.com.tw/E0E3A)  
-- [☕ Buy Me a Coffee](https://www.paypal.com/ncp/payment/ARWX3ZS893UKU)  
-- [🔗 Support This Project](https://www.paypal.com/ncp/payment/4YCFVARX3ADGW](https://www.paypal.com/ncp/payment/GJS4D5VTSVWG4))  
+## ☕ 支持作者  
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/K3K11KMXOL)  
+
+[🔗 Support This Project](https://www.paypal.com/ncp/payment/4YCFVARX3ADGW](https://www.paypal.com/ncp/payment/GJS4D5VTSVWG4))  
+
+[💚 綠界科技贊助（支持作者）](https://p.ecpay.com.tw/E0E3A)  
+
+[![Donate via ECPay](https://payment.ecpay.com.tw/Upload/QRCode/201901/QRCode_21c4c069-547f-4115-9f8d-2c050273f028.png)](https://p.ecpay.com.tw/E0E3A)  
 感謝每一位支持者！💖
 
 ---
