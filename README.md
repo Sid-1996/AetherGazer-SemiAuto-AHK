@@ -121,3 +121,5 @@ Software strictly under the following conditions:
 Violation of these terms may result in revocation of usage rights
 and potential legal action.
 
+<meta name="google-site-verification" content="cp1I1EkUOFzDxlgMDqINp5rkt2t4MaocapRQO0qwBjA" />
+
