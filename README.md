@@ -76,7 +76,6 @@
 
 ## ⚠️ 注意事項
 
-- 此倉庫內 `.ahk` 僅為 **邏輯演示版**，不可直接執行。
 - 可執行版本請務必從 **Releases** 取得。
 - 本腳本僅供 **學術研究、技術展示與個人學習** 之用，**禁止商業用途**。
 - 本腳本對應 **視窗模式 1600×900**，其他解析度不保證可用。
@@ -105,4 +104,5 @@ YouTube：[@SID-v7t](https://www.youtube.com/@SID-v7t)
 
 [![Donate via ECPay](https://payment.ecpay.com.tw/Upload/QRCode/201901/QRCode_21c4c069-547f-4115-9f8d-2c050273f028.png)](https://p.ecpay.com.tw/E0E3A)  
 感謝每一位支持者！💖
+
 
