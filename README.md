@@ -34,6 +34,16 @@
 
 ---
 
+## ⭐ 支持專案
+
+如果您覺得這個專案對您有幫助，請給我們一個 ⭐ **Star**！
+
+[![GitHub stars](https://img.shields.io/github/stars/Sid-1996/AetherGazer-SemiAuto-AHK?style=social)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/stargazers)
+
+您的支持是我們持續改進的最大動力！每一個星星都代表著對我們工作的認可，也能幫助更多人發現這個專案。
+
+---
+
 作者環境為 **陸服 PC 版本** 製作，台服尚未測試。  
 因作者角色有限，目前 **F5 專屬模式** 僅支援作者所擁有的角色。
 
@@ -55,7 +65,7 @@
 | **F2**  | 調整 **遊戲視窗為 1600×900 並置中**，並啟用該視窗 |
 | **F3**  | 開啟/關閉 **熱鍵說明面板**（Help GUI） |
 | **F4**  | **手動暫停/恢復** 腳本；暫停時 **進入戰鬥會自動恢復** |
-| **F5**  | 開啟 **角色選擇面板**（通用模式、魂羽、緋染、巧构、庚辰；赤音顯示「開發中」） |
+| **F5**  | 開啟 **角色選擇面板**（通用模式、魂羽、緋染、巧构、庚辰 |
 | **F6**  | 切換 **烤肉模式**（自動按 **E/Q**；啟用時暫停其他自動邏輯） |
 | **F7**  | **手動檢測腳本更新狀態** |
 | **F11** | **重新載入** 腳本 |
@@ -83,11 +93,13 @@
 ---
 
 ## 🔒 授權聲明
+
 本專案採用 **MIT License** 開源授權條款。
 
 ---
 
 ## 📬 聯絡方式
+
 作者：Sid  
 GitHub：[@Sid-1996](https://github.com/Sid-1996)  
 YouTube：[@SID-v7t](https://www.youtube.com/@SID-v7t)
@@ -104,5 +116,4 @@ YouTube：[@SID-v7t](https://www.youtube.com/@SID-v7t)
 
 [![Donate via ECPay](https://payment.ecpay.com.tw/Upload/QRCode/201901/QRCode_21c4c069-547f-4115-9f8d-2c050273f028.png)](https://p.ecpay.com.tw/E0E3A)  
 感謝每一位支持者！💖
-
 
