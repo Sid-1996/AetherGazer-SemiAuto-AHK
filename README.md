@@ -3,7 +3,17 @@
 
 # 深空之眼 Sid 半自動腳本
 
-⚠️ **重要提醒**  
+[![GitHub stars](https://img.shields.io/github/stars/Sid-1996/AetherGazer-SemiAuto-AHK?style=for-the-badge&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/Sid-1996/AetherGazer-SemiAuto-AHK?style=for-the-badge&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/forks)
+[![GitHub issues](https://img.shields.io/github/issues/Sid-1996/AetherGazer-SemiAuto-AHK?style=for-the-badge&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/issues)
+[![GitHub license](https://img.shields.io/github/license/Sid-1996/AetherGazer-SemiAuto-AHK?style=for-the-badge&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/blob/main/LICENSE)
+[![GitHub release](https://img.shields.io/github/v/release/Sid-1996/AetherGazer-SemiAuto-AHK?style=for-the-badge&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases/latest)
+[![GitHub downloads](https://img.shields.io/github/downloads/Sid-1996/AetherGazer-SemiAuto-AHK/total?style=for-the-badge&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases)
+[![GitHub last commit](https://img.shields.io/github/last-commit/Sid-1996/AetherGazer-SemiAuto-AHK?style=for-the-badge&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/commits/main)
+[![AutoHotkey](https://img.shields.io/badge/AutoHotkey-v2.0-red?style=for-the-badge&logo=autohotkey)](https://www.autohotkey.com/)
+[![Windows](https://img.shields.io/badge/Windows-10%2B-blue?style=for-the-badge&logo=windows)](https://www.microsoft.com/windows/)
+
+---  
 本倉庫僅提供 **代碼邏輯演示版（不可執行）**，所有細節與演算法均已省略或替換為註解。  
 實際可執行版本已打包成 **EXE 壓縮檔**，請前往 Releases 頁面下載。  
 
