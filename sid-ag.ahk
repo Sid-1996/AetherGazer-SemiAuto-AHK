@@ -1,6 +1,6 @@
 ;===========================================================
-;  AetherGazer-emiAuto-AHK v1.0.5 - AutoHotkey v2版
-;  深空之眼 ‧ Sid半自動遊戲腳本 v1.0.5 - 正式版
+;  AetherGazer-emiAuto-AHK v1.0.6 - AutoHotkey v2版
+;  深空之眼 ‧ Sid半自動遊戲腳本 v1.0.6 - 正式版
 ;-----------------------------------------------------------
 #Requires AutoHotkey v2.0
 #SingleInstance Force
@@ -21,6 +21,67 @@ SetMouseDelay(-1)
 ;=== 初始化配置管理器 ===
 InitializeConfig()
 
+;=== 簡易JSON解析函數 ===
+Jxon_Load(jsonStr) {
+    ; 使用自定義JSON解析器
+    return ParseSimpleJSON(jsonStr)
+}
+
+ParseSimpleJSON(jsonStr) {
+    ; 解析數組格式的JSON配置
+    result := Map()
+    
+    ; 移除空白字符
+    jsonStr := RegExReplace(jsonStr, "\s+", "")
+    
+    ; 檢查是否為數組格式
+    if !RegExMatch(jsonStr, "^\[.*\]$") {
+        throw Error("無效的JSON格式：期望數組")
+    }
+    
+    ; 移除外層的[]
+    jsonStr := SubStr(jsonStr, 2, StrLen(jsonStr) - 2)
+    
+    ; 分割對象
+    objects := StrSplit(jsonStr, "},{")
+    
+    for objStr in objects {
+        ; 清理對象字符串
+        objStr := StrReplace(objStr, "{", "")
+        objStr := StrReplace(objStr, "}", "")
+        
+        ; 解析鍵值對
+        objMap := Map()
+        pairs := StrSplit(objStr, ",")
+        
+        for pair in pairs {
+            if RegExMatch(pair, '"([^"]+)":(.+)', &match) {
+                key := match[1]
+                value := match[2]
+                
+                ; 移除引號
+                if RegExMatch(value, '^"([^"]*)"$', &strMatch) {
+                    value := strMatch[1]
+                } else {
+                    ; 轉換為數字
+                    value := Integer(value)
+                }
+                
+                objMap[key] := value
+            }
+        }
+        
+        ; 如果有coordId，添加到結果中
+        if objMap.Has("coordId") {
+            coordId := objMap["coordId"]
+            coords := [objMap["x1"], objMap["y1"], objMap["x2"], objMap["y2"]]
+            result[coordId] := coords
+        }
+    }
+    
+    return result
+}
+
 ;=== 系統環境檢查 ===
 ; 任務1: 檢查系統管理員權限
 if !A_IsAdmin {
@@ -32,7 +93,7 @@ if !A_IsAdmin {
 CheckSystemEnvironment()
 
 ;=== 腳本版本資訊 ===
-global SCRIPT_VERSION := GetConfig("Script", "Version", "1.0.5")
+global SCRIPT_VERSION := GetConfig("Script", "Version", "1.0.6")
 
 ;=== 從配置文件載入參數 ===
 global ColorVariation     := GetConfig("Game", "ColorVariation", 15)
@@ -60,6 +121,10 @@ global CurrentCharacter   := "通用模式"
 global IsCharacterGUIOpen := false
 global IsBlackOverlayCreated := false
 global StartupGUI         := true  ; 添加這行，初始化為 true
+
+;=== 快速切換角色配置變數 ===
+global CharacterList      := ["通用模式", "魂羽", "赤音", "緋染", "巧构", "庚辰"]
+global CurrentCharacterIndex := 1
 
 ;=== 手動介入監測變數 ===
 global IsManualIntervention := false
@@ -109,7 +174,7 @@ SetTimer(CheckForUpdates, -1000) ; 延遲1秒執行，避免阻塞啟動
 
 CheckForUpdates() {
     ; 從配置中獲取版本號，如果沒有則使用預設值
-    currentVersion := GetConfig("Script", "Version", "1.0.5") 
+    currentVersion := GetConfig("Script", "Version", "1.0.6") 
     updater := UpdateChecker(currentVersion, "Sid-1996", "AetherGazer-SemiAuto-AHK")
     updater.Check(true) ; true 表示靜默檢查，沒有新版本就不提示
 }
@@ -144,6 +209,9 @@ RegisterHotkeys() {
         HotKey("F8", (*) => ToggleInputDebug()) ; 新增調試模式切換熱鍵
         HotKey(GetConfig("Hotkeys", "Reload", "F11"), (*) => ReloadScript())
         HotKey(GetConfig("Hotkeys", "Exit", "F12"), (*) => ExitScript())
+        ; 新增快速切換角色熱鍵 - 主鍵盤方向鍵
+        HotKey("^Left", (*) => CycleCharacterNext())  ; Ctrl+左方向鍵（向前/來）
+        HotKey("^Right", (*) => CycleCharacterPrev())  ; Ctrl+右方向鍵（向後/回）
     } catch Error as e {
         ; 熱鍵註冊失敗時使用預設熱鍵
         MsgBox("熱鍵註冊部分失敗，將使用預設設定: " . e.Message, "警告", 48)
@@ -162,6 +230,9 @@ RegisterDefaultHotkeys() {
     HotKey("F8", (*) => ToggleInputDebug()) ; 新增調試模式切換熱鍵
     HotKey("F11", (*) => ReloadScript())
     HotKey("F12", (*) => ExitScript())
+    ; 新增快速切換角色熱鍵 - 主鍵盤方向鍵
+    HotKey("^Left", (*) => CycleCharacterNext())  ; Ctrl+左方向鍵（向前/來）
+    HotKey("^Right", (*) => CycleCharacterPrev())  ; Ctrl+右方向鍵（向後/回）
 }
 
 ;-----------------------------------------------------------
@@ -233,7 +304,7 @@ ManualCheckForUpdates() {
     LastAction := "手動檢查更新中..."
     ShowCenteredToolTip("正在檢查更新...", 2000)
     
-    currentVersion := GetConfig("Script", "Version", "1.0.5")
+    currentVersion := GetConfig("Script", "Version", "1.0.6")
     updater := UpdateChecker(currentVersion, "Sid-1996", "AetherGazer-SemiAuto-AHK")
     updater.Check(false) ; false 表示非靜默，即使是最新版也會提示
 }
@@ -244,6 +315,76 @@ ToggleInputDebug() {
     EnableInputDebug := !EnableInputDebug
     LastAction := "輸入調試模式: " . (EnableInputDebug ? "開啟" : "關閉")
     ShowCenteredToolTip("輸入調試模式" . (EnableInputDebug ? "已開啟" : "已關閉"), 1500)
+}
+
+; 快速切換角色 - 向前（Ctrl+小鍵盤←）
+CycleCharacterNext() {
+    global LastHotkeyPress, CurrentCharacter, CurrentCharacterIndex, CharacterList, LastAction
+    if (A_TickCount - LastHotkeyPress < 300)
+        return
+    LastHotkeyPress := A_TickCount
+    
+    try {
+        if (!IsSet(CharacterList) || CharacterList.Length = 0) {
+            ShowCenteredToolTip("角色列表未初始化", 1500)
+            return
+        }
+        
+        ; 找到當前角色的索引
+        CurrentCharacterIndex := 1
+        Loop CharacterList.Length {
+            if (CharacterList[A_Index] = CurrentCharacter) {
+                CurrentCharacterIndex := A_Index
+                break
+            }
+        }
+        
+        ; 向前循環
+        CurrentCharacterIndex++
+        if (CurrentCharacterIndex > CharacterList.Length)
+            CurrentCharacterIndex := 1
+        
+        CurrentCharacter := CharacterList[CurrentCharacterIndex]
+        LastAction := "切換角色: " . CurrentCharacter
+        ShowCenteredToolTip("已切換到: " . CurrentCharacter, 1500)
+    } catch Error as e {
+        ShowCenteredToolTip("快速切換錯誤: " . e.Message, 1500)
+    }
+}
+
+; 快速切換角色 - 向後（Ctrl+小鍵盤→）
+CycleCharacterPrev() {
+    global LastHotkeyPress, CurrentCharacter, CurrentCharacterIndex, CharacterList, LastAction
+    if (A_TickCount - LastHotkeyPress < 300)
+        return
+    LastHotkeyPress := A_TickCount
+    
+    try {
+        if (!IsSet(CharacterList) || CharacterList.Length = 0) {
+            ShowCenteredToolTip("角色列表未初始化", 1500)
+            return
+        }
+        
+        ; 找到當前角色的索引
+        CurrentCharacterIndex := 1
+        Loop CharacterList.Length {
+            if (CharacterList[A_Index] = CurrentCharacter) {
+                CurrentCharacterIndex := A_Index
+                break
+            }
+        }
+        
+        ; 向後循環
+        CurrentCharacterIndex--
+        if (CurrentCharacterIndex < 1)
+            CurrentCharacterIndex := CharacterList.Length
+        
+        CurrentCharacter := CharacterList[CurrentCharacterIndex]
+        LastAction := "切換角色: " . CurrentCharacter
+        ShowCenteredToolTip("已切換到: " . CurrentCharacter, 1500)
+    } catch Error as e {
+        ShowCenteredToolTip("快速切換錯誤: " . e.Message, 1500)
+    }
 }
 
 ; 新增ESC關閉幫助GUI函數
@@ -527,8 +668,14 @@ BBQLoop() {
         return
     }
 
+    ; 獲取烤肉區域座標
+    bbqCoords := GetCoordBounds("bbq_red")
+    if (!bbqCoords) {
+        return
+    }
+
     try {
-        if (ImageSearch(&fx, &fy, 811, 188, 874, 237, "*" . ImageVariation . " " . A_ScriptDir . "\Setting\烤肉紅判定.png")) {
+        if (ImageSearch(&fx, &fy, bbqCoords[1], bbqCoords[2], bbqCoords[3], bbqCoords[4], "*" . ImageVariation . " " . A_ScriptDir . "\Setting\烤肉紅判定.png")) {
             Send("{e}")
             LastAction := "偵測到紅色烤肉 → 已發送 E 鍵"
             return
@@ -538,7 +685,7 @@ BBQLoop() {
     }
 
     try {
-        if (ImageSearch(&fx, &fy, 811, 188, 874, 237, "*" . ImageVariation . " " . A_ScriptDir . "\Setting\烤肉藍判定.png")) {
+        if (ImageSearch(&fx, &fy, bbqCoords[1], bbqCoords[2], bbqCoords[3], bbqCoords[4], "*" . ImageVariation . " " . A_ScriptDir . "\Setting\烤肉藍判定.png")) {
             Send("{q}")
             LastAction := "偵測到藍色烤肉 → 已發送 Q 鍵"
             return
@@ -635,47 +782,107 @@ ResetSkillCasting() {
 }
 
 ;-----------------------------------------------------------
+; 座標讀取函數 (從配置文件讀取調整後的座標)
+;-----------------------------------------------------------
+GetCoordBounds(coordId) {
+    static coordCache := Map()
+    
+    ; 如果已經快取過，直接返回
+    if coordCache.Has(coordId) {
+        return coordCache[coordId]
+    }
+    
+    try {
+        ; 讀取配置文件
+        configFile := A_ScriptDir . "\coordinates_config.json"
+        if !FileExist(configFile) {
+            MsgBox("找不到座標配置文件: " . configFile, "錯誤", "Icon!")
+            return false
+        }
+        
+        ; 讀取JSON內容
+        configText := FileRead(configFile, "UTF-8")
+        config := Jxon_Load(configText)
+        
+        ; 檢查是否存在該座標ID
+        if !config.Has(coordId) {
+            MsgBox("配置文件中找不到座標ID: " . coordId, "錯誤", "Icon!")
+            return false
+        }
+        
+        ; 獲取座標數組 [x1, y1, x2, y2]
+        coords := config[coordId]
+        if coords.Length != 4 {
+            MsgBox("座標ID " . coordId . " 的座標格式不正確", "錯誤", "Icon!")
+            return false
+        }
+        
+        ; 快取並返回
+        coordCache[coordId] := coords
+        return coords
+        
+    } catch Error as e {
+        MsgBox("讀取座標配置時發生錯誤: " . e.Message, "錯誤", "Icon!")
+        return false
+    }
+}
+
+;-----------------------------------------------------------
 ; 角色專屬技能檢查函數 (保持原有不變)
 ;-----------------------------------------------------------
 CheckHunYuSkills() {
     global HunYuF1Image, HunYuF2Image, HunYuEImage
     global ImageVariation, LastAction, LastSkillTime, isCastingSkill, SkillCooldown
 
-    try {
-        if (ImageSearch(&FoundX, &FoundY, 1045, 684, 1565, 880, "*" . ImageVariation . " " . HunYuF1Image)) {
-            Send("{f}")
-            LastAction := "魂羽模式：偵測到F判定1 → 已發送 F 鍵"
-            LastSkillTime := A_TickCount
-            isCastingSkill := true
-            SetTimer(ResetSkillCasting, -(SkillCooldown + 50))
-            return true
-        }
-    } catch {
-        ; 圖片搜索失敗
+    ; 檢查遊戲窗口是否為活動窗口
+    gameWindow := GetGameConfig("WindowTitle")
+    if (!WinActive(gameWindow)) {
+        return false
     }
 
-    try {
-        if (ImageSearch(&FoundX, &FoundY, 1045, 684, 1565, 880, "*" . ImageVariation . " " . HunYuEImage)) {
-            Send("{e}")
-            LastAction := "魂羽模式：偵測到E判定 → 已發送 E 鍵"
-            LastSkillTime := A_TickCount
-            isCastingSkill := true
-            SetTimer(ResetSkillCasting, -(SkillCooldown + 50))
-            return true
+    ; 獲取魂羽F1判定區域座標
+    hunyuF1Coords := GetCoordBounds("hunyu_f1")
+    if (hunyuF1Coords) {
+        try {
+            if (ImageSearch(&FoundX, &FoundY, hunyuF1Coords[1], hunyuF1Coords[2], hunyuF1Coords[3], hunyuF1Coords[4], "*" . ImageVariation . " " . HunYuF1Image)) {
+                Send("{f}")
+                LastAction := "魂羽模式：偵測到F判定1 → 已發送 F 鍵"
+                LastSkillTime := A_TickCount
+                isCastingSkill := true
+                SetTimer(ResetSkillCasting, -(SkillCooldown + 50))
+                return true
+            }
+        } catch {
+            ; 圖片搜索失敗
         }
-    } catch {
-        ; 圖片搜索失敗
+
+        try {
+            if (ImageSearch(&FoundX, &FoundY, hunyuF1Coords[1], hunyuF1Coords[2], hunyuF1Coords[3], hunyuF1Coords[4], "*" . ImageVariation . " " . HunYuEImage)) {
+                Send("{e}")
+                LastAction := "魂羽模式：偵測到E判定 → 已發送 E 鍵"
+                LastSkillTime := A_TickCount
+                isCastingSkill := true
+                SetTimer(ResetSkillCasting, -(SkillCooldown + 50))
+                return true
+            }
+        } catch {
+            ; 圖片搜索失敗
+        }
     }
 
-    try {
-        if (ImageSearch(&FoundX, &FoundY, 1043, 748, 1170, 868, "*" . ImageVariation . " " . HunYuF2Image)) {
-            Send("{LButton}")
-            LastAction := "魂羽模式：偵測到F判定2 → 已發送左鍵"
-            Sleep(25)
-            return true
+    ; 獲取魂羽F2判定區域座標
+    hunyuF2Coords := GetCoordBounds("hunyu_f2")
+    if (hunyuF2Coords) {
+        try {
+            if (ImageSearch(&FoundX, &FoundY, hunyuF2Coords[1], hunyuF2Coords[2], hunyuF2Coords[3], hunyuF2Coords[4], "*" . ImageVariation . " " . HunYuF2Image)) {
+                Send("{LButton}")
+                LastAction := "魂羽模式：偵測到F判定2 → 已發送左鍵"
+                Sleep(25)
+                return true
+            }
+        } catch {
+            ; 圖片搜索失敗
         }
-    } catch {
-        ; 圖片搜索失敗
     }
     
     return false
@@ -689,12 +896,30 @@ CheckChiYinSkills() {
 CheckFeiRanSkills() {
     global LastAction, LastSkillTime, isCastingSkill
     global FeiRanQImage, FeiRanQ1Image, FeiRanEImage, FeiRanE1Image, FeiRanFImage, FeiRanFEndImage
-    
+
+    ; 檢查遊戲窗口是否為活動窗口
+    gameWindow := GetGameConfig("WindowTitle")
+    if (!WinActive(gameWindow)) {
+        return false
+    }
+
     FeiRanVariationNormal := 70
     FeiRanVariationStrict := 40
 
+    ; 獲取緋染Q技能區域座標
+    faranQCoords := GetCoordBounds("faran_q")
+    if (!faranQCoords) {
+        return false
+    }
+
+    ; 獲取緋染F End區域座標
+    faranFEndCoords := GetCoordBounds("faran_f_end")
+    if (!faranFEndCoords) {
+        faranFEndCoords := [688, 742, 917, 793]  ; 後備座標
+    }
+
     try {
-        if (ImageSearch(&fx, &fy, 1162, 764, 1468, 885, "*" . FeiRanVariationNormal . " " . FeiRanQImage)) {
+        if (ImageSearch(&fx, &fy, faranQCoords[1], faranQCoords[2], faranQCoords[3], faranQCoords[4], "*" . FeiRanVariationNormal . " " . FeiRanQImage)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{q}")
@@ -707,7 +932,7 @@ CheckFeiRanSkills() {
     }
 
     try {
-        if (ImageSearch(&fx, &fy, 1162, 764, 1468, 885, "*" . FeiRanVariationNormal . " " . FeiRanQ1Image)) {
+        if (ImageSearch(&fx, &fy, faranQCoords[1], faranQCoords[2], faranQCoords[3], faranQCoords[4], "*" . FeiRanVariationNormal . " " . FeiRanQ1Image)) {
             isCastingSkill := true
             LastAction := "緋染模式：偵測到Q1 → 執行連段"
             Send("{q}")
@@ -732,7 +957,7 @@ CheckFeiRanSkills() {
     }
 
     try {
-        if (ImageSearch(&fx, &fy, 1162, 764, 1468, 885, "*" . FeiRanVariationNormal . " " . FeiRanEImage)) {
+        if (ImageSearch(&fx, &fy, faranQCoords[1], faranQCoords[2], faranQCoords[3], faranQCoords[4], "*" . FeiRanVariationNormal . " " . FeiRanEImage)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{e}")
@@ -745,7 +970,7 @@ CheckFeiRanSkills() {
     }
 
     try {
-        if (ImageSearch(&fx, &fy, 1162, 764, 1468, 885, "*" . FeiRanVariationNormal . " " . FeiRanE1Image)) {
+        if (ImageSearch(&fx, &fy, faranQCoords[1], faranQCoords[2], faranQCoords[3], faranQCoords[4], "*" . FeiRanVariationNormal . " " . FeiRanE1Image)) {
             isCastingSkill := true
             LastAction := "緋染模式：偵測到E1 → 執行連段"
             Send("{e}")
@@ -770,7 +995,7 @@ CheckFeiRanSkills() {
     }
 
     try {
-        if (ImageSearch(&fx, &fy, 1162, 764, 1468, 885, "*" . FeiRanVariationStrict . " " . FeiRanFImage)) {
+        if (ImageSearch(&fx, &fy, faranQCoords[1], faranQCoords[2], faranQCoords[3], faranQCoords[4], "*" . FeiRanVariationStrict . " " . FeiRanFImage)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{f}")
@@ -783,7 +1008,7 @@ CheckFeiRanSkills() {
     }
 
     try {
-        if (ImageSearch(&fx, &fy, 688, 742, 917, 793, "*50 " . FeiRanFEndImage)) {
+        if (ImageSearch(&fx, &fy, faranFEndCoords[1], faranFEndCoords[2], faranFEndCoords[3], faranFEndCoords[4], "*50 " . FeiRanFEndImage)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{f}")
@@ -801,16 +1026,34 @@ CheckFeiRanSkills() {
 CheckQiaoGouSkills() {
     global LastAction, LastSkillTime, isCastingSkill
     global QiaoGouQImage, QiaoGouFImage, QiaoGouQ1Image, QiaoGouE1Image, QiaoGouEnhanceMode
-    
+
+    ; 檢查遊戲窗口是否為活動窗口
+    gameWindow := GetGameConfig("WindowTitle")
+    if (!WinActive(gameWindow)) {
+        return false
+    }
+
     QiaoGouVariationNormal := 100
     QiaoGouVariationStrict := 25
 
-    ; 檢測橘紅色像素點 (連段所需能量判定)
+    ; 獲取巧構Q技能區域座標
+    qiaoguQCoords := GetCoordBounds("qiaogu_q")
+    if (!qiaoguQCoords) {
+        return false
+    }
+
+    ; 獲取巧構能量檢測區域座標
+    qiaoguEnergyCoords := GetCoordBounds("qiaogu_energy")
+    if (!qiaoguEnergyCoords) {
+        qiaoguEnergyCoords := [938, 840, 962, 847]  ; 後備座標
+    }
+
+    ; 檢測橘紅色像素點 (連段所需能量判定) - 使用配置座標
     try {
-        if (PixelSearch(&FoundX, &FoundY, 938, 840, 962, 847, 0xEE821A, 25)) {
+        if (PixelSearch(&FoundX, &FoundY, qiaoguEnergyCoords[1], qiaoguEnergyCoords[2], qiaoguEnergyCoords[3], qiaoguEnergyCoords[4], 0xEE821A, 25)) {
             ; 有橘紅色像素點時，能量充足，優先檢查Q技能圖片判定
             try {
-                if (ImageSearch(&fx, &fy, 1156, 748, 1558, 883, "*" . QiaoGouVariationNormal . " " . QiaoGouQImage)) {
+                if (ImageSearch(&fx, &fy, qiaoguQCoords[1], qiaoguQCoords[2], qiaoguQCoords[3], qiaoguQCoords[4], "*" . QiaoGouVariationNormal . " " . QiaoGouQImage)) {
                     isCastingSkill := true
                     LastSkillTime := A_TickCount
                     LastAction := "巧构模式：偵測到能量充足 → 執行 Q-E-Q-E 連段"
@@ -836,7 +1079,7 @@ CheckQiaoGouSkills() {
 
     ; 檢測F技能
     try {
-        if (ImageSearch(&fx, &fy, 1156, 748, 1558, 883, "*" . QiaoGouVariationNormal . " " . QiaoGouFImage)) {
+        if (ImageSearch(&fx, &fy, qiaoguQCoords[1], qiaoguQCoords[2], qiaoguQCoords[3], qiaoguQCoords[4], "*" . QiaoGouVariationNormal . " " . QiaoGouFImage)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{f}")
@@ -852,7 +1095,7 @@ CheckQiaoGouSkills() {
     if (QiaoGouEnhanceMode = "Q") {
         ; 當前輪到強化Q，只檢測強化Q
         try {
-            if (ImageSearch(&fx, &fy, 1156, 748, 1558, 883, "*" . QiaoGouVariationNormal . " " . QiaoGouQ1Image)) {
+            if (ImageSearch(&fx, &fy, qiaoguQCoords[1], qiaoguQCoords[2], qiaoguQCoords[3], qiaoguQCoords[4], "*" . QiaoGouVariationNormal . " " . QiaoGouQ1Image)) {
                 isCastingSkill := true
                 LastSkillTime := A_TickCount
                 Send("{q}")
@@ -868,7 +1111,7 @@ CheckQiaoGouSkills() {
     } else if (QiaoGouEnhanceMode = "E") {
         ; 當前輪到強化E，只檢測強化E
         try {
-            if (ImageSearch(&fx, &fy, 1156, 748, 1558, 883, "*" . QiaoGouVariationNormal . " " . QiaoGouE1Image)) {
+            if (ImageSearch(&fx, &fy, qiaoguQCoords[1], qiaoguQCoords[2], qiaoguQCoords[3], qiaoguQCoords[4], "*" . QiaoGouVariationNormal . " " . QiaoGouE1Image)) {
                 isCastingSkill := true
                 LastSkillTime := A_TickCount
                 Send("{e}")
@@ -892,20 +1135,32 @@ CheckQiaoGouSkills() {
 CheckGengChenSkills() {
     global LastAction, LastSkillTime, isCastingSkill
     global GengChenQImage, GengChenQ1Image
-    
-    ; 檢測紅色像素點 (怒氣充足判定)
+
+    ; 檢查遊戲窗口是否為活動窗口
+    gameWindow := GetGameConfig("WindowTitle")
+    if (!WinActive(gameWindow)) {
+        return false
+    }
+
+    ; 獲取庚辰Q技能區域座標
+    gengchenQCoords := GetCoordBounds("gengchen_q")
+    if (!gengchenQCoords) {
+        return false
+    }
+
+    ; 檢測紅色像素點 (怒氣充足判定) - 使用相對座標
     try {
         if (PixelSearch(&FoundX, &FoundY, 883, 837, 899, 853, 0xEE2727, 25)) {
             ; 有紅色像素點時，怒氣充足，檢查Q技能圖片判定
             try {
                 ; 嘗試搜尋第一張圖片 (庚辰Q.png)
-                if (ImageSearch(&FoundX, &FoundY, 1219, 768, 1462, 881, "*80 " . GengChenQImage)) {
+                if (ImageSearch(&FoundX, &FoundY, gengchenQCoords[1], gengchenQCoords[2], gengchenQCoords[3], gengchenQCoords[4], "*80 " . GengChenQImage)) {
                     LastAction := "庚辰模式：偵測到怒氣充足 → 執行技能連段"
                     ExecuteGengChenActions()
                     return true
                 }
                 ; 如果第一張圖片沒找到，嘗試搜尋第二張圖片 (庚辰Q1.png)
-                else if (ImageSearch(&FoundX, &FoundY, 1219, 768, 1462, 881, "*80 " . GengChenQ1Image)) {
+                else if (ImageSearch(&FoundX, &FoundY, gengchenQCoords[1], gengchenQCoords[2], gengchenQCoords[3], gengchenQCoords[4], "*80 " . GengChenQ1Image)) {
                     LastAction := "庚辰模式：偵測到怒氣充足 → 執行技能連段"
                     ExecuteGengChenActions()
                     return true
@@ -1004,13 +1259,23 @@ CreateCharacterSelectGUI() {
 }
 
 CharacterConfirm(*) {
-    global CharacterSelectGuiObj, CurrentCharacter, LastAction, IsCharacterGUIOpen
+    global CharacterSelectGuiObj, CurrentCharacter, CurrentCharacterIndex, CharacterList, LastAction, IsCharacterGUIOpen
     try {
         SelectedCharacter := CharacterSelectGuiObj["SelectedCharacter"].Text
         if (SelectedCharacter = "")
             return
         OldCharacter := CurrentCharacter
         CurrentCharacter := SelectedCharacter
+        
+        ; 同步更新索引
+        CurrentCharacterIndex := 1
+        Loop CharacterList.Length {
+            if (CharacterList[A_Index] = CurrentCharacter) {
+                CurrentCharacterIndex := A_Index
+                break
+            }
+        }
+        
         if (OldCharacter != CurrentCharacter) {
             LastAction := "切換角色: " . OldCharacter . " → " . CurrentCharacter
             ShowCenteredToolTip("已切換到: " . CurrentCharacter, 1500)
@@ -1210,49 +1475,57 @@ CreateHelpGUI() {
     HelpGUIObj.AddText("x30 y215", "F7  - 手動檢查版本更新")
     HelpGUIObj.AddText("x30 y235", "F8  - 切換輸入監測調試模式")
     
-    HelpGUIObj.SetFont("cFF9900 s12 bold")
-    HelpGUIObj.AddText("x20 y265", "系統熱鍵：")
+    HelpGUIObj.SetFont("c00FF99 s12 bold")
+    HelpGUIObj.AddText("x20 y260", "快速切換快捷鍵 (新增):")
     
     HelpGUIObj.SetFont("cFFFFFF s12 norm")
-    HelpGUIObj.AddText("x30 y290", "F11 - 重新載入腳本")
-    HelpGUIObj.AddText("x30 y310", "F12 - 結束腳本")
+    HelpGUIObj.AddText("x30 y285", "Ctrl+左方向鍵 ← - 下一個角色配置（向前）")
+    HelpGUIObj.AddText("x30 y305", "Ctrl+右方向鍵 → - 上一個角色配置（向後）")
+    
+    HelpGUIObj.SetFont("cFF9900 s12 bold")
+    HelpGUIObj.AddText("x20 y330", "系統熱鍵：")
+    
+    HelpGUIObj.SetFont("cFFFFFF s12 norm")
+    HelpGUIObj.AddText("x30 y355", "F11 - 重新載入腳本")
+    HelpGUIObj.AddText("x30 y375", "F12 - 結束腳本")
     
     ; 注意事項
     HelpGUIObj.SetFont("cFF6666 s12 bold")
-    HelpGUIObj.AddText("x20 y340", "注意事項：")
+    HelpGUIObj.AddText("x20 y405", "注意事項:")
     
     HelpGUIObj.SetFont("cFFFFFF s12 norm")
-    HelpGUIObj.AddText("x30 y365", "• 腳本支持通過ini文件配置遊戲設定")
-    HelpGUIObj.AddText("x30 y385", "• 需將Setting等資料夾放在腳本同目錄")
-    HelpGUIObj.AddText("x30 y405", "• 此面板不影響腳本正常運行")
+    HelpGUIObj.AddText("x30 y430", "• 腳本支持通過ini文件配置遊戲設定")
+    HelpGUIObj.AddText("x30 y450", "• 需將Setting等資料夾放在腳本同目錄")
+    HelpGUIObj.AddText("x30 y470", "• 此面板不影響腳本正常運行")
+    HelpGUIObj.AddText("x30 y490", "• 快速切換時按反方向可輕鬆返回前一配置")
     
     ; 贊助資訊區塊
     HelpGUIObj.SetFont("c00CCFF s12 bold")
-    HelpGUIObj.AddText("x20 y435", "快速連結：(下方可點擊前往)")
+    HelpGUIObj.AddText("x20 y520", "快速連結：(下方可點擊前往)")
     
     ; 綠界科技贊助連結
     HelpGUIObj.SetFont("c28a745 s11 underline") ; 清新綠
-    sponsorLink1 := HelpGUIObj.AddText("x30 y460", "💚 綠界科技贊助（支持作者）")
+    sponsorLink1 := HelpGUIObj.AddText("x30 y545", "💚 綠界科技贊助（支持作者）")
     sponsorLink1.OnEvent("Click", (*) => Run("https://p.ecpay.com.tw/E0E3A"))
 
     ; Buy Me a Coffee
     HelpGUIObj.SetFont("cf39c12 s11 underline") ; 活力橙
-    sponsorLink2 := HelpGUIObj.AddText("x30 y480", "☕ [ ko-fi ] 請作者喝咖啡")
+    sponsorLink2 := HelpGUIObj.AddText("x30 y565", "☕ [ ko-fi ] 請作者喝咖啡")
     sponsorLink2.OnEvent("Click", (*) => Run("https://ko-fi.com/sid1996"))
 
     ; 支持此專案 - PayPal
     HelpGUIObj.SetFont("c1f75fe s11 underline") ; 熱情紅
-    sponsorLink3 := HelpGUIObj.AddText("x30 y500", "🔗 支持專案：PayPal 贊助")
+    sponsorLink3 := HelpGUIObj.AddText("x30 y585", "🔗 支持專案：PayPal 贊助")
     sponsorLink3.OnEvent("Click", (*) => Run("https://www.paypal.com/ncp/payment/GJS4D5VTSVWG4"))
 
     ; GitHub 連結 (放最下面)
     HelpGUIObj.SetFont("c3498db s11 underline") ; 科技藍
-    githubLink := HelpGUIObj.AddText("x30 y520", "💻 GitHub：深空之眼 Sid 半自動腳本")
+    githubLink := HelpGUIObj.AddText("x30 y605", "💻 GitHub：深空之眼 Sid 半自動腳本")
     githubLink.OnEvent("Click", (*) => Run("https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK"))
 
     ; 版本信息
     HelpGUIObj.SetFont("c888888 s10")
-    HelpGUIObj.AddText("x20 y545 w350 Center", "版本 v1.0.5 正式版 | 製作 by Sid 1996")
+    HelpGUIObj.AddText("x20 y630 w350 Center", "版本 v1.0.6 正式版 | 製作 by Sid 1996")
     
     ; 修正GUI位置 - 確保在螢幕範圍內
     x := 50   ; 距離螢幕左邊50像素  
@@ -1260,7 +1533,7 @@ CreateHelpGUI() {
     
     ; 調整GUI整體高度，避免文字擠壓
     guiWidth := 390
-    guiHeight := 580  ; 增加高度以容納新的F8說明
+    guiHeight := 670  ; 增加高度以容納新的快速切換說明
     
     ; 獲取螢幕尺寸確保GUI不會跑出螢幕
     MonitorGet(1, &Left, &Top, &Right, &Bottom)

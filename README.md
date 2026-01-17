@@ -1,14 +1,11 @@
 # 深空之眼 Sid 半自動腳本
 
-[![GitHub stars](https://img.shields.io/github/stars/Sid-1996/AetherGazer-SemiAuto-AHK?style=for-the-badge&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/Sid-1996/AetherGazer-SemiAuto-AHK?style=for-the-badge&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/forks)
-[![GitHub issues](https://img.shields.io/github/issues/Sid-1996/AetherGazer-SemiAuto-AHK?style=for-the-badge&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/issues)
-[![GitHub license](https://img.shields.io/github/license/Sid-1996/AetherGazer-SemiAuto-AHK?style=for-the-badge&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/blob/main/LICENSE)
-[![GitHub release](https://img.shields.io/github/v/release/Sid-1996/AetherGazer-SemiAuto-AHK?style=for-the-badge&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases/latest)
-[![GitHub downloads](https://img.shields.io/github/downloads/Sid-1996/AetherGazer-SemiAuto-AHK/total?style=for-the-badge&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases)
-[![GitHub last commit](https://img.shields.io/github/last-commit/Sid-1996/AetherGazer-SemiAuto-AHK?style=for-the-badge&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/commits/main)
-[![AutoHotkey](https://img.shields.io/badge/AutoHotkey-v2.0-red?style=for-the-badge&logo=autohotkey)](https://www.autohotkey.com/)
-[![Windows](https://img.shields.io/badge/Windows-10%2B-blue?style=for-the-badge&logo=windows)](https://www.microsoft.com/windows/)
+[![GitHub stars](https://img.shields.io/github/stars/Sid-1996/AetherGazer-SemiAuto-AHK?style=flat-square&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/stargazers)
+[![GitHub downloads](https://img.shields.io/github/downloads/Sid-1996/AetherGazer-SemiAuto-AHK/total?style=flat-square&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases)
+[![Version](https://img.shields.io/badge/version-v1.0.6-blue?style=flat-square)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases)
+[![GitHub release](https://img.shields.io/github/v/release/Sid-1996/AetherGazer-SemiAuto-AHK?style=flat-square&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases/latest)
+[![AutoHotkey](https://img.shields.io/badge/AutoHotkey-v2.0-red?style=flat-square&logo=autohotkey)](https://www.autohotkey.com/)
+[![License](https://img.shields.io/github/license/Sid-1996/AetherGazer-SemiAuto-AHK?style=flat-square)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/blob/main/LICENSE)
 
 ---
 
@@ -70,8 +67,13 @@
 | **F7**  | **手動檢測腳本更新狀態** |
 | **F11** | **重新載入** 腳本 |
 | **F12** | **結束** 腳本 |
+| **Ctrl+← (左方向鍵)** | **快速切換角色** - 向前/來（循環切換至下一個角色） |
+| **Ctrl+→ (右方向鍵)** | **快速切換角色** - 向後/回（循環切換至上一個角色） |
 
-> 註：以上描述均直接對應腳本內的熱鍵區塊與 Help GUI 顯示內容。
+> 📌 **新增快速切換角色功能**：  
+> 使用 Ctrl+左右方向鍵可快速切換角色配置，無需打開選擇面板。  
+> Ctrl+← (左)向前循環，Ctrl+→ (右)向後循環。即使切換過頭也能輕鬆返回。  
+> 切換時會在遊戲窗口顯示短暫浮出的配置名稱提示，方便使用者確認當前角色。
 
 ---
 
