@@ -2,7 +2,7 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/Sid-1996/AetherGazer-SemiAuto-AHK?style=flat-square&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/stargazers)
 [![GitHub downloads](https://img.shields.io/github/downloads/Sid-1996/AetherGazer-SemiAuto-AHK/total?style=flat-square&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases)
-[![Version](https://img.shields.io/badge/version-v1.0.6-blue?style=flat-square)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases)
+[![Version](https://img.shields.io/badge/version-v1.0.7-blue?style=flat-square)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases)
 [![GitHub release](https://img.shields.io/github/v/release/Sid-1996/AetherGazer-SemiAuto-AHK?style=flat-square&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases/latest)
 [![AutoHotkey](https://img.shields.io/badge/AutoHotkey-v2.0-red?style=flat-square&logo=autohotkey)](https://www.autohotkey.com/)
 [![License](https://img.shields.io/github/license/Sid-1996/AetherGazer-SemiAuto-AHK?style=flat-square)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/blob/main/LICENSE)

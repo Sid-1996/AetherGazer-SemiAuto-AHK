@@ -1,6 +1,6 @@
 ;===========================================================
-;  AetherGazer-emiAuto-AHK v1.0.7 - AutoHotkey v2版
-;  深空之眼 ‧ Sid半自動遊戲腳本 v1.0.7 - 正式版
+;  AetherGazer-emiAuto-AHK v1.0.5 - AutoHotkey v2版
+;  深空之眼 ‧ Sid半自動遊戲腳本 v1.0.5 - 正式版
 ;-----------------------------------------------------------
 #Requires AutoHotkey v2.0
 #SingleInstance Force
@@ -32,17 +32,13 @@ if !A_IsAdmin {
 CheckSystemEnvironment()
 
 ;=== 腳本版本資訊 ===
-global SCRIPT_VERSION := GetConfig("Script", "Version", "1.0.7")
+global SCRIPT_VERSION := GetConfig("Script", "Version", "1.0.5")
 
 ;=== 從配置文件載入參數 ===
 global ColorVariation     := GetConfig("Game", "ColorVariation", 15)
 global ImageVariation     := GetConfig("Game", "ImageVariation", 80)
 global SkillCooldown      := GetConfig("Game", "SkillCooldown", 150)
 global SkillLockTime      := GetConfig("Game", "SkillLockTime", 300)
-
-;=== 快速切換角色配置變數 ===
-global CharacterList      := ["通用模式", "魂羽", "赤音", "緋染", "巧构", "庚辰"]
-global CurrentCharacterIndex := 1
 
 ;=== 全域狀態變量 ===
 global isScriptPaused     := false
@@ -113,7 +109,7 @@ SetTimer(CheckForUpdates, -1000) ; 延遲1秒執行，避免阻塞啟動
 
 CheckForUpdates() {
     ; 從配置中獲取版本號，如果沒有則使用預設值
-    currentVersion := GetConfig("Script", "Version", "1.0.7") 
+    currentVersion := GetConfig("Script", "Version", "1.0.5") 
     updater := UpdateChecker(currentVersion, "Sid-1996", "AetherGazer-SemiAuto-AHK")
     updater.Check(true) ; true 表示靜默檢查，沒有新版本就不提示
 }
@@ -148,9 +144,6 @@ RegisterHotkeys() {
         HotKey("F8", (*) => ToggleInputDebug()) ; 新增調試模式切換熱鍵
         HotKey(GetConfig("Hotkeys", "Reload", "F11"), (*) => ReloadScript())
         HotKey(GetConfig("Hotkeys", "Exit", "F12"), (*) => ExitScript())
-        ; 新增快速切換角色熱鍵
-        HotKey("^Left", (*) => CycleCharacterNext())  ; Ctrl+左方向鍵（向前/來）
-        HotKey("^Right", (*) => CycleCharacterPrev())  ; Ctrl+右方向鍵（向後/回）
     } catch Error as e {
         ; 熱鍵註冊失敗時使用預設熱鍵
         MsgBox("熱鍵註冊部分失敗，將使用預設設定: " . e.Message, "警告", 48)
@@ -169,9 +162,6 @@ RegisterDefaultHotkeys() {
     HotKey("F8", (*) => ToggleInputDebug()) ; 新增調試模式切換熱鍵
     HotKey("F11", (*) => ReloadScript())
     HotKey("F12", (*) => ExitScript())
-    ; 新增快速切換角色熱鍵
-    HotKey("^Left", (*) => CycleCharacterNext())  ; Ctrl+左方向鍵（向前/來）
-    HotKey("^Right", (*) => CycleCharacterPrev())  ; Ctrl+右方向鍵（向後/回）
 }
 
 ;-----------------------------------------------------------
@@ -243,7 +233,7 @@ ManualCheckForUpdates() {
     LastAction := "手動檢查更新中..."
     ShowCenteredToolTip("正在檢查更新...", 2000)
     
-    currentVersion := GetConfig("Script", "Version", "1.0.7")
+    currentVersion := GetConfig("Script", "Version", "1.0.5")
     updater := UpdateChecker(currentVersion, "Sid-1996", "AetherGazer-SemiAuto-AHK")
     updater.Check(false) ; false 表示非靜默，即使是最新版也會提示
 }
@@ -254,76 +244,6 @@ ToggleInputDebug() {
     EnableInputDebug := !EnableInputDebug
     LastAction := "輸入調試模式: " . (EnableInputDebug ? "開啟" : "關閉")
     ShowCenteredToolTip("輸入調試模式" . (EnableInputDebug ? "已開啟" : "已關閉"), 1500)
-}
-
-; 快速切換角色 - 向前（Ctrl+左方向鍵）
-CycleCharacterNext() {
-    global LastHotkeyPress, CurrentCharacter, CurrentCharacterIndex, CharacterList, LastAction
-    if (A_TickCount - LastHotkeyPress < 300)
-        return
-    LastHotkeyPress := A_TickCount
-    
-    try {
-        if (!IsSet(CharacterList) || CharacterList.Length = 0) {
-            ShowCenteredToolTip("角色列表未初始化", 1500)
-            return
-        }
-        
-        ; 找到當前角色的索引
-        CurrentCharacterIndex := 1
-        Loop CharacterList.Length {
-            if (CharacterList[A_Index] = CurrentCharacter) {
-                CurrentCharacterIndex := A_Index
-                break
-            }
-        }
-        
-        ; 向前循環
-        CurrentCharacterIndex++
-        if (CurrentCharacterIndex > CharacterList.Length)
-            CurrentCharacterIndex := 1
-        
-        CurrentCharacter := CharacterList[CurrentCharacterIndex]
-        LastAction := "切換角色: " . CurrentCharacter
-        ShowCenteredToolTip("已切換到: " . CurrentCharacter, 1500)
-    } catch Error as e {
-        ShowCenteredToolTip("快速切換錯誤: " . e.Message, 1500)
-    }
-}
-
-; 快速切換角色 - 向後（Ctrl+右方向鍵）
-CycleCharacterPrev() {
-    global LastHotkeyPress, CurrentCharacter, CurrentCharacterIndex, CharacterList, LastAction
-    if (A_TickCount - LastHotkeyPress < 300)
-        return
-    LastHotkeyPress := A_TickCount
-    
-    try {
-        if (!IsSet(CharacterList) || CharacterList.Length = 0) {
-            ShowCenteredToolTip("角色列表未初始化", 1500)
-            return
-        }
-        
-        ; 找到當前角色的索引
-        CurrentCharacterIndex := 1
-        Loop CharacterList.Length {
-            if (CharacterList[A_Index] = CurrentCharacter) {
-                CurrentCharacterIndex := A_Index
-                break
-            }
-        }
-        
-        ; 向後循環
-        CurrentCharacterIndex--
-        if (CurrentCharacterIndex < 1)
-            CurrentCharacterIndex := CharacterList.Length
-        
-        CurrentCharacter := CharacterList[CurrentCharacterIndex]
-        LastAction := "切換角色: " . CurrentCharacter
-        ShowCenteredToolTip("已切換到: " . CurrentCharacter, 1500)
-    } catch Error as e {
-        ShowCenteredToolTip("快速切換錯誤: " . e.Message, 1500)
-    }
 }
 
 ; 新增ESC關閉幫助GUI函數
@@ -1123,17 +1043,6 @@ UpdateStatusDisplay() {
     combatStatus := isInCombat ? "戰鬥中" : "非戰鬥"
     modeStatus := isBBQMode ? "烤肉模式" : (isScriptPaused ? "暫停中" : "運行中")
 
-    ; 獲取遊戲窗口位置和大小（用於動態定位GUI）
-    try {
-        WinGetPos(&gameX, &gameY, &gameW, &gameH, gameWindow)
-        ; 狀態顯示窗口 - 固定在左上角相對位置
-        displayX := gameX + 10
-        displayY := gameY + 10
-    } catch {
-        displayX := StatusDisplayX
-        displayY := StatusDisplayY
-    }
-
     ; 創建狀態顯示GUI
     if (!IsStatusGUICreated) {
         StatusGUIObj := Gui("+LastFound -Caption +AlwaysOnTop +ToolWindow +E0x20", "StatusOverlay")
@@ -1145,7 +1054,7 @@ UpdateStatusDisplay() {
         StatusGUIObj.AddText("x10 y50 w280", "模式: " . modeStatus).Name := "ModeCtrl"
         StatusGUIObj.AddText("x10 y65 w280", "普攻: " . (isAutoAttack ? "開" : "關")).Name := "AutoAttackCtrl"
         StatusGUIObj.AddText("x10 y80 w280", "角色: " . CurrentCharacter).Name := "CharacterCtrl"
-        StatusGUIObj.Show("x" . displayX . " y" . displayY . " w300 h95 NoActivate")
+        StatusGUIObj.Show("x" . StatusDisplayX . " y" . StatusDisplayY . " w300 h95 NoActivate")
         WinSetTransparent(200, "StatusOverlay")
         IsStatusGUICreated := true
     } else {
@@ -1157,44 +1066,24 @@ UpdateStatusDisplay() {
             StatusGUIObj["ModeCtrl"].Text := "模式: " . modeStatus
             StatusGUIObj["AutoAttackCtrl"].Text := "普攻: " . (isAutoAttack ? "開" : "關")
             StatusGUIObj["CharacterCtrl"].Text := "角色: " . CurrentCharacter
-            ; 動態更新GUI位置以跟隨窗口
-            StatusGUIObj.Show("x" . displayX . " y" . displayY . " NoActivate")
         } catch {
             ; GUI 更新錯誤處理
         }
     }
 
-    ; 創建並動態更新黑色遮擋窗口
-    try {
-        WinGetPos(&gameX, &gameY, &gameW, &gameH, gameWindow)
-        ; 黑色遮擋層位置計算：基於遊戲窗口的絕對位置
-        ; UID遮擋範圍（相對視窗座標）：左上(1275,864) 右下(1421,887)
-        overlayX := gameX + 1275        ; 遮擋左邊界
-        overlayY := gameY + 864         ; 遮擋上邊界
-        overlayWidth := 1421 - 1275     ; 146 像素寬
-        overlayHeight := 887 - 864      ; 23 像素高
+    ; 創建黑色遮擋窗口
+    if (!IsBlackOverlayCreated) {
+        overlayX := 1431
+        overlayY := 931
+        overlayWidth := 1579 - 1431    ; 148 像素寬
+        overlayHeight := 953 - 931     ; 22 像素高
         
-        if (!IsBlackOverlayCreated) {
-            BlackOverlayObj := Gui("+LastFound -Caption +AlwaysOnTop +ToolWindow +E0x20", "BlackOverlay")
-            BlackOverlayObj.BackColor := "0x000000"  ; 純黑色
-            BlackOverlayObj.AddText("x0 y0 w" . overlayWidth . " h" . overlayHeight . " BackgroundTrans", "")
-            BlackOverlayObj.Show("x" . overlayX . " y" . overlayY . " w" . overlayWidth . " h" . overlayHeight . " NoActivate")
-            WinSetTransparent(255, "BlackOverlay")
-            IsBlackOverlayCreated := true
-        } else {
-            ; 動態更新黑色遮擋窗口位置
-            BlackOverlayObj.Show("x" . overlayX . " y" . overlayY . " NoActivate")
-        }
-    } catch {
-        ; 窗口查詢失敗，嘗試使用硬編碼備用座標
-        if (!IsBlackOverlayCreated) {
-            BlackOverlayObj := Gui("+LastFound -Caption +AlwaysOnTop +ToolWindow +E0x20", "BlackOverlay")
-            BlackOverlayObj.BackColor := "0x000000"
-            BlackOverlayObj.AddText("x0 y0 w146 h23 BackgroundTrans", "")
-            BlackOverlayObj.Show("x1275 y864 w146 h23 NoActivate")
-            WinSetTransparent(255, "BlackOverlay")
-            IsBlackOverlayCreated := true
-        }
+        BlackOverlayObj := Gui("+LastFound -Caption +AlwaysOnTop +ToolWindow +E0x20", "BlackOverlay")
+        BlackOverlayObj.BackColor := "0x000000"  ; 純黑色
+        BlackOverlayObj.AddText("x0 y0 w" . overlayWidth . " h" . overlayHeight . " BackgroundTrans", "")
+        BlackOverlayObj.Show("x" . overlayX . " y" . overlayY . " w" . overlayWidth . " h" . overlayHeight . " NoActivate")
+        WinSetTransparent(255, "BlackOverlay")
+        IsBlackOverlayCreated := true
     }
 }
 
@@ -1235,32 +1124,31 @@ UpdateCentralStatusDisplay() {
         statusMessage := "非戰鬥狀態..."
     }
     
-    ; 獲取遊戲窗口位置和大小（用於動態定位中央狀態顯示）
-    try {
-        WinGetPos(&gameX, &gameY, &gameW, &gameH, gameWindow)
-        ; 計算中央位置
-        centerX := gameX + (gameW // 2) - 150  ; GUI寬度約300，所以-150置中
-        centerY := gameY + 50  ; 距離遊戲窗口頂部50像素
-    } catch {
-        ; 窗口查詢失敗時的備用位置
-        centerX := 730
-        centerY := 50
-    }
-    
     ; 創建或更新中央狀態GUI
     if (!IsCentralStatusGUICreated) {
-        CentralStatusGUIObj := Gui("+LastFound -Caption +AlwaysOnTop +ToolWindow +E0x20", "CentralStatus")
-        CentralStatusGUIObj.BackColor := "0x000000"  ; 黑色背景
-        CentralStatusGUIObj.SetFont("cFFFFFF s18 bold", "Microsoft YaHei")  ; 大字體
-        CentralStatusGUIObj.AddText("x20 y10 w260 Center", statusMessage).Name := "CentralStatusText"
-        CentralStatusGUIObj.Show("x" . centerX . " y" . centerY . " w300 h40 NoActivate")
-        WinSetTransparent(180, "CentralStatus")  ; 半透明
-        IsCentralStatusGUICreated := true
+        ; 獲取遊戲窗口位置和大小
+        try {
+            WinGetPos(&gameX, &gameY, &gameW, &gameH, gameWindow)
+            
+            ; 計算中央位置
+            centerX := gameX + (gameW // 2) - 150  ; GUI寬度約300，所以-150置中
+            centerY := gameY + 50  ; 距離遊戲窗口頂部50像素
+            
+            CentralStatusGUIObj := Gui("+LastFound -Caption +AlwaysOnTop +ToolWindow +E0x20", "CentralStatus")
+            CentralStatusGUIObj.BackColor := "0x000000"  ; 黑色背景
+            CentralStatusGUIObj.SetFont("cFFFFFF s18 bold", "Microsoft YaHei")  ; 大字體
+            CentralStatusGUIObj.AddText("x20 y10 w260 Center", statusMessage).Name := "CentralStatusText"
+            CentralStatusGUIObj.Show("x" . centerX . " y" . centerY . " w300 h40 NoActivate")
+            WinSetTransparent(180, "CentralStatus")  ; 半透明
+            IsCentralStatusGUICreated := true
+        } catch {
+            ; 窗口操作失敗
+        }
     } else {
-        ; 更新現有GUI的文字和位置（跟隨窗口移動）
+        ; 更新現有GUI的文字
         try {
             CentralStatusGUIObj["CentralStatusText"].Text := statusMessage
-            CentralStatusGUIObj.Show("x" . centerX . " y" . centerY . " NoActivate")  ; 動態更新位置
+            CentralStatusGUIObj.Show("NoActivate")  ; 確保顯示
         } catch {
             ; GUI更新失敗，重置狀態
             IsCentralStatusGUICreated := false
@@ -1364,7 +1252,7 @@ CreateHelpGUI() {
 
     ; 版本信息
     HelpGUIObj.SetFont("c888888 s10")
-    HelpGUIObj.AddText("x20 y545 w350 Center", "版本 v1.0.7 正式版 | 製作 by Sid 2025")
+    HelpGUIObj.AddText("x20 y545 w350 Center", "版本 v1.0.5 正式版 | 製作 by Sid 2025")
     
     ; 修正GUI位置 - 確保在螢幕範圍內
     x := 50   ; 距離螢幕左邊50像素  
