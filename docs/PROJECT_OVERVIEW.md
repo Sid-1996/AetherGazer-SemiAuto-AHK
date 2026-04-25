@@ -18,18 +18,18 @@
   - 主程式入口。
   - 載入所有模組，初始化設定、註冊熱鍵、啟動戰鬥迴圈與更新檢查。
 
-- `ConfigManager.ahk`
+- `src/modules/ConfigManager.ahk`
   - 統一管理 `Config.ini`。
   - 提供預設值、讀寫設定與儲存功能。
 
-- `GameWindowManager.ahk`
+- `src/modules/GameWindowManager.ahk`
   - 管理遊戲視窗尺寸、位置與遊戲進程狀態。
   - 目前也負責 F2 視窗調整。
 
-- `UISequenceManager.ahk`
+- `src/modules/UISequenceManager.ahk`
   - 管理啟動流程 GUI、環境檢查畫面與提示流程。
 
-- `UpdateChecker.ahk`
+- `src/modules/UpdateChecker.ahk`
   - 透過 GitHub Releases API 檢查新版本。
 
 - `CoordinateAdjustmentTool.ahk`
@@ -38,21 +38,21 @@
 
 ## 設定與資料
 
-- `Config.ini`
+- `config/Config.ini`
   - 主腳本設定，包含版本、熱鍵、UI 與遊戲參數。
 
-- `GameConfig.ini`
+- `config/GameConfig.ini`
   - 遊戲視窗與進程監控設定。
 
-- `coordinates_config.json`
+- `config/coordinates_config.json`
   - 座標校正工具輸出的座標資料。
 
 ## 素材結構
 
-- `Setting/`
+- `assets/common/`
   - 共用判定素材，例如戰鬥判定、烤肉模式相關圖片。
 
-- `魂羽/`、`緋染/`、`巧构/`、`庚辰/`
+- `assets/characters/魂羽/`、`assets/characters/緋染/`、`assets/characters/巧构/`、`assets/characters/庚辰/`
   - 各角色技能辨識素材。
   - 主腳本以相對路徑直接讀取這些圖片。
 

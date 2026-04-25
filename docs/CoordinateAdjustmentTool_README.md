@@ -85,12 +85,12 @@
 #### 步驟5：保存配置
 
 - 按 **F9** 保存調整後的座標
-- 配置會保存為 `coordinates_config.json` 文件
+- 配置會保存為 `config/coordinates_config.json` 文件
 - 工具會顯示保存成功的提示訊息
 
 #### 步驟5：保存配置
 - 按 **F9** 保存調整後的座標
-- 配置會保存為 `coordinates_config.json` 文件
+- 配置會保存為 `config/coordinates_config.json` 文件
 - 工具會顯示保存成功的提示訊息
 
 ## 🖥️ 介面說明
@@ -112,7 +112,7 @@
 
 ## 📄 配置文件
 
-### coordinates_config.json 格式
+### config/coordinates_config.json 格式
 ```json
 [
   {
@@ -133,7 +133,7 @@
 ```
 
 ### 配置文件位置
-- 預設保存位置：`腳本目錄\coordinates_config.json`
+- 預設保存位置：`config\coordinates_config.json`
 - 如果文件不存在，工具會使用內建的預設座標
 
 ## 🔧 整合到主腳本
@@ -146,7 +146,7 @@
 LoadCustomCoordinates()
 
 LoadCustomCoordinates() {
-    configFile := A_ScriptDir . "\coordinates_config.json"
+    configFile := ConfigPath("coordinates_config.json")
     if (!FileExist(configFile))
         return
 
@@ -191,7 +191,7 @@ LoadCustomCoordinates() {
 
 如遇到問題或需要技術支援，請：
 
-1. 檢查 `coordinates_config.json` 文件格式是否正確
+1. 檢查 `config/coordinates_config.json` 文件格式是否正確
 2. 確認遊戲視窗大小和解析度設置
 3. 查看工具的錯誤提示訊息
 4. 參考主腳本的 `AHK_MODULES.md` 文檔

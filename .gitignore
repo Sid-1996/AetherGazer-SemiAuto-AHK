@@ -14,9 +14,9 @@ Desktop.ini
 .vscode/
 
 # Optional local overrides
-Config.local.ini
-GameConfig.local.ini
-coordinates_config.local.json
+config/Config.local.ini
+config/GameConfig.local.ini
+config/coordinates_config.local.json
 
 # Temporary upload/cache folders
 .tmp.driveupload/
@@ -24,5 +24,3 @@ coordinates_config.local.json
 
 # Local git bootstrap leftovers
 .git-broken/
-git-meta/
-git-meta-test/

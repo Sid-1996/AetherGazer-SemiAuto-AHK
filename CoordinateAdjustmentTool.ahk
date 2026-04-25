@@ -1,6 +1,7 @@
 ﻿#Requires AutoHotkey v2.0
 #SingleInstance Force
-SetWorkingDir(A_ScriptDir)
+#Include src\ProjectPaths.ahk
+SetWorkingDir(PROJECT_ROOT)
 CoordMode("Mouse", "Screen")
 CoordMode("Pixel", "Window")
 
@@ -47,33 +48,33 @@ global coordData := Map(
 
 ; 每個辨識項目的定義，包含：名稱、圖片路徑、座標ID、說明、類型
 global recognitionItems := [
-    {name: "戰鬥判定", image: "Setting\戰鬥判定.png", coordId: "battle_check", desc: "戰鬥狀態判定區域", type: "image"},
-    {name: "烤肉紅判定", image: "Setting\烤肉紅判定.png", coordId: "bbq_red", desc: "烤肉模式紅色判定", type: "image"},
-    {name: "烤肉藍判定", image: "Setting\烤肉藍判定.png", coordId: "bbq_red", desc: "烤肉模式藍色判定", type: "image"},  ; 共享bbq_red座標
+    {name: "戰鬥判定", image: CommonAssetPath("戰鬥判定.png"), coordId: "battle_check", desc: "戰鬥狀態判定區域", type: "image"},
+    {name: "烤肉紅判定", image: CommonAssetPath("烤肉紅判定.png"), coordId: "bbq_red", desc: "烤肉模式紅色判定", type: "image"},
+    {name: "烤肉藍判定", image: CommonAssetPath("烤肉藍判定.png"), coordId: "bbq_red", desc: "烤肉模式藍色判定", type: "image"},  ; 共享bbq_red座標
 
     ; 魂羽角色
-    {name: "魂羽F1", image: "魂羽\魂羽F判定1.png", coordId: "hunyu_f1", desc: "魂羽F技能判定1", type: "image"},
-    {name: "魂羽E", image: "魂羽\魂羽E判定.png", coordId: "hunyu_f1", desc: "魂羽E技能判定", type: "image"},  ; 共享hunyu_f1座標
-    {name: "魂羽F2", image: "魂羽\魂羽F判定2.png", coordId: "hunyu_f2", desc: "魂羽F技能判定2", type: "image"},
+    {name: "魂羽F1", image: CharacterAssetPath("魂羽", "魂羽F判定1.png"), coordId: "hunyu_f1", desc: "魂羽F技能判定1", type: "image"},
+    {name: "魂羽E", image: CharacterAssetPath("魂羽", "魂羽E判定.png"), coordId: "hunyu_f1", desc: "魂羽E技能判定", type: "image"},  ; 共享hunyu_f1座標
+    {name: "魂羽F2", image: CharacterAssetPath("魂羽", "魂羽F判定2.png"), coordId: "hunyu_f2", desc: "魂羽F技能判定2", type: "image"},
 
     ; 緋染角色
-    {name: "緋染Q", image: "緋染\緋染Q.png", coordId: "faran_q", desc: "緋染Q技能", type: "image"},
-    {name: "緋染Q1", image: "緋染\緋染Q1.png", coordId: "faran_q", desc: "緋染Q1技能", type: "image"},  ; 共享faran_q座標
-    {name: "緋染E", image: "緋染\緋染E.png", coordId: "faran_q", desc: "緋染E技能", type: "image"},   ; 共享faran_q座標
-    {name: "緋染E1", image: "緋染\緋染E1.png", coordId: "faran_q", desc: "緋染E1技能", type: "image"}, ; 共享faran_q座標
-    {name: "緋染F", image: "緋染\緋染F.png", coordId: "faran_q", desc: "緋染F技能", type: "image"},   ; 共享faran_q座標
-    {name: "緋染F_End", image: "緋染\緋染F End.png", coordId: "faran_f_end", desc: "緋染F結束判定", type: "image"},
+    {name: "緋染Q", image: CharacterAssetPath("緋染", "緋染Q.png"), coordId: "faran_q", desc: "緋染Q技能", type: "image"},
+    {name: "緋染Q1", image: CharacterAssetPath("緋染", "緋染Q1.png"), coordId: "faran_q", desc: "緋染Q1技能", type: "image"},  ; 共享faran_q座標
+    {name: "緋染E", image: CharacterAssetPath("緋染", "緋染E.png"), coordId: "faran_q", desc: "緋染E技能", type: "image"},   ; 共享faran_q座標
+    {name: "緋染E1", image: CharacterAssetPath("緋染", "緋染E1.png"), coordId: "faran_q", desc: "緋染E1技能", type: "image"}, ; 共享faran_q座標
+    {name: "緋染F", image: CharacterAssetPath("緋染", "緋染F.png"), coordId: "faran_q", desc: "緋染F技能", type: "image"},   ; 共享faran_q座標
+    {name: "緋染F_End", image: CharacterAssetPath("緋染", "緋染F End.png"), coordId: "faran_f_end", desc: "緋染F結束判定", type: "image"},
 
     ; 巧构角色
-    {name: "巧构Q", image: "巧构\巧构Q.png", coordId: "qiaogu_q", desc: "巧构Q技能", type: "image"},
-    {name: "巧构F", image: "巧构\巧构F.png", coordId: "qiaogu_q", desc: "巧构F技能", type: "image"},   ; 共享qiaogu_q座標
-    {name: "巧构Q1", image: "巧构\巧构Q1.png", coordId: "qiaogu_q", desc: "巧构Q1技能", type: "image"}, ; 共享qiaogu_q座標
-    {name: "巧构E1", image: "巧构\巧构E1.png", coordId: "qiaogu_q", desc: "巧构E1技能", type: "image"}, ; 共享qiaogu_q座標
+    {name: "巧构Q", image: CharacterAssetPath("巧构", "巧构Q.png"), coordId: "qiaogu_q", desc: "巧构Q技能", type: "image"},
+    {name: "巧构F", image: CharacterAssetPath("巧构", "巧构F.png"), coordId: "qiaogu_q", desc: "巧构F技能", type: "image"},   ; 共享qiaogu_q座標
+    {name: "巧构Q1", image: CharacterAssetPath("巧构", "巧构Q1.png"), coordId: "qiaogu_q", desc: "巧构Q1技能", type: "image"}, ; 共享qiaogu_q座標
+    {name: "巧构E1", image: CharacterAssetPath("巧构", "巧构E1.png"), coordId: "qiaogu_q", desc: "巧构E1技能", type: "image"}, ; 共享qiaogu_q座標
     {name: "巧构能量檢測", image: "", coordId: "qiaogu_energy", desc: "巧构連段所需能量判定區域", type: "pixel"}, ; 像素搜索
 
     ; 庚辰角色
-    {name: "庚辰Q", image: "庚辰\庚辰Q.png", coordId: "gengchen_q", desc: "庚辰Q技能", type: "image"},
-    {name: "庚辰Q1", image: "庚辰\庚辰Q1.png", coordId: "gengchen_q", desc: "庚辰Q1技能", type: "image"} ; 共享gengchen_q座標
+    {name: "庚辰Q", image: CharacterAssetPath("庚辰", "庚辰Q.png"), coordId: "gengchen_q", desc: "庚辰Q技能", type: "image"},
+    {name: "庚辰Q1", image: CharacterAssetPath("庚辰", "庚辰Q1.png"), coordId: "gengchen_q", desc: "庚辰Q1技能", type: "image"} ; 共享gengchen_q座標
 ]
 
 ; === 工具函數 ===
@@ -289,7 +290,7 @@ ShowSingleOverlay(selectedItem) {
 ; 載入座標配置
 LoadCoordinates() {
     global currentRects, coordData, recognitionItems
-    configFile := A_ScriptDir . "\coordinates_config.json"
+    configFile := ConfigPath("coordinates_config.json")
 
     ; 舊coordId到新coordId的映射表（處理配置文件兼容性）
     coordIdMapping := Map(
@@ -383,7 +384,7 @@ LoadCoordinates() {
 ; 保存座標配置
 SaveCoordinates() {
     global currentRects, coordData
-    configFile := A_ScriptDir . "\coordinates_config.json"
+    configFile := ConfigPath("coordinates_config.json")
 
     try {
         json := "["

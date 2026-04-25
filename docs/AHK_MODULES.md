@@ -7,10 +7,10 @@
 | 檔案名稱 | 功能分類 | 行數 | 依賴關係 |
 |----------|----------|------|----------|
 | `sid-ag.ahk` | 主程式 | ~900+ | 所有模組 |
-| `ConfigManager.ahk` | 配置管理 | ~300 | 無 |
-| `GameWindowManager.ahk` | 視窗管理 | ~190 | ConfigManager |
-| `UISequenceManager.ahk` | UI動畫 | ~400 | 無 |
-| `UpdateChecker.ahk` | 更新檢查 | ~110 | 無 |
+| `src/modules/ConfigManager.ahk` | 配置管理 | ~300 | 無 |
+| `src/modules/GameWindowManager.ahk` | 視窗管理 | ~190 | ConfigManager |
+| `src/modules/UISequenceManager.ahk` | UI動畫 | ~400 | 無 |
+| `src/modules/UpdateChecker.ahk` | 更新檢查 | ~110 | 無 |
 
 ---
 
@@ -30,10 +30,10 @@
 
 ```ahk
 ; 模組載入順序
-#Include GameWindowManager.ahk    ; 視窗管理優先
-#Include ConfigManager.ahk        ; 配置管理
-#Include UpdateChecker.ahk        ; 更新檢查
-#Include UISequenceManager.ahk    ; UI動畫
+#Include src\modules\GameWindowManager.ahk    ; 視窗管理優先
+#Include src\modules\ConfigManager.ahk        ; 配置管理
+#Include src\modules\UpdateChecker.ahk        ; 更新檢查
+#Include src\modules\UISequenceManager.ahk    ; UI動畫
 ```
 
 #### ⚡ 核心函數
@@ -56,7 +56,7 @@
 
 ---
 
-### 2. `ConfigManager.ahk` - 配置管理器
+### 2. `src/modules/ConfigManager.ahk` - 配置管理器
 
 #### 🎯 配置管理功能
 
@@ -102,7 +102,7 @@ CharacterSelect=F5
 
 ---
 
-### 3. `GameWindowManager.ahk` - 遊戲視窗管理器
+### 3. `src/modules/GameWindowManager.ahk` - 遊戲視窗管理器
 
 #### 🎯 視窗管理功能
 
@@ -138,7 +138,7 @@ CenterWindow=true
 
 ---
 
-### 4. `UISequenceManager.ahk` - UI序列管理器
+### 4. `src/modules/UISequenceManager.ahk` - UI序列管理器
 
 #### 🎯 UI動畫功能
 
@@ -171,7 +171,7 @@ CenterWindow=true
 
 ---
 
-### 5. `UpdateChecker.ahk` - 更新檢查器
+### 5. `src/modules/UpdateChecker.ahk` - 更新檢查器
 
 #### 🎯 更新檢查功能
 
@@ -212,16 +212,16 @@ API端點: https://api.github.com/repos/{user}/{repo}/releases/latest
 
 ```mermaid
 graph TD
-    A[sid-ag.ahk] --> B[ConfigManager.ahk]
-    A --> C[GameWindowManager.ahk]
-    A --> D[UISequenceManager.ahk]
-    A --> E[UpdateChecker.ahk]
+    A[sid-ag.ahk] --> B["src/modules/ConfigManager.ahk"]
+    A --> C["src/modules/GameWindowManager.ahk"]
+    A --> D["src/modules/UISequenceManager.ahk"]
+    A --> E["src/modules/UpdateChecker.ahk"]
 
     C --> B
     D --> B
 
-    B -.-> F[Config.ini]
-    C -.-> G[GameConfig.ini]
+    B -.-> F["config/Config.ini"]
+    C -.-> G["config/GameConfig.ini"]
 ```
 
 ## 📊 效能指標

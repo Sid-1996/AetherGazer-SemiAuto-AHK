@@ -4,7 +4,8 @@
 ;-----------------------------------------------------------
 #Requires AutoHotkey v2.0
 #SingleInstance Force
-SetWorkingDir(A_ScriptDir)
+#Include src\ProjectPaths.ahk
+SetWorkingDir(PROJECT_ROOT)
 CoordMode("Pixel", "Window")
 SendMode("Input")
 SetControlDelay(1)
@@ -13,10 +14,10 @@ SetKeyDelay(-1)
 SetMouseDelay(-1)
 
 ;=== 引入模組 ===
-#Include GameWindowManager.ahk
-#Include ConfigManager.ahk
-#Include UpdateChecker.ahk
-#Include UISequenceManager.ahk
+#Include src\modules\GameWindowManager.ahk
+#Include src\modules\ConfigManager.ahk
+#Include src\modules\UpdateChecker.ahk
+#Include src\modules\UISequenceManager.ahk
 
 ;=== 初始化配置管理器 ===
 InitializeConfig()
@@ -57,7 +58,7 @@ global IsStatusGUICreated := false
 global StartupGUI         := GetConfig("UI", "ShowStartupGUI", true)
 global StatusDisplayX     := GetConfig("UI", "StatusDisplayX", 10)
 global StatusDisplayY     := GetConfig("UI", "StatusDisplayY", 10)
-global CombatCheckImage   := A_ScriptDir . "\Setting\戰鬥判定.png"
+global CombatCheckImage   := CommonAssetPath("戰鬥判定.png")
 global UserPaused         := false
 global LastAction         := "尚未執行任何動作"
 global CurrentCharacter   := "通用模式"
@@ -83,25 +84,25 @@ global CentralStatusGUIObj := ""
 global IsCentralStatusGUICreated := false
 
 ;=== 角色專屬圖片路徑 ===
-global HunYuF1Image       := A_ScriptDir . "\魂羽\魂羽F判定1.png"
-global HunYuF2Image       := A_ScriptDir . "\魂羽\魂羽F判定2.png"
-global HunYuEImage        := A_ScriptDir . "\魂羽\魂羽E判定.png"
+global HunYuF1Image       := CharacterAssetPath("魂羽", "魂羽F判定1.png")
+global HunYuF2Image       := CharacterAssetPath("魂羽", "魂羽F判定2.png")
+global HunYuEImage        := CharacterAssetPath("魂羽", "魂羽E判定.png")
 
-global FeiRanQImage       := A_ScriptDir . "\緋染\緋染Q.png"
-global FeiRanQ1Image      := A_ScriptDir . "\緋染\緋染Q1.png"
-global FeiRanEImage       := A_ScriptDir . "\緋染\緋染E.png"
-global FeiRanE1Image      := A_ScriptDir . "\緋染\緋染E1.png"
-global FeiRanFImage       := A_ScriptDir . "\緋染\緋染F.png"
-global FeiRanFEndImage    := A_ScriptDir . "\緋染\緋染F End.png"
+global FeiRanQImage       := CharacterAssetPath("緋染", "緋染Q.png")
+global FeiRanQ1Image      := CharacterAssetPath("緋染", "緋染Q1.png")
+global FeiRanEImage       := CharacterAssetPath("緋染", "緋染E.png")
+global FeiRanE1Image      := CharacterAssetPath("緋染", "緋染E1.png")
+global FeiRanFImage       := CharacterAssetPath("緋染", "緋染F.png")
+global FeiRanFEndImage    := CharacterAssetPath("緋染", "緋染F End.png")
 
-global QiaoGouQImage      := A_ScriptDir . "\巧构\巧构Q.png"
-global QiaoGouFImage      := A_ScriptDir . "\巧构\巧构F.png"
-global QiaoGouQ1Image     := A_ScriptDir . "\巧构\巧构Q1.png"
-global QiaoGouE1Image     := A_ScriptDir . "\巧构\巧构E1.png"
+global QiaoGouQImage      := CharacterAssetPath("巧构", "巧构Q.png")
+global QiaoGouFImage      := CharacterAssetPath("巧构", "巧构F.png")
+global QiaoGouQ1Image     := CharacterAssetPath("巧构", "巧构Q1.png")
+global QiaoGouE1Image     := CharacterAssetPath("巧构", "巧构E1.png")
 global QiaoGouEnhanceMode := "Q"
 
-global GengChenQImage     := A_ScriptDir . "\庚辰\庚辰Q.png"
-global GengChenQ1Image    := A_ScriptDir . "\庚辰\庚辰Q1.png"
+global GengChenQImage     := CharacterAssetPath("庚辰", "庚辰Q.png")
+global GengChenQ1Image    := CharacterAssetPath("庚辰", "庚辰Q1.png")
 
 ;=== 初始化遊戲管理器 ===
 InitializeGameManager()
@@ -608,7 +609,7 @@ BBQLoop() {
     }
 
     try {
-        if (ImageSearch(&fx, &fy, 811, 188, 874, 237, "*" . ImageVariation . " " . A_ScriptDir . "\Setting\烤肉紅判定.png")) {
+        if (ImageSearch(&fx, &fy, 811, 188, 874, 237, "*" . ImageVariation . " " . CommonAssetPath("烤肉紅判定.png"))) {
             Send("{e}")
             LastAction := "偵測到紅色烤肉 → 已發送 E 鍵"
             return
@@ -618,7 +619,7 @@ BBQLoop() {
     }
 
     try {
-        if (ImageSearch(&fx, &fy, 811, 188, 874, 237, "*" . ImageVariation . " " . A_ScriptDir . "\Setting\烤肉藍判定.png")) {
+        if (ImageSearch(&fx, &fy, 811, 188, 874, 237, "*" . ImageVariation . " " . CommonAssetPath("烤肉藍判定.png"))) {
             Send("{q}")
             LastAction := "偵測到藍色烤肉 → 已發送 Q 鍵"
             return
