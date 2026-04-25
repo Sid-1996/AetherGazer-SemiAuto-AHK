@@ -1,0 +1,27 @@
+# AutoHotkey compiled artifacts and release bundles
+*.exe
+*.zip
+
+# Local runtime noise
+*.log
+*.tmp
+Thumbs.db
+Desktop.ini
+
+# Editor and OS metadata
+.DS_Store
+.idea/
+.vscode/
+
+# Optional local overrides
+Config.local.ini
+GameConfig.local.ini
+coordinates_config.local.json
+
+# Temporary upload/cache folders
+.tmp.driveupload/
+
+# Local git bootstrap leftovers
+.git-broken/
+git-meta/
+git-meta-test/

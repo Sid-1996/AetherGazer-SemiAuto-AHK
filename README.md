@@ -1,0 +1,121 @@
+# 深空之眼 Sid 半自動腳本
+
+[![GitHub stars](https://img.shields.io/github/stars/Sid-1996/AetherGazer-SemiAuto-AHK?style=flat-square&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/stargazers)
+[![GitHub downloads](https://img.shields.io/github/downloads/Sid-1996/AetherGazer-SemiAuto-AHK/total?style=flat-square&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases)
+[![Version](https://img.shields.io/badge/version-v1.0.7-blue?style=flat-square)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases)
+[![GitHub release](https://img.shields.io/github/v/release/Sid-1996/AetherGazer-SemiAuto-AHK?style=flat-square&logo=github)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases/latest)
+[![AutoHotkey](https://img.shields.io/badge/AutoHotkey-v2.0-red?style=flat-square&logo=autohotkey)](https://www.autohotkey.com/)
+[![License](https://img.shields.io/github/license/Sid-1996/AetherGazer-SemiAuto-AHK?style=flat-square)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/blob/main/LICENSE)
+
+---
+
+## 🎮 專案簡介
+這是一款針對 **《深空之眼 (Aether Gazer)》** 所設計的 **半自動戰鬥輔助腳本**，由 Sid 製作。  
+設計目標是降低戰鬥時間的人工作業，同時保留即時手動介入的彈性。
+
+---
+
+## ✨ 主要功能特色
+
+- **自動戰鬥核心**
+  - 自動判定技能可用狀態與普攻施放
+  - 基於像素/圖片偵測的冷卻判斷與保護
+  - 偵測 WASD 移動中時暫緩施放，避免干擾手操
+- **角色特化模式**
+  - 內建角色選擇：**通用模式、魂羽、緋染、巧构、庚辰**（**其它**功能開發中）
+  - 角色模式優先於通用偵測，針對技能圖示進行強化判斷
+- **狀態疊圖 Overlay**
+  - 顯示腳本狀態、戰鬥狀態、目前動作、模式與普攻開關、當前角色
+- **輸入優化**
+  - 以 **直接傳送至遊戲視窗** 的方式發送按鍵，降低與玩家操作衝突
+
+---
+
+## ⭐ 支持專案
+
+如果您覺得這個專案對您有幫助，請給我們一個 ⭐ **Star**！
+
+[![GitHub stars](https://img.shields.io/github/stars/Sid-1996/AetherGazer-SemiAuto-AHK?style=social)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/stargazers)
+
+您的支持是我們持續改進的最大動力！每一個星星都代表著對我們工作的認可，也能幫助更多人發現這個專案。
+
+---
+
+作者環境為 **陸服 PC 版本** 製作，台服尚未測試。  
+因作者角色有限，目前 **F5 專屬模式** 僅支援作者所擁有的角色。
+
+## 🖥 環境要求
+
+- **螢幕解析度**：僅支援 `1920×1080`
+- **遊戲視窗模式**：僅支援 `1600×900`
+- ⚠️ **重要提醒**：請務必在 `1920×1080` 的螢幕解析度下，  
+  使用 `1600×900` 的遊戲視窗模式進行
+- ⌨️ 可使用 **F2** 一鍵調整並置中遊戲視窗
+
+---
+
+## ⌨️ 熱鍵一覽（對應腳本實作）
+
+| 熱鍵  | 功能 |
+|-------|------|
+| **F1**  | 切換 **自動普攻**（開/關） |
+| **F2**  | 調整 **遊戲視窗為 1600×900 並置中**，並啟用該視窗 |
+| **F3**  | 開啟/關閉 **熱鍵說明面板**（Help GUI） |
+| **F4**  | **手動暫停/恢復** 腳本；暫停時 **進入戰鬥會自動恢復** |
+| **F5**  | 開啟 **角色選擇面板**（通用模式、魂羽、緋染、巧构、庚辰 |
+| **F6**  | 切換 **烤肉模式**（自動按 **E/Q**；啟用時暫停其他自動邏輯） |
+| **F7**  | **手動檢測腳本更新狀態** |
+| **F11** | **重新載入** 腳本 |
+| **F12** | **結束** 腳本 |
+| **Ctrl+← (左方向鍵)** | **快速切換角色** - 向前/來（循環切換至下一個角色） |
+| **Ctrl+→ (右方向鍵)** | **快速切換角色** - 向後/回（循環切換至上一個角色） |
+
+> 📌 **新增快速切換角色功能**：  
+> 使用 Ctrl+左右方向鍵可快速切換角色配置，無需打開選擇面板。  
+> Ctrl+← (左)向前循環，Ctrl+→ (右)向後循環。即使切換過頭也能輕鬆返回。  
+> 切換時會在遊戲窗口顯示短暫浮出的配置名稱提示，方便使用者確認當前角色。
+
+---
+
+## 📦 使用方式
+
+1. 前往 Releases 下載最新的 **EXE 壓縮包**。
+2. 解壓並執行 `深空之眼Sid半自動腳本.exe`。
+3. 將遊戲設為 **視窗模式 1600×900**（可按 **F2** 自動調整）。
+4. 進入關卡後按 **F5** 選擇角色模式，按 **F1/F6** 視需求啟用普攻/烤肉模式。
+
+---
+
+## ⚠️ 注意事項
+
+- 可執行版本請務必從 **Releases** 取得。
+- 本腳本僅供 **學術研究、技術展示與個人學習** 之用，**禁止商業用途**。
+- 本腳本對應 **視窗模式 1600×900**，其他解析度不保證可用。
+
+---
+
+## 🔒 授權聲明
+
+本專案採用 **MIT License** 開源授權條款。
+
+---
+
+## 📬 聯絡方式
+
+作者：Sid  
+GitHub：[@Sid-1996](https://github.com/Sid-1996)  
+YouTube：[@SID-v7t](https://www.youtube.com/@SID-v7t)
+
+---
+
+## ☕ 支持作者
+
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/K3K11KMXOL)
+
+[🔗 Support This Project](https://www.paypal.com/ncp/payment/GJS4D5VTSVWG4)
+
+[💚 綠界科技贊助（支持作者）](https://p.ecpay.com.tw/E0E3A)
+
+[![Donate via ECPay](https://payment.ecpay.com.tw/Upload/QRCode/201901/QRCode_21c4c069-547f-4115-9f8d-2c050273f028.png)](https://p.ecpay.com.tw/E0E3A)  
+感謝每一位支持者！💖
+
