@@ -20,6 +20,7 @@ coordinates_config.local.json
 
 # Temporary upload/cache folders
 .tmp.driveupload/
+.tmp.drivedownload/
 
 # Local git bootstrap leftovers
 .git-broken/
