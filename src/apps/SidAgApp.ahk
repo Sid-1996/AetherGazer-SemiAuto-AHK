@@ -55,7 +55,7 @@ global IsStatusGUICreated := false
 global StartupGUI         := GetConfig("UI", "ShowStartupGUI", true)
 global StatusDisplayX     := GetConfig("UI", "StatusDisplayX", 10)
 global StatusDisplayY     := GetConfig("UI", "StatusDisplayY", 10)
-global CombatCheckImage   := CommonAssetPath("戰鬥判定.png")
+global CombatCheckImage   := GetCommonAssetPath("戰鬥判定.png")
 global UserPaused         := false
 global LastAction         := "尚未執行任何動作"
 global CurrentCharacter   := "通用模式"
@@ -81,25 +81,25 @@ global CentralStatusGUIObj := ""
 global IsCentralStatusGUICreated := false
 
 ;=== 角色專屬圖片路徑 ===
-global HunYuF1Image       := CharacterAssetPath("魂羽", "魂羽F判定1.png")
-global HunYuF2Image       := CharacterAssetPath("魂羽", "魂羽F判定2.png")
-global HunYuEImage        := CharacterAssetPath("魂羽", "魂羽E判定.png")
+global HunYuF1Image       := GetCharacterAssetPath("魂羽", "魂羽F判定1.png")
+global HunYuF2Image       := GetCharacterAssetPath("魂羽", "魂羽F判定2.png")
+global HunYuEImage        := GetCharacterAssetPath("魂羽", "魂羽E判定.png")
 
-global FeiRanQImage       := CharacterAssetPath("緋染", "緋染Q.png")
-global FeiRanQ1Image      := CharacterAssetPath("緋染", "緋染Q1.png")
-global FeiRanEImage       := CharacterAssetPath("緋染", "緋染E.png")
-global FeiRanE1Image      := CharacterAssetPath("緋染", "緋染E1.png")
-global FeiRanFImage       := CharacterAssetPath("緋染", "緋染F.png")
-global FeiRanFEndImage    := CharacterAssetPath("緋染", "緋染F End.png")
+global FeiRanQImage       := GetCharacterAssetPath("緋染", "緋染Q.png")
+global FeiRanQ1Image      := GetCharacterAssetPath("緋染", "緋染Q1.png")
+global FeiRanEImage       := GetCharacterAssetPath("緋染", "緋染E.png")
+global FeiRanE1Image      := GetCharacterAssetPath("緋染", "緋染E1.png")
+global FeiRanFImage       := GetCharacterAssetPath("緋染", "緋染F.png")
+global FeiRanFEndImage    := GetCharacterAssetPath("緋染", "緋染F End.png")
 
-global QiaoGouQImage      := CharacterAssetPath("巧构", "巧构Q.png")
-global QiaoGouFImage      := CharacterAssetPath("巧构", "巧构F.png")
-global QiaoGouQ1Image     := CharacterAssetPath("巧构", "巧构Q1.png")
-global QiaoGouE1Image     := CharacterAssetPath("巧构", "巧构E1.png")
+global QiaoGouQImage      := GetCharacterAssetPath("巧构", "巧构Q.png")
+global QiaoGouFImage      := GetCharacterAssetPath("巧构", "巧构F.png")
+global QiaoGouQ1Image     := GetCharacterAssetPath("巧构", "巧构Q1.png")
+global QiaoGouE1Image     := GetCharacterAssetPath("巧构", "巧构E1.png")
 global QiaoGouEnhanceMode := "Q"
 
-global GengChenQImage     := CharacterAssetPath("庚辰", "庚辰Q.png")
-global GengChenQ1Image    := CharacterAssetPath("庚辰", "庚辰Q1.png")
+global GengChenQImage     := GetCharacterAssetPath("庚辰", "庚辰Q.png")
+global GengChenQ1Image    := GetCharacterAssetPath("庚辰", "庚辰Q1.png")
 
 ;=== 初始化遊戲管理器 ===
 InitializeGameManager()
@@ -606,7 +606,7 @@ BBQLoop() {
     }
 
     try {
-        if (ImageSearch(&fx, &fy, 811, 188, 874, 237, "*" . ImageVariation . " " . CommonAssetPath("烤肉紅判定.png"))) {
+        if (ImageSearch(&fx, &fy, 811, 188, 874, 237, "*" . ImageVariation . " " . GetCommonAssetPath("烤肉紅判定.png"))) {
             Send("{e}")
             LastAction := "偵測到紅色烤肉 → 已發送 E 鍵"
             return
@@ -616,7 +616,7 @@ BBQLoop() {
     }
 
     try {
-        if (ImageSearch(&fx, &fy, 811, 188, 874, 237, "*" . ImageVariation . " " . CommonAssetPath("烤肉藍判定.png"))) {
+        if (ImageSearch(&fx, &fy, 811, 188, 874, 237, "*" . ImageVariation . " " . GetCommonAssetPath("烤肉藍判定.png"))) {
             Send("{q}")
             LastAction := "偵測到藍色烤肉 → 已發送 Q 鍵"
             return

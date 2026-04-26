@@ -10,23 +10,23 @@ global CHARACTER_ASSETS_DIR := ASSETS_DIR . "\characters"
 global DOCS_DIR := PROJECT_ROOT . "\docs"
 global RELEASES_DIR := PROJECT_ROOT . "\releases"
 
-ProjectPath(relativePath := "") {
+GetProjectPath(relativePath := "") {
     return relativePath = "" ? PROJECT_ROOT : PROJECT_ROOT . "\" . relativePath
 }
 
-ConfigPath(fileName := "") {
+GetConfigPath(fileName := "") {
     return fileName = "" ? CONFIG_DIR : CONFIG_DIR . "\" . fileName
 }
 
-AssetPath(relativePath := "") {
+GetAssetPath(relativePath := "") {
     return relativePath = "" ? ASSETS_DIR : ASSETS_DIR . "\" . relativePath
 }
 
-CommonAssetPath(fileName := "") {
+GetCommonAssetPath(fileName := "") {
     return fileName = "" ? COMMON_ASSETS_DIR : COMMON_ASSETS_DIR . "\" . fileName
 }
 
-CharacterAssetPath(characterName, fileName := "") {
+GetCharacterAssetPath(characterName, fileName := "") {
     basePath := CHARACTER_ASSETS_DIR . "\" . characterName
     return fileName = "" ? basePath : basePath . "\" . fileName
 }

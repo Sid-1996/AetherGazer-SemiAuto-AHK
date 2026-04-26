@@ -7,7 +7,7 @@
 ;=== 全局變量 ===
 global GameConfig := Map()
 global GameWasRunning := false
-global ConfigFile := ConfigPath("GameConfig.ini")
+global ConfigFile := GetConfigPath("GameConfig.ini")
 global OnGameExitCallback := ""
 global OnGameStartCallback := ""
 

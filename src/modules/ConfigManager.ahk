@@ -8,7 +8,7 @@
 class ConfigManager {
     ; 建構子
     __New(configPath := "") {
-        this.configPath := configPath ? configPath : ConfigPath("Config.ini")
+        this.configPath := configPath ? configPath : GetConfigPath("Config.ini")
         this.config := Map()
         this.LoadConfig()
     }

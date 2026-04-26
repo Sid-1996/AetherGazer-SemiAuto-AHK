@@ -146,7 +146,7 @@
 LoadCustomCoordinates()
 
 LoadCustomCoordinates() {
-    configFile := ConfigPath("coordinates_config.json")
+    configFile := GetConfigPath("coordinates_config.json")
     if (!FileExist(configFile))
         return
 
