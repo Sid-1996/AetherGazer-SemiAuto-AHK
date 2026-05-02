@@ -34,7 +34,7 @@ global SCRIPT_VERSION := GetConfig("Script", "Version", "1.0.7")
 
 ;=== 從配置文件載入參數 ===
 global ColorVariation     := GetConfig("Game", "ColorVariation", 15)
-global ImageVariation     := GetConfig("Game", "ImageVariation", 80)
+global ImageVariation     := GetConfig("Game", "ImageVariation", 90)
 global SkillCooldown      := GetConfig("Game", "SkillCooldown", 150)
 global SkillLockTime      := GetConfig("Game", "SkillLockTime", 300)
 
@@ -768,7 +768,7 @@ CheckFeiRanSkills() {
     global LastAction, LastSkillTime, isCastingSkill
     global FeiRanQImage, FeiRanQ1Image, FeiRanEImage, FeiRanE1Image, FeiRanFImage, FeiRanFEndImage
     
-    FeiRanVariationNormal := 70
+    FeiRanVariationNormal := 80
     FeiRanVariationStrict := 40
 
     try {
@@ -880,8 +880,8 @@ CheckQiaoGouSkills() {
     global LastAction, LastSkillTime, isCastingSkill
     global QiaoGouQImage, QiaoGouFImage, QiaoGouQ1Image, QiaoGouE1Image, QiaoGouEnhanceMode
     
-    QiaoGouVariationNormal := 100
-    QiaoGouVariationStrict := 25
+    QiaoGouVariationNormal := 110
+    QiaoGouVariationStrict := 35
 
     ; 檢測橘紅色像素點 (連段所需能量判定)
     try {
