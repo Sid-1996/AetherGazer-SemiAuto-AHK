@@ -24,3 +24,6 @@ config/coordinates_config.local.json
 
 # Local git bootstrap leftovers
 .git-broken/
+
+# Release bundles and build artifacts
+releases/
