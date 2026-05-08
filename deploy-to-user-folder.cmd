@@ -5,6 +5,13 @@ echo Starting deployment to user folder...
 set devFolder=c:\Code play first\AetherGazer ahk
 set userFolder=c:\Code play first\AetherGazer ahk\releases\AetherGazer-AHK-v1.0.9
 
+echo Creating target directories...
+if not exist "%userFolder%" mkdir "%userFolder%"
+if not exist "%userFolder%\modules" mkdir "%userFolder%\modules"
+if not exist "%userFolder%\lib" mkdir "%userFolder%\lib"
+if not exist "%userFolder%\config" mkdir "%userFolder%\config"
+if not exist "%userFolder%\assets" mkdir "%userFolder%\assets"
+
 echo Processing SidAgApp.ahk...
 powershell -Command "(Get-Content '%devFolder%\src\apps\SidAgApp.ahk' -Raw -Encoding UTF8) -replace '#Include \.\.\\modules\\', '#Include modules\' -replace '#Include \.\.\\\.\.\\lib\\', '#Include lib\' | Set-Content '%userFolder%\SidAgApp.ahk' -NoNewline -Encoding UTF8"
 
