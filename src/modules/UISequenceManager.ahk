@@ -141,7 +141,7 @@ UIManager_ProcessNextFadeStep(step) {
             UIManager_FadeInEffect("NameText", "Sid 半自動遊戲腳本", 2)
         case 2:
             ; 直接使用版本號，避免依賴外部配置管理器
-            versionStr := "版本 v1.0.8 正式版 | 1920×1080專用"
+            versionStr := "版本 v1.0.9 正式版 | 1920×1080專用"
             UIManager_FadeInEffect("VersionText", versionStr, 3)
         case 3:
             UIManager_FadeInEffect("AuthorText", "製作 by Sid © 2025", 4)

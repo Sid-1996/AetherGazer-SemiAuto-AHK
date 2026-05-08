@@ -3,7 +3,7 @@ chcp 65001 >nul
 echo Starting deployment to user folder...
 
 set devFolder=c:\Code play first\AetherGazer ahk
-set userFolder=c:\Code play first\AetherGazer ahk\releases\AetherGazer-AHK-v1.0.8
+set userFolder=c:\Code play first\AetherGazer ahk\releases\AetherGazer-AHK-v1.0.9
 
 echo Processing SidAgApp.ahk...
 powershell -Command "(Get-Content '%devFolder%\src\apps\SidAgApp.ahk' -Raw -Encoding UTF8) -replace '#Include \.\.\\modules\\', '#Include modules\' -replace '#Include \.\.\\\.\.\\lib\\', '#Include lib\' | Set-Content '%userFolder%\SidAgApp.ahk' -NoNewline -Encoding UTF8"
