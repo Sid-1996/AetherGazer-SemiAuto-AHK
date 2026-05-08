@@ -5,8 +5,14 @@ if (A_IsCompiled) {
     ; EXE 執行時，腳本位於根目錄
     global PROJECT_ROOT := RegExReplace(A_ScriptDir, "\\$")
 } else {
-    ; 開發時，腳本位於 src 目錄
-    global PROJECT_ROOT := RegExReplace(A_LineFile, "\\src\\ProjectPaths\.ahk$")
+    ; 檢查腳本位置：開發時在 src 目錄，發布時在根目錄
+    if (InStr(A_LineFile, "\src\ProjectPaths.ahk")) {
+        ; 開發時，腳本位於 src 目錄
+        global PROJECT_ROOT := RegExReplace(A_LineFile, "\\src\\ProjectPaths\.ahk$")
+    } else {
+        ; 發布時，腳本位於根目錄
+        global PROJECT_ROOT := RegExReplace(A_LineFile, "\\ProjectPaths\.ahk$")
+    }
 }
 
 global SRC_DIR := PROJECT_ROOT . "\src"
