@@ -94,7 +94,7 @@ CharacterSelect=F5
 - `SaveConfig()` - 保存所有配置到檔案
 - `CreateDefaultConfig()` - 建立預設配置
 
-#### 🔒 安全特性
+#### 安全特性
 
 - **檔案存在檢查**：自動建立缺失的配置文件
 - **類型轉換**：安全的字串到數值轉換
@@ -104,14 +104,56 @@ CharacterSelect=F5
 
 ### 3. `src/modules/GameWindowManager.ahk` - 遊戲視窗管理器
 
-#### 🎯 視窗管理功能
+#### 視窗管理功能
 
 - **視窗調整**：自動調整遊戲視窗到指定大小和位置
 - **進程監控**：即時監控遊戲進程的啟動和結束
 - **條件熱鍵**：智能F2熱鍵，僅在遊戲視窗活躍時生效
 - **回調機制**：支援遊戲啟動/結束的事件回調
+- **座標轉換**：**FindText 專用**的視窗/螢幕座標轉換功能
 
-#### ⚙️ 配置參數
+#### 座標轉換系統（重要）
+
+本專案整合 FindText 函式庫時的特殊座標轉換機制：
+
+```ahk
+; 視窗座標 → 螢幕座標（給 FindText 使用）
+screenCoords := WindowToScreen(winX, winY)
+
+; 螢幕座標 → 視窗座標（反向轉換）
+windowCoords := ScreenToWindow(screenX, screenY)
+```
+
+#### 為什麼需要座標轉換？
+
+- **專案設定**：`CoordMode("Pixel", "Window")` - 所有座標相對於遊戲視窗
+- **FindText 預設**：使用螢幕絕對座標進行圖像搜尋
+- **轉換必要性**：必須轉換才能讓 FindText 正確找到遊戲畫面中的元素
+
+#### 核心轉換函數
+
+- `WindowToScreen(winX, winY)` - 將視窗相對座標轉換為螢幕絕對座標
+- `ScreenToWindow(screenX, screenY)` - 將螢幕絕對座標轉換為視窗相對座標
+
+#### 使用範例
+
+```ahk
+; 原來的 ImageSearch（視窗座標）：
+if (ImageSearch(&fx, &fy, 1162, 764, 1468, 885, "*" . variation . " " . imagePath))
+
+; 新的 FindText（需轉換座標）：
+screenCoords := WindowToScreen(1162, 764)
+screenCoords2 := WindowToScreen(1468, 885)
+if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0, 0, text))
+```
+
+#### 重要注意事項
+
+- **FindText 專用**：此轉換機制專為 FindText 設計，其他 ImageSearch 不需修改
+- **自動偵測**：如果遊戲視窗不存在，函數會返回原始座標
+- **文檔參考**：完整使用指南請參考 `docs/FINDTEXT_GUIDE.md`
+
+#### 配置參數
 
 ```ini
 [Game]

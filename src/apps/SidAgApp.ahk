@@ -1,6 +1,6 @@
 ;===========================================================
-;  AetherGazer-emiAuto-AHK v1.0.7 - AutoHotkey v2版
-;  深空之眼 ‧ Sid半自動遊戲腳本 v1.0.7 - 正式版
+;  AetherGazer-emiAuto-AHK v1.0.8 - AutoHotkey v2版
+;  深空之眼 ‧ Sid半自動遊戲腳本 v1.0.8 - 正式版
 ;-----------------------------------------------------------
 SetWorkingDir(PROJECT_ROOT)
 CoordMode("Pixel", "Window")
@@ -15,6 +15,7 @@ SetMouseDelay(-1)
 #Include ..\modules\ConfigManager.ahk
 #Include ..\modules\UpdateChecker.ahk
 #Include ..\modules\UISequenceManager.ahk
+#Include ..\..\lib\FindText.ahk
 
 ;=== 初始化配置管理器 ===
 InitializeConfig()
@@ -30,7 +31,7 @@ if !A_IsAdmin {
 CheckSystemEnvironment()
 
 ;=== 腳本版本資訊 ===
-global SCRIPT_VERSION := GetConfig("Script", "Version", "1.0.7")
+global SCRIPT_VERSION := GetConfig("Script", "Version", "1.0.8")
 
 ;=== 從配置文件載入參數 ===
 global ColorVariation     := GetConfig("Game", "ColorVariation", 15)
@@ -92,6 +93,15 @@ global FeiRanE1Image      := GetCharacterAssetPath("緋染", "緋染E1.png")
 global FeiRanFImage       := GetCharacterAssetPath("緋染", "緋染F.png")
 global FeiRanFEndImage    := GetCharacterAssetPath("緋染", "緋染F End.png")
 
+;=== FindText 文字常數 ===
+global FeiRanQText := "|<>*122$49.zzzy7zzVzzzz3zzwTztj1zzz7zw7Vzzzvzy3kzzzzzz3kTzzXzzVsDzy7zzlw7zwDzzxy3zkTzzzy1zUzzzzz1y1zzzzzUw3zzzzzkMLzzw7zsBzzzw7zw7zzzy7zy3zzzz1zv1zzzzUzrUzzzzsD/kTzzzy3Rs7zzzzUyQ3zzzzsDi1zzzzy3r0zzzzzUtUTrzzzw7kDrzzk"
+global FeiRanQ1Text := "|<>*135$45.zzvzzzzzzyDzzzzzzFzzzzzzs7zzzzzzUzzzzzzy7zzzzzzszzzzzzzzzs0Tzzzzzy07zzzzy00zzzk0007zy00000zs000007k0zzzU0UTzzzzU3zzzzzz0zzzzzzs7zzzzzz1U"
+global FeiRanEText := "|<>*132$46.z7zlzzzzwzzXzwDznzzbz1zzjzz7w3zyzzzDsDzvzzyTwzzrzzwzzzzTwzxzzzzy7zvzxzy1zzzzby0Tzzzyy0000Dzr000000Cm000000nzU00TzyTzs3zzznzzy7zzyTzzzzzzXzzrzzzwTzzTzzzXzztzzzwTzzjzzz3zzwzzzsTzznzzy3zzzDzzUTzy"
+global FeiRanE1Text := "|<>*136$37.zzwzzzzzwTzzzzw3zzzzw0zzzzy0zzzzz0zzzzzzzzzzzzzzzzzzs007zw00Tzz00Tzzs03zzzk0DzzzU0zzzzk0zzzzs0zzzzw0zzzzy8Tzzzz4DzzzzV7zzzzs1zzzzz0Tzzzzz3zzzz"
+global FeiRanFText := "|<>*127$33.03rzzzk3zzzzk3zzzzk3zkyDU7zb7z0DzXza0ztzww1zTzbk7zzwzUTzz7y1zzszw7zz7zkLztzz4vzDzwZztzzsTzDzyDztzzWzzDzsrztzyDzyDzbzzlztzzyDyTzzVzjzzwDvzzzVzzzzwDzzzzVzxzzwDzDzzVzkTzwDw3zzlzUTTyDwDszlzrz3yDzzw"
+global FeiRanFEndText := "|<>*149$20.0000000000000000000000000000000000000003003w07y0Tz1zzU"
+global CombatCheckText := "|<>*121$22.0Dzw0zzlzzz7sC41U004290M8wTk3lwkB00000UkM"
+
 global QiaoGouQImage      := GetCharacterAssetPath("巧构", "巧构Q.png")
 global QiaoGouFImage      := GetCharacterAssetPath("巧构", "巧构F.png")
 global QiaoGouQ1Image     := GetCharacterAssetPath("巧构", "巧构Q1.png")
@@ -111,7 +121,7 @@ SetTimer(CheckForUpdates, -1000) ; 延遲1秒執行，避免阻塞啟動
 
 CheckForUpdates() {
     ; 從配置中獲取版本號，如果沒有則使用預設值
-    currentVersion := GetConfig("Script", "Version", "1.0.7") 
+    currentVersion := GetConfig("Script", "Version", "1.0.8") 
     updater := UpdateChecker(currentVersion, "Sid-1996", "AetherGazer-SemiAuto-AHK")
     updater.Check(true) ; true 表示靜默檢查，沒有新版本就不提示
 }
@@ -120,6 +130,9 @@ CheckForUpdates() {
 ; 系統環境檢查函數 (簡化版 - 主要邏輯移至UISequenceManager)
 ;-----------------------------------------------------------
 CheckSystemEnvironment() {
+    ; 短暫停0.3秒後開始儀式感
+    Sleep(300)
+    
     ; 使用新的UI序列管理器
     if (GetConfig("UI", "ShowStartupGUI", true)) {
         StartUISequence()
@@ -241,7 +254,7 @@ ManualCheckForUpdates() {
     LastAction := "手動檢查更新中..."
     ShowCenteredToolTip("正在檢查更新...", 2000)
     
-    currentVersion := GetConfig("Script", "Version", "1.0.7")
+    currentVersion := GetConfig("Script", "Version", "1.0.8")
     updater := UpdateChecker(currentVersion, "Sid-1996", "AetherGazer-SemiAuto-AHK")
     updater.Check(false) ; false 表示非靜默，即使是最新版也會提示
 }
@@ -497,19 +510,18 @@ CombatDetection() {
     }
 
     try {
-        if (ImageSearch(&FoundX, &FoundY, 88, 853, 150, 888, "*" . ImageVariation . " " . CombatCheckImage)) {
+        ; 轉換視窗座標為螢幕座標以供 FindText 使用
+        screenCoords := WindowToScreen(88, 853)
+        screenCoords2 := WindowToScreen(150, 888)
+        
+        if (FindText(&FoundX, &FoundY, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, CombatCheckText)) {
             if (!isInCombat) {
                 isInCombat := true
                 isCastingSkill := false
-                LastSkillTime := 0
-                if (UserPaused && !isBBQMode) {
-                    isScriptPaused := false
-                    UserPaused := false
-                    LastAction := "偵測到戰鬥開始 → 自動恢復戰鬥模式"
-                    ShowCenteredToolTip("偵測到戰鬥！自動恢復戰鬥模式", 1000)
-                }
-                StatusText := "戰鬥狀態：進行中"
+                LastAction := "偵測到戰鬥 → 開始自動戰鬥"
+                StatusText := "戰鬥中 - 自動戰鬥啟動"
             }
+            return true
         } else if (isInCombat) {
             isInCombat := false
             isCastingSkill := false
@@ -769,10 +781,14 @@ CheckFeiRanSkills() {
     global FeiRanQImage, FeiRanQ1Image, FeiRanEImage, FeiRanE1Image, FeiRanFImage, FeiRanFEndImage
     
     FeiRanVariationNormal := 80
-    FeiRanVariationStrict := 40
+    FeiRanVariationStrict := 60
 
     try {
-        if (ImageSearch(&fx, &fy, 1162, 764, 1468, 885, "*" . FeiRanVariationNormal . " " . FeiRanQImage)) {
+        ; 轉換視窗座標為螢幕座標以供 FindText 使用
+        screenCoords := WindowToScreen(1162, 764)
+        screenCoords2 := WindowToScreen(1468, 885)
+        
+        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, FeiRanQText)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{q}")
@@ -781,11 +797,15 @@ CheckFeiRanSkills() {
             return true
         }
     } catch {
-        ; 圖片搜索失敗
+        ; FindText 搜索失敗
     }
 
     try {
-        if (ImageSearch(&fx, &fy, 1162, 764, 1468, 885, "*" . FeiRanVariationNormal . " " . FeiRanQ1Image)) {
+        ; 轉換視窗座標為螢幕座標以供 FindText 使用
+        screenCoords := WindowToScreen(1162, 764)
+        screenCoords2 := WindowToScreen(1468, 885)
+        
+        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, FeiRanQ1Text)) {
             isCastingSkill := true
             LastAction := "緋染模式：偵測到Q1 → 執行連段"
             Send("{q}")
@@ -806,11 +826,15 @@ CheckFeiRanSkills() {
             return true
         }
     } catch {
-        ; 圖片搜索失敗
+        ; FindText 搜索失敗
     }
 
     try {
-        if (ImageSearch(&fx, &fy, 1162, 764, 1468, 885, "*" . FeiRanVariationNormal . " " . FeiRanEImage)) {
+        ; 轉換視窗座標為螢幕座標以供 FindText 使用
+        screenCoords := WindowToScreen(1162, 764)
+        screenCoords2 := WindowToScreen(1468, 885)
+        
+        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, FeiRanEText)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{e}")
@@ -819,11 +843,15 @@ CheckFeiRanSkills() {
             return true
         }
     } catch {
-        ; 圖片搜索失敗
+        ; FindText 搜索失敗
     }
 
     try {
-        if (ImageSearch(&fx, &fy, 1162, 764, 1468, 885, "*" . FeiRanVariationNormal . " " . FeiRanE1Image)) {
+        ; 轉換視窗座標為螢幕座標以供 FindText 使用
+        screenCoords := WindowToScreen(1162, 764)
+        screenCoords2 := WindowToScreen(1468, 885)
+        
+        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, FeiRanE1Text)) {
             isCastingSkill := true
             LastAction := "緋染模式：偵測到E1 → 執行連段"
             Send("{e}")
@@ -844,11 +872,15 @@ CheckFeiRanSkills() {
             return true
         }
     } catch {
-        ; 圖片搜索失敗
+        ; FindText 搜索失敗
     }
 
     try {
-        if (ImageSearch(&fx, &fy, 1162, 764, 1468, 885, "*" . FeiRanVariationStrict . " " . FeiRanFImage)) {
+        ; 轉換視窗座標為螢幕座標以供 FindText 使用
+        screenCoords := WindowToScreen(1162, 764)
+        screenCoords2 := WindowToScreen(1468, 885)
+        
+        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, FeiRanFText)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{f}")
@@ -857,11 +889,11 @@ CheckFeiRanSkills() {
             return true
         }
     } catch {
-        ; 圖片搜索失敗
+        ; FindText 搜索失敗
     }
 
     try {
-        if (ImageSearch(&fx, &fy, 688, 742, 917, 793, "*50 " . FeiRanFEndImage)) {
+        if (ImageSearch(&fx, &fy, 688, 742, 917, 793, "*" . FeiRanVariationStrict . " " . FeiRanFEndImage)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{f}")
@@ -870,7 +902,7 @@ CheckFeiRanSkills() {
             return true
         }
     } catch {
-        ; 圖片搜索失敗
+        ; 圖片搜索失敗時的處理
     }
     
     return false
@@ -1362,7 +1394,7 @@ CreateHelpGUI() {
 
     ; 版本信息
     HelpGUIObj.SetFont("c888888 s10")
-    HelpGUIObj.AddText("x20 y545 w350 Center", "版本 v1.0.7 正式版 | 製作 by Sid 2025")
+    HelpGUIObj.AddText("x20 y545 w350 Center", "版本 v1.0.8 正式版 | 製作 by Sid 2025")
     
     ; 修正GUI位置 - 確保在螢幕範圍內
     x := 50   ; 距離螢幕左邊50像素  

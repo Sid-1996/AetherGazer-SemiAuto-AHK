@@ -126,8 +126,8 @@ UIManager_FadeInEffect(controlName, text, nextStep) {
         targetControl.Text := text
         targetControl.Visible := true
         
-        ; 延遲後進行下一步
-        SetTimer(UIManager_ProcessNextFadeStep.Bind(nextStep), -250)
+        ; 淡入動畫效果100ms完成，視窗停留0.5秒
+        SetTimer(UIManager_ProcessNextFadeStep.Bind(nextStep), -100)
     } catch {
         ; 如果控件不存在，跳過到下一步
         UIManager_ProcessNextFadeStep(nextStep)
@@ -141,17 +141,17 @@ UIManager_ProcessNextFadeStep(step) {
             UIManager_FadeInEffect("NameText", "Sid 半自動遊戲腳本", 2)
         case 2:
             ; 直接使用版本號，避免依賴外部配置管理器
-            versionStr := "版本 v1.0.7 正式版 | 1920×1080專用"
+            versionStr := "版本 v1.0.8 正式版 | 1920×1080專用"
             UIManager_FadeInEffect("VersionText", versionStr, 3)
         case 3:
             UIManager_FadeInEffect("AuthorText", "製作 by Sid © 2025", 4)
         case 4:
             UIManager_FadeInEffect("WarningText", "⚠️ 請務必將相關檔案放在腳本同目錄，並使用系統管理員啟動", 5)
         case 5:
-            UIManager_FadeInEffect("InstructionText", "按任意鍵繼續...", 6)
+            UIManager_FadeInEffect("InstructionText", "正在準備啟動...", 6)
         case 6:
-            ; 開始 "按任意鍵繼續..." 的淡入淡出動畫
-            UIManager_StartBlinkingAnimation()
+            ; 短暫停0.5秒後自動繼續
+            SetTimer(UIManager_OnStartupComplete, -500)
     }
 }
 
@@ -193,7 +193,7 @@ UIManager_OnStartupComplete() {
         UIManager_StartupGUI.Destroy()
         UIManager_StartupGUI := ""
     }
-    SetTimer(UIManager_ShowNextStep, -250)
+    SetTimer(UIManager_ShowNextStep, -300)
 }
 
 ;=== 顯示環境檢查 ===
@@ -231,12 +231,12 @@ UIManager_ShowEnvironmentCheck() {
 UIManager_StartEnvironmentProgress() {
     global UIManager_EnvGUI
     static progressSteps := [
-        {text: "[▌      ] 檢查桌面解析度...", delay: 75},
-        {text: "[▌▌     ] 檢查DPI縮放...", delay: 75},
-        {text: "[▌▌▌    ] 檢查系統權限...", delay: 75},
-        {text: "[▌▌▌▌   ] 驗證腳本環境...", delay: 75},
-        {text: "[▌▌▌▌▌  ] 載入配置檔案...", delay: 75},
-        {text: "[▌▌▌▌▌▌ ] 檢查完成！", delay: 125}
+        {text: "[      ] 檢查桌面解析度...", delay: 40},
+        {text: "[▌     ] 檢查DPI縮放...", delay: 50},
+        {text: "[▌▌    ] 檢查系統權限...", delay: 50},
+        {text: "[▌▌▌   ] 驗證腳本環境...", delay: 50},
+        {text: "[▌▌▌▌  ] 載入配置檔案...", delay: 50},
+        {text: "[▌▌▌▌▌ ] 檢查完成！", delay: 0}
     ]
     static stepIndex := 1
     
@@ -245,7 +245,7 @@ UIManager_StartEnvironmentProgress() {
             step := progressSteps[stepIndex]
             UIManager_EnvGUI["ProgressText"].Text := step.text
             stepIndex++
-            SetTimer(UIManager_StartEnvironmentProgress, -step.delay)
+            SetTimer(UIManager_StartEnvironmentProgress, -300)
         } catch {
             ; GUI已被銷毀
             stepIndex := 1
@@ -258,7 +258,7 @@ UIManager_StartEnvironmentProgress() {
         if (result.success) {
             try {
                 UIManager_EnvGUI["ResultText"].Text := "✓ 桌面環境：1920×1080 @ 100% 縮放 (腳本所需)"
-                SetTimer(UIManager_OnEnvironmentComplete, -1000)
+                SetTimer(UIManager_OnEnvironmentComplete, -300)
             } catch {
                 ; GUI已被銷毀
                 UIManager_OnEnvironmentComplete()
@@ -307,7 +307,7 @@ UIManager_OnEnvironmentComplete() {
         UIManager_EnvGUI.Destroy()
         UIManager_EnvGUI := ""
     }
-    SetTimer(UIManager_ShowNextStep, -250)
+    SetTimer(UIManager_ShowNextStep, -300)
 }
 
 ;=== 顯示環境警告 ===
@@ -340,7 +340,7 @@ UIManager_ShowEnvironmentWarning(result) {
     btnContinue := warningGUI.AddButton("x120 y300 w100 h35", "仍要繼續")
     btnExit := warningGUI.AddButton("x280 y300 w100 h35", "退出腳本")
     
-    btnContinue.OnEvent("Click", (*) => (warningGUI.Destroy(), SetTimer(UIManager_ShowNextStep, -250)))
+    btnContinue.OnEvent("Click", (*) => (warningGUI.Destroy(), SetTimer(UIManager_ShowNextStep, -1000)))
     btnExit.OnEvent("Click", (*) => ExitApp())
     warningGUI.OnEvent("Close", (*) => ExitApp())
     
@@ -367,7 +367,7 @@ UIManager_ShowF2Reminder() {
     UIManager_ReminderGUI.Show("w400 h140")
     
     ; 開始倒數計時
-    UIManager_StartCountdown(3)
+    UIManager_StartCountdown(1.5)
 }
 
 ;=== 倒數計時 ===
@@ -380,7 +380,7 @@ UIManager_StartCountdown(seconds) {
     
     if (remaining > 0 && UIManager_ReminderGUI) {
         try {
-            UIManager_ReminderGUI["CountdownText"].Text := "此提醒將在 " . (remaining / 2) . " 秒後自動關閉..."
+            UIManager_ReminderGUI["CountdownText"].Text := "此提醒將在 " . Round(remaining / 2) . " 秒後自動關閉..."
             remaining--
             SetTimer(UIManager_StartCountdown.Bind(0), -500)
         } catch {
@@ -400,7 +400,7 @@ UIManager_OnReminderComplete() {
         UIManager_ReminderGUI.Destroy()
         UIManager_ReminderGUI := ""
     }
-    SetTimer(UIManager_ShowNextStep, -250)
+    SetTimer(UIManager_ShowNextStep, -300)
 }
 
 ;=== 完成整個序列 ===

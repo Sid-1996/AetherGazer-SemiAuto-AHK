@@ -187,3 +187,30 @@ IsGameRunning() {
 AutoExit() {
     ExitApp()
 }
+
+;=== 座標轉換函數 ===
+; 將視窗相對座標轉換為螢幕絕對座標
+WindowToScreen(winX, winY) {
+    global GameConfig
+    windowTitle := GameConfig["WindowTitle"]
+    
+    if (!WinExist(windowTitle)) {
+        return {x: winX, y: winY}
+    }
+    
+    WinGetPos(&clientX, &clientY, &clientWidth, &clientHeight, windowTitle)
+    return {x: clientX + winX, y: clientY + winY}
+}
+
+; 將螢幕絕對座標轉換為視窗相對座標  
+ScreenToWindow(screenX, screenY) {
+    global GameConfig
+    windowTitle := GameConfig["WindowTitle"]
+    
+    if (!WinExist(windowTitle)) {
+        return {x: screenX, y: screenY}
+    }
+    
+    WinGetPos(&clientX, &clientY, &clientWidth, &clientHeight, windowTitle)
+    return {x: screenX - clientX, y: screenY - clientY}
+}

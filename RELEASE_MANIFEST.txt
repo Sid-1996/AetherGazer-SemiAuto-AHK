@@ -1,0 +1,120 @@
+# AetherGazer AHK v1.0.8 發布清單
+# 
+# 此檔案標示打包 EXE 時需要包含的檔案和目錄
+# 
+
+## ✅ 必要檔案（使用者運行所需）
+
+### 核心執行檔
+sid-ag.ahk                    # 主程式入口
+run-sid-ag.cmd               # 啟動腳本
+
+### 配置檔案
+config/                       # 配置檔案目錄
+├── Config.ini               # 主配置檔
+├── GameConfig.ini            # 遊戲配置檔
+└── coordinates_config.json    # 座標配置檔
+
+### 資源檔案
+assets/                       # 資源檔案目錄
+├── common/                 # 共用資源
+│   ├── 戰鬥判定.png
+│   ├── 烤肉紅判定.png
+│   └── 烤肉藍判定.png
+└── characters/             # 角色資源
+    ├── 緋染/
+    │   ├── 緋染Q.png
+    │   ├── 緋染Q1.png
+    │   ├── 緋染E.png
+    │   ├── 緋染E1.png
+    │   ├── 緋染F.png
+    │   ├── 緋染F End.png
+    │   ├── 緋染E判定.png
+    │   └── 緋染F判定1.png
+    ├── 魂羽/
+    ├── 巧构/
+    └── 庚辰/
+
+### 函式庫
+lib/                          # 函式庫目錄
+└── FindText.ahk             # FindText 圖像辨識函式庫
+
+### 授權檔案
+LICENSE                       # 授權條款
+
+## ❌ 排除檔案（開發專用，不需要打包）
+
+### 開發工具
+CoordinateAdjustmentTool.ahk   # 座標調整工具
+run-coordinate-tool.cmd         # 座標工具啟動腳本
+
+### 原始碼
+src/                          # 原始碼目錄（已編譯到 EXE 中）
+
+### 文檔
+docs/                         # 開發文檔
+README.md                     # 開發說明
+CHANGELOG.md                   # 開發日誌
+
+### 版本控制
+.git/                         # Git 版本控制
+.github/                       # GitHub 配置
+.gitignore                     # Git 忽略規則
+
+## 📦 打包建議
+
+### 最小化打包
+只包含「必要檔案」部分，約 10-15MB
+
+### 完整打包
+包含「必要檔案」+「文檔」，約 15-20MB
+
+### 打包命令參考
+```cmd
+# 創建發布目錄
+mkdir AetherGazer-AHK-v1.0.8
+
+# 複製必要檔案
+xcopy sid-ag.ahk AetherGazer-AHK-v1.0.8\
+xcopy run-sid-ag.cmd AetherGazer-AHK-v1.0.8\
+xcopy config AetherGazer-AHK-v1.0.8\config\ /E /I
+xcopy assets AetherGazer-AHK-v1.0.8\assets\ /E /I
+xcopy lib AetherGazer-AHK-v1.0.8\lib\ /E /I
+copy LICENSE AetherGazer-AHK-v1.0.8\
+
+# 編譯 EXE
+"C:\Program Files\AutoHotkey\Compiler\Ahk2Exe.exe" /in AetherGazer-AHK-v1.0.8\sid-ag.ahk
+
+# 壓縮
+powershell Compress-Archive AetherGazer-AHK-v1.0.8 AetherGazer-AHK-v1.0.8.zip
+```
+
+## 🎯 使用者端檔案結構
+
+打包後，使用者解壓縮應該看到：
+```
+AetherGazer-AHK-v1.0.8/
+├── sid-ag.ahk              # 主程式腳本（已修復路徑）
+├── ProjectPaths.ahk         # 路徑管理模組
+├── SidAgApp.ahk           # 主應用程式
+├── run-sid-ag.cmd         # 啟動腳本
+├── LICENSE                # 授權檔案
+├── config/               # 配置檔案
+├── assets/               # 資源檔案
+└── lib/                 # 函式庫
+    └── FindText.ahk     # FindText 圖像辨識
+```
+
+## 📚 使用者指南
+
+**詳細使用說明請參考**：`docs/USER_GUIDE.md`
+
+**快速開始**：
+1. 解壓縮後雙擊 `run-sid-ag.cmd`
+2. 或直接執行 `sid-ag.ahk`
+3. 確認遊戲視窗標題正確
+
+**注意事項**：
+- 使用者版本已修復所有路徑問題
+- 包含完整的 FindText 整合功能
+- 支援獨立 EXE 執行
