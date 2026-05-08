@@ -20,6 +20,7 @@ powershell -Command "(Get-Content '%devFolder%\sid-ag.ahk' -Raw -Encoding UTF8) 
 
 echo Copying main entry files...
 copy "%devFolder%\run-sid-ag.cmd" "%userFolder%\run-sid-ag.cmd" /Y
+copy "%devFolder%\src\ProjectPaths.ahk" "%userFolder%\ProjectPaths.ahk" /Y
 
 echo Copying documentation files...
 copy "%devFolder%\README.md" "%userFolder%\README.md" /Y
