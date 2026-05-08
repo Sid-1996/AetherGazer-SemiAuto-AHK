@@ -1,5 +1,26 @@
 # 更新日誌 (Changelog)
 
+## [v1.0.9] - 2026-05-09
+
+### 🎯 巧构角色完成轉換
+- ✅ **巧构Q**：從 ImageSearch 轉換為 FindText
+- ✅ **巧构F**：從 ImageSearch 轉換為 FindText
+- ✅ **巧构Q1**：從 ImageSearch 轉換為 FindText
+- ✅ **巧构E1**：從 ImageSearch 轉換為 FindText
+- ✅ **能量檢測**：從 PixelSearch 轉換為 FindText
+
+### 🔧 巧构技能邏輯修正
+- **修復F技能後無法釋放Q/E的問題**
+  - 移除F技能執行後的return true
+  - 讓F技能執行後繼續執行強化技能檢測邏輯
+  - 形成正確的 F → Q1 → F → E1 循環
+
+### 📝 版本更新
+- sid-ag.ahk: v1.0.8 → v1.0.9
+- 更新 README.md：巧构角色轉換狀態
+
+---
+
 ## [v1.0.8] - 2026-05-08
 
 ### ✨ 新增功能 (Features)

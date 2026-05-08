@@ -103,9 +103,14 @@ global FeiRanFEndText := "|<>*149$20.0000000000000000000000000000000000000003003
 global CombatCheckText := "|<>*121$22.0Dzw0zzlzzz7sC41U004290M8wTk3lwkB00000UkM"
 
 global QiaoGouQImage      := GetCharacterAssetPath("巧构", "巧构Q.png")
+global QiaoGouQText       := "|<>*143$47.zttsTzzzzyDwTzzzzVTwS07zs1zsk07z0DzsU03s1zsN1w7U0071Tz600042000000EE0000002402E002880wU000U00700000000000Y000000102zzs00204Dys0Dwzyzzw07tzvzzz03nzDzz"
 global QiaoGouFImage      := GetCharacterAssetPath("巧构", "巧构F.png")
+global QiaoGouFText       := "|<>*126$54.zzzzxzzzzzzzzxzzzzzzzzxzzzzzzzzxzzzzzzzzszzzzzzzzssDzzzz0Tsy3zzzw03kT1zzzk00kTszzzzzy07yTzzzzk00TDzzzzk01zjzzzsT07UrzzzzzkTsLzzkzyEryDzy3Ds8UzbzsGT08U7yTlaU0BU0HDX040BU3kD79TsB0zVb6Pbz77zCrCnVzsTwSHCnk7kQ0SHCbs08U0y3y3s3wy0y6y3w7sz0w6z3wDsTkwAzXwTkDtsAznwz03tkMztxw00RUkzzW00003Uzz0bzzyC1zz83zzs03zzb000y0Dzzny07zz1zzlzzzzznzzszzzzzzzzw7zzzzzzzy0TzzzzzzzU0zzzzzzzk3zzzzU"
 global QiaoGouQ1Image     := GetCharacterAssetPath("巧构", "巧构Q1.png")
+global QiaoGouQ1Text      := "|<>*131$26.Xg3yst0zj0M7ns21tyA0SRm077Q01nnUU0sM+0CW71b8k0VX620NszYAS413Dk01bw40lzU0Azw06Dz01bzs0HzV00XU"
 global QiaoGouE1Image     := GetCharacterAssetPath("巧构", "巧构E1.png")
+global QiaoGouE1Text      := "|<>*150$37.QH7zzzd8tzzzoECTzzv837zsQW0nzU8MUNz3MC8zz403WTzY1lsTzy38S1zzb27kzzb1Xzzzg0kzzzcAADk0Dw3G0W0w8pTlyQABTbDwC3T7VwA0K3sAA1hVw8Q0TMy8Eo3yTMtv0zDMntk7ndnsw0ytykzU3w0EzY030lw"
+global QiaoGouEnergyText  := "|<>*96$356.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002"
 global QiaoGouEnhanceMode := "Q"
 
 global GengChenQImage     := GetCharacterAssetPath("庚辰", "庚辰Q.png")
@@ -915,12 +920,20 @@ CheckQiaoGouSkills() {
     QiaoGouVariationNormal := 110
     QiaoGouVariationStrict := 35
 
-    ; 檢測橘紅色像素點 (連段所需能量判定)
+    ; 檢測能量是否充足 (連段所需能量判定)
     try {
-        if (PixelSearch(&FoundX, &FoundY, 938, 840, 962, 847, 0xEE821A, 25)) {
-            ; 有橘紅色像素點時，能量充足，優先檢查Q技能圖片判定
+        ; 轉換視窗座標為螢幕座標以供 FindText 使用
+        screenCoords := WindowToScreen(583,835)
+        screenCoords2 := WindowToScreen(1016,852)
+        
+        if (FindText(&FoundX, &FoundY, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, QiaoGouEnergyText)) {
+            ; 能量充足，優先檢查Q技能判定
             try {
-                if (ImageSearch(&fx, &fy, 1156, 748, 1558, 883, "*" . QiaoGouVariationNormal . " " . QiaoGouQImage)) {
+                ; 轉換視窗座標為螢幕座標以供 FindText 使用
+                screenCoords := WindowToScreen(1210,760)
+                screenCoords2 := WindowToScreen(1470,861)
+                
+                if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, QiaoGouQText)) {
                     isCastingSkill := true
                     LastSkillTime := A_TickCount
                     LastAction := "巧构模式：偵測到能量充足 → 執行 Q-E-Q-E 連段"
@@ -946,13 +959,17 @@ CheckQiaoGouSkills() {
 
     ; 檢測F技能
     try {
-        if (ImageSearch(&fx, &fy, 1156, 748, 1558, 883, "*" . QiaoGouVariationNormal . " " . QiaoGouFImage)) {
+        ; 轉換視窗座標為螢幕座標以供 FindText 使用
+        screenCoords := WindowToScreen(1210,760)
+        screenCoords2 := WindowToScreen(1470,861)
+        
+        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, QiaoGouFText)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{f}")
             LastAction := "巧构模式：偵測到F → 已發送 F 鍵 (下次強化技能: " . QiaoGouEnhanceMode . ")"
             SetTimer(ResetSkillCasting, -300)
-            return true
+            ; 不return，繼續執行強化技能檢測
         }
     } catch {
         ; 圖片搜索失敗
@@ -962,7 +979,11 @@ CheckQiaoGouSkills() {
     if (QiaoGouEnhanceMode = "Q") {
         ; 當前輪到強化Q，只檢測強化Q
         try {
-            if (ImageSearch(&fx, &fy, 1156, 748, 1558, 883, "*" . QiaoGouVariationNormal . " " . QiaoGouQ1Image)) {
+            ; 轉換視窗座標為螢幕座標以供 FindText 使用
+            screenCoords := WindowToScreen(1210,760)
+            screenCoords2 := WindowToScreen(1470,861)
+            
+            if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, QiaoGouQ1Text)) {
                 isCastingSkill := true
                 LastSkillTime := A_TickCount
                 Send("{q}")
@@ -978,7 +999,11 @@ CheckQiaoGouSkills() {
     } else if (QiaoGouEnhanceMode = "E") {
         ; 當前輪到強化E，只檢測強化E
         try {
-            if (ImageSearch(&fx, &fy, 1156, 748, 1558, 883, "*" . QiaoGouVariationNormal . " " . QiaoGouE1Image)) {
+            ; 轉換視窗座標為螢幕座標以供 FindText 使用
+            screenCoords := WindowToScreen(1210,760)
+            screenCoords2 := WindowToScreen(1470,861)
+            
+            if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, QiaoGouE1Text)) {
                 isCastingSkill := true
                 LastSkillTime := A_TickCount
                 Send("{e}")
