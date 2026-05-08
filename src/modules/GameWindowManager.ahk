@@ -4,6 +4,13 @@
 ;===========================================================
 #Requires AutoHotkey v2.0
 
+;=== 防止直接執行 ===
+; 此檔案應由 SidAgApp.ahk 引入，不應直接執行
+if !IsSet(PROJECT_ROOT) {
+    MsgBox("請不要直接執行此檔案！`n`n請改為執行 sid-ag.ahk 或 run-sid-ag.cmd`n`n此檔案是模組檔案，需要由主程式載入。", "執行錯誤", "IconX 4096")
+    ExitApp
+}
+
 ;=== 全局變量 ===
 global GameConfig := Map()
 global GameWasRunning := false
