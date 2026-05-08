@@ -77,7 +77,7 @@ AutoHotkey v2 專案，用於《深空之眼》的半自動戰鬥、角色技能
 
 ### 🖼️ 鍵位提示設定參考
 
-![鍵位提示設定](assets/common/AetherGazer%20UI%20set.png)
+![鍵位提示設定](https://raw.githubusercontent.com/Sid-1996/AetherGazer-SemiAuto-AHK/main/assets/common/AetherGazer%20UI%20set.png)
 
 **設定路徑**：遊戲內 → 設定 → 界面 → 鍵位提示
 
