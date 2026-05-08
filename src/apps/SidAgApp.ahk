@@ -2,14 +2,6 @@
 ;  AetherGazer-emiAuto-AHK v1.0.8 - AutoHotkey v2版
 ;  深空之眼 ‧ Sid半自動遊戲腳本 v1.0.8 - 正式版
 ;-----------------------------------------------------------
-
-;=== 防止直接執行 ===
-; 此檔案應由 sid-ag.ahk 引入，不應直接執行
-if !IsSet(PROJECT_ROOT) {
-    MsgBox("請不要直接執行此檔案！`n`n請改為執行 sid-ag.ahk 或 run-sid-ag.cmd`n`n此檔案是模組檔案，需要由主程式載入。", "執行錯誤", "IconX 4096")
-    ExitApp
-}
-
 SetWorkingDir(PROJECT_ROOT)
 CoordMode("Pixel", "Window")
 SendMode("Input")
