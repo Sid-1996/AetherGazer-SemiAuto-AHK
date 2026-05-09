@@ -46,13 +46,13 @@ global coordData := Map(
 ; 每個辨識項目的定義，包含：名稱、圖片路徑、座標ID、說明、類型
 global recognitionItems := [
     {name: "戰鬥判定", image: GetCommonAssetPath("戰鬥判定.png"), coordId: "battle_check", desc: "戰鬥狀態判定區域", type: "image"},
-    {name: "烤肉紅判定", image: GetCommonAssetPath("烤肉紅判定.png"), coordId: "bbq_red", desc: "烤肉模式紅色判定", type: "image"},
-    {name: "烤肉藍判定", image: GetCommonAssetPath("烤肉藍判定.png"), coordId: "bbq_red", desc: "烤肉模式藍色判定", type: "image"},  ; 共享bbq_red座標
+    {name: "烤肉紅判定", image: "|<>*128$16.zzy00M01U0600M01U0600M01U0600M01U0600M01zzy", coordId: "bbq_red", desc: "烤肉模式紅色判定", type: "findtext"},
+    {name: "烤肉藍判定", image: "|<>*180$19.zzzztzzwTzwDzy3zy1zy0Tz07z03zU0zU0Tk07k03k00s00A007zzz", coordId: "bbq_red", desc: "烤肉模式藍色判定", type: "findtext"},  ; 共享bbq_red座標
 
     ; 魂羽角色
-    {name: "魂羽F1", image: GetCharacterAssetPath("魂羽", "魂羽F判定1.png"), coordId: "hunyu_f1", desc: "魂羽F技能判定1", type: "image"},
-    {name: "魂羽E", image: GetCharacterAssetPath("魂羽", "魂羽E判定.png"), coordId: "hunyu_f1", desc: "魂羽E技能判定", type: "image"},  ; 共享hunyu_f1座標
-    {name: "魂羽F2", image: GetCharacterAssetPath("魂羽", "魂羽F判定2.png"), coordId: "hunyu_f2", desc: "魂羽F技能判定2", type: "image"},
+    {name: "魂羽F1", image: "|<>*137$37.1kV8ss0sVaAQ0AlnXA02Vts43kEQs8DsN6Ma7syNt7lszWN7wMzshDzDzy67zzzz37zzzx5UDzztUkHzzkwMsTzkSSS3z0TiT0C0DnDk30Dtbs00Twnz0E", coordId: "hunyu_f1", desc: "魂羽F技能判定1", type: "findtext"},
+    {name: "魂羽E", image: "|<>*141$43.zyQxwzzzzCSwTzzzbDSTzzznXiDzzztlr7jzzwsvXbzvyAQVbyoz62EnywRn00nyS6tU0NwTXgk09wTkrA05wTwNa00wDz6v01sDzXBU1sDzsqk0sDDwts0MiTzQw0MSRzoC00CQTs7U06QDy1k06Trr0k06Tzwk800zzz0400zzTk000xzk", coordId: "hunyu_f1", desc: "魂羽E技能判定", type: "findtext"},  ; 共享hunyu_f1座標
+    {name: "魂羽F2", image: "|<>*134$61.z2Ds6Dzzz1zsbz1bzzzVzwHz0TzzzUzy7zX7zzzUTz3zVnzzzkDzUzkszzzs7zkTmADzzw7zs7u0Dzzw7zw1w03zyw3vy0y01zzS1wzky00Tzb0z7w7807znUzlw3Y03zskzsS1W01xwMTi7UlU0yS0T7UkMk0TbUA7kA4Q0Dtk07w20C0DwE0Dz0U707z00DzU07k3xk0Dzs0Hs1ww007y19y0yS003zkYz0SDU0DzzvTUDDs1zzzxzs77wDzk", coordId: "hunyu_f2", desc: "魂羽F技能判定2", type: "findtext"},
 
     ; 緋染角色
     {name: "緋染Q", image: GetCharacterAssetPath("緋染", "緋染Q.png"), coordId: "faran_q", desc: "緋染Q技能", type: "image"},
@@ -70,8 +70,8 @@ global recognitionItems := [
     {name: "巧构能量檢測", image: "", coordId: "qiaogu_energy", desc: "巧构連段所需能量判定區域", type: "pixel"}, ; 像素搜索
 
     ; 庚辰角色
-    {name: "庚辰Q", image: GetCharacterAssetPath("庚辰", "庚辰Q.png"), coordId: "gengchen_q", desc: "庚辰Q技能", type: "image"},
-    {name: "庚辰Q1", image: GetCharacterAssetPath("庚辰", "庚辰Q1.png"), coordId: "gengchen_q", desc: "庚辰Q1技能", type: "image"} ; 共享gengchen_q座標
+    {name: "庚辰Q", image: "|<>*132$41.zzzDzzzzzyTzzzzzwTzzzzzwzzzzzzsznzzzzlzDzzzzXwzzzzz3bzzzzy63zzzzwA3zzzzsD3zzzzkS7zzzzUQDzzzz0sTzyDy1szzs7w3lzzkzs7XzzlzkC7zznzUQTzzXz1kzzzby3Vz7bbw67sD7bkAD0yDbUkw1wD71/k20DC0zD40SA3zz8QS07zy1zy0Tzg3zw1zn07zs3zY1", coordId: "gengchen_q", desc: "庚辰Q技能", type: "findtext"},
+    {name: "庚辰Q1", image: "|<>*134$43.00000010000007000000T001203z00Q00zz00zzzy0TAzzzsQTjzzz0y0Dw0A3zzrk0M023zU00000DW000003k000001kk00000MM00000Aa000002PM00001jk00001rs00000zw00000Ty00000TzU0000Tzs0000Czw0004TDy0004Sbb000Dytzk00TyMzy00zw43r03zwCUTU7zyDt1kzzyTy07zzzzs", coordId: "gengchen_q", desc: "庚辰Q1技能", type: "findtext"} ; 共享gengchen_q座標
 ]
 
 ; === 工具函數 ===

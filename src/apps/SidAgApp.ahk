@@ -82,9 +82,9 @@ global CentralStatusGUIObj := ""
 global IsCentralStatusGUICreated := false
 
 ;=== 角色專屬圖片路徑 ===
-global HunYuF1Image       := GetCharacterAssetPath("魂羽", "魂羽F判定1.png")
-global HunYuF2Image       := GetCharacterAssetPath("魂羽", "魂羽F判定2.png")
-global HunYuEImage        := GetCharacterAssetPath("魂羽", "魂羽E判定.png")
+global HunYuF1Text        := "|<>*137$37.1kV8ss0sVaAQ0AlnXA02Vts43kEQs8DsN6Ma7syNt7lszWN7wMzshDzDzy67zzzz37zzzx5UDzztUkHzzkwMsTzkSSS3z0TiT0C0DnDk30Dtbs00Twnz0E"
+global HunYuF2Text        := "|<>*134$61.z2Ds6Dzzz1zsbz1bzzzVzwHz0TzzzUzy7zX7zzzUTz3zVnzzzkDzUzkszzzs7zkTmADzzw7zs7u0Dzzw7zw1w03zyw3vy0y01zzS1wzky00Tzb0z7w7807znUzlw3Y03zskzsS1W01xwMTi7UlU0yS0T7UkMk0TbUA7kA4Q0Dtk07w20C0DwE0Dz0U707z00DzU07k3xk0Dzs0Hs1ww007y19y0yS003zkYz0SDU0DzzvTUDDs1zzzxzs77wDzk"
+global HunYuEText         := "|<>*141$43.zyQxwzzzzCSwTzzzbDSTzzznXiDzzztlr7jzzwsvXbzvyAQVbyoz62EnywRn00nyS6tU0NwTXgk09wTkrA05wTwNa00wDz6v01sDzXBU1sDzsqk0sDDwts0MiTzQw0MSRzoC00CQTs7U06QDy1k06Trr0k06Tzwk800zzz0400zzTk000xzk"
 
 global FeiRanQImage       := GetCharacterAssetPath("緋染", "緋染Q.png")
 global FeiRanQ1Image      := GetCharacterAssetPath("緋染", "緋染Q1.png")
@@ -113,8 +113,8 @@ global QiaoGouE1Text      := "|<>*150$37.QH7zzzd8tzzzoECTzzv837zsQW0nzU8MUNz3MC8
 global QiaoGouEnergyText  := "|<>*96$356.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002"
 global QiaoGouEnhanceMode := "Q"
 
-global GengChenQImage     := GetCharacterAssetPath("庚辰", "庚辰Q.png")
-global GengChenQ1Image    := GetCharacterAssetPath("庚辰", "庚辰Q1.png")
+global GengChenQText      := "|<>*132$41.zzzDzzzzzyTzzzzzwTzzzzzwzzzzzzsznzzzzlzDzzzzXwzzzzz3bzzzzy63zzzzwA3zzzzsD3zzzzkS7zzzzUQDzzzz0sTzyDy1szzs7w3lzzkzs7XzzlzkC7zznzUQTzzXz1kzzzby3Vz7bbw67sD7bkAD0yDbUkw1wD71/k20DC0zD40SA3zz8QS07zy1zy0Tzg3zw1zn07zs3zY1"
+global GengChenQ1Text     := "|<>*134$43.00000010000007000000T001203z00Q00zz00zzzy0TAzzzsQTjzzz0y0Dw0A3zzrk0M023zU00000DW000003k000001kk00000MM00000Aa000002PM00001jk00001rs00000zw00000Ty00000TzU0000Tzs0000Czw0004TDy0004Sbb000Dytzk00TyMzy00zw43r03zwCUTU7zyDt1kzzyTy07zzzzs"
 
 ;=== 初始化遊戲管理器 ===
 InitializeGameManager()
@@ -623,7 +623,11 @@ BBQLoop() {
     }
 
     try {
-        if (ImageSearch(&fx, &fy, 811, 188, 874, 237, "*" . ImageVariation . " " . GetCommonAssetPath("烤肉紅判定.png"))) {
+        ; 轉換視窗座標為螢幕座標以供 FindText 使用
+        screenCoords := WindowToScreen(811, 188)
+        screenCoords2 := WindowToScreen(874, 237)
+        
+        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, Text:="|<>*128$16.zzy00M01U0600M01U0600M01U0600M01U0600M01zzy")) {
             Send("{e}")
             LastAction := "偵測到紅色烤肉 → 已發送 E 鍵"
             return
@@ -633,7 +637,11 @@ BBQLoop() {
     }
 
     try {
-        if (ImageSearch(&fx, &fy, 811, 188, 874, 237, "*" . ImageVariation . " " . GetCommonAssetPath("烤肉藍判定.png"))) {
+        ; 轉換視窗座標為螢幕座標以供 FindText 使用
+        screenCoords := WindowToScreen(811, 188)
+        screenCoords2 := WindowToScreen(874, 237)
+        
+        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, Text:="|<>*180$19.zzzztzzwTzwDzy3zy1zy0Tz07z03zU0zU0Tk07k03k00s00A007zzz")) {
             Send("{q}")
             LastAction := "偵測到藍色烤肉 → 已發送 Q 鍵"
             return
@@ -733,11 +741,15 @@ ResetSkillCasting() {
 ; 角色專屬技能檢查函數 (保持原有不變)
 ;-----------------------------------------------------------
 CheckHunYuSkills() {
-    global HunYuF1Image, HunYuF2Image, HunYuEImage
+    global HunYuF1Text, HunYuF2Text, HunYuEText
     global ImageVariation, LastAction, LastSkillTime, isCastingSkill, SkillCooldown
 
     try {
-        if (ImageSearch(&FoundX, &FoundY, 1045, 684, 1565, 880, "*" . ImageVariation . " " . HunYuF1Image)) {
+        ; 轉換視窗座標為螢幕座標以供 FindText 使用
+        screenCoords := WindowToScreen(1045, 684)
+        screenCoords2 := WindowToScreen(1565, 880)
+        
+        if (FindText(&FoundX, &FoundY, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, HunYuF1Text)) {
             Send("{f}")
             LastAction := "魂羽模式：偵測到F判定1 → 已發送 F 鍵"
             LastSkillTime := A_TickCount
@@ -750,7 +762,11 @@ CheckHunYuSkills() {
     }
 
     try {
-        if (ImageSearch(&FoundX, &FoundY, 1045, 684, 1565, 880, "*" . ImageVariation . " " . HunYuEImage)) {
+        ; 轉換視窗座標為螢幕座標以供 FindText 使用
+        screenCoords := WindowToScreen(1045, 684)
+        screenCoords2 := WindowToScreen(1565, 880)
+        
+        if (FindText(&FoundX, &FoundY, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, HunYuEText)) {
             Send("{e}")
             LastAction := "魂羽模式：偵測到E判定 → 已發送 E 鍵"
             LastSkillTime := A_TickCount
@@ -763,7 +779,11 @@ CheckHunYuSkills() {
     }
 
     try {
-        if (ImageSearch(&FoundX, &FoundY, 1043, 748, 1170, 868, "*" . ImageVariation . " " . HunYuF2Image)) {
+        ; 轉換視窗座標為螢幕座標以供 FindText 使用
+        screenCoords := WindowToScreen(1043, 748)
+        screenCoords2 := WindowToScreen(1170, 868)
+        
+        if (FindText(&FoundX, &FoundY, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, HunYuF2Text)) {
             Send("{LButton}")
             LastAction := "魂羽模式：偵測到F判定2 → 已發送左鍵"
             Sleep(25)
@@ -1033,14 +1053,17 @@ CheckGengChenSkills() {
         if (PixelSearch(&FoundX, &FoundY, 883, 837, 899, 853, 0xEE2727, 25)) {
             ; 有紅色像素點時，怒氣充足，檢查Q技能圖片判定
             try {
-                ; 嘗試搜尋第一張圖片 (庚辰Q.png)
-                if (ImageSearch(&FoundX, &FoundY, 1219, 768, 1462, 881, "*80 " . GengChenQImage)) {
+                ; 轉換視窗座標為螢幕座標以供 FindText 使用
+                screenCoords := WindowToScreen(1219, 768)
+                screenCoords2 := WindowToScreen(1462, 881)
+                
+                if (FindText(&FoundX, &FoundY, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, GengChenQText)) {
                     LastAction := "庚辰模式：偵測到怒氣充足 → 執行技能連段"
                     ExecuteGengChenActions()
                     return true
                 }
-                ; 如果第一張圖片沒找到，嘗試搜尋第二張圖片 (庚辰Q1.png)
-                else if (ImageSearch(&FoundX, &FoundY, 1219, 768, 1462, 881, "*80 " . GengChenQ1Image)) {
+                ; 如果第一張圖片沒找到，嘗試搜尋第二張圖片 (庚辰Q1)
+                else if (FindText(&FoundX, &FoundY, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, GengChenQ1Text)) {
                     LastAction := "庚辰模式：偵測到怒氣充足 → 執行技能連段"
                     ExecuteGengChenActions()
                     return true
