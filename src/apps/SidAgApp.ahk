@@ -56,7 +56,6 @@ global IsStatusGUICreated := false
 global StartupGUI         := GetConfig("UI", "ShowStartupGUI", true)
 global StatusDisplayX     := GetConfig("UI", "StatusDisplayX", 10)
 global StatusDisplayY     := GetConfig("UI", "StatusDisplayY", 10)
-global CombatCheckImage   := GetCommonAssetPath("戰鬥判定.png")
 global UserPaused         := false
 global LastAction         := "尚未執行任何動作"
 global CurrentCharacter   := "通用模式"
@@ -86,11 +85,6 @@ global HunYuF1Text        := "|<>*137$37.1kV8ss0sVaAQ0AlnXA02Vts43kEQs8DsN6Ma7sy
 global HunYuF2Text        := "|<>*134$61.z2Ds6Dzzz1zsbz1bzzzVzwHz0TzzzUzy7zX7zzzUTz3zVnzzzkDzUzkszzzs7zkTmADzzw7zs7u0Dzzw7zw1w03zyw3vy0y01zzS1wzky00Tzb0z7w7807znUzlw3Y03zskzsS1W01xwMTi7UlU0yS0T7UkMk0TbUA7kA4Q0Dtk07w20C0DwE0Dz0U707z00DzU07k3xk0Dzs0Hs1ww007y19y0yS003zkYz0SDU0DzzvTUDDs1zzzxzs77wDzk"
 global HunYuEText         := "|<>*141$43.zyQxwzzzzCSwTzzzbDSTzzznXiDzzztlr7jzzwsvXbzvyAQVbyoz62EnywRn00nyS6tU0NwTXgk09wTkrA05wTwNa00wDz6v01sDzXBU1sDzsqk0sDDwts0MiTzQw0MSRzoC00CQTs7U06QDy1k06Trr0k06Tzwk800zzz0400zzTk000xzk"
 
-global FeiRanQImage       := GetCharacterAssetPath("緋染", "緋染Q.png")
-global FeiRanQ1Image      := GetCharacterAssetPath("緋染", "緋染Q1.png")
-global FeiRanEImage       := GetCharacterAssetPath("緋染", "緋染E.png")
-global FeiRanE1Image      := GetCharacterAssetPath("緋染", "緋染E1.png")
-global FeiRanFImage       := GetCharacterAssetPath("緋染", "緋染F.png")
 global FeiRanFEndImage    := GetCharacterAssetPath("緋染", "緋染F End.png")
 
 ;=== FindText 文字常數 ===
@@ -102,13 +96,9 @@ global FeiRanFText := "|<>*127$33.03rzzzk3zzzzk3zzzzk3zkyDU7zb7z0DzXza0ztzww1zTz
 global FeiRanFEndText := "|<>*149$20.0000000000000000000000000000000000000003003w07y0Tz1zzU"
 global CombatCheckText := "|<>*121$22.0Dzw0zzlzzz7sC41U004290M8wTk3lwkB00000UkM"
 
-global QiaoGouQImage      := GetCharacterAssetPath("巧构", "巧构Q.png")
 global QiaoGouQText       := "|<>*143$47.zttsTzzzzyDwTzzzzVTwS07zs1zsk07z0DzsU03s1zsN1w7U0071Tz600042000000EE0000002402E002880wU000U00700000000000Y000000102zzs00204Dys0Dwzyzzw07tzvzzz03nzDzz"
-global QiaoGouFImage      := GetCharacterAssetPath("巧构", "巧构F.png")
 global QiaoGouFText       := "|<>*126$54.zzzzxzzzzzzzzxzzzzzzzzxzzzzzzzzxzzzzzzzzszzzzzzzzssDzzzz0Tsy3zzzw03kT1zzzk00kTszzzzzy07yTzzzzk00TDzzzzk01zjzzzsT07UrzzzzzkTsLzzkzyEryDzy3Ds8UzbzsGT08U7yTlaU0BU0HDX040BU3kD79TsB0zVb6Pbz77zCrCnVzsTwSHCnk7kQ0SHCbs08U0y3y3s3wy0y6y3w7sz0w6z3wDsTkwAzXwTkDtsAznwz03tkMztxw00RUkzzW00003Uzz0bzzyC1zz83zzs03zzb000y0Dzzny07zz1zzlzzzzznzzszzzzzzzzw7zzzzzzzy0TzzzzzzzU0zzzzzzzk3zzzzU"
-global QiaoGouQ1Image     := GetCharacterAssetPath("巧构", "巧构Q1.png")
 global QiaoGouQ1Text      := "|<>*131$26.Xg3yst0zj0M7ns21tyA0SRm077Q01nnUU0sM+0CW71b8k0VX620NszYAS413Dk01bw40lzU0Azw06Dz01bzs0HzV00XU"
-global QiaoGouE1Image     := GetCharacterAssetPath("巧构", "巧构E1.png")
 global QiaoGouE1Text      := "|<>*150$37.QH7zzzd8tzzzoECTzzv837zsQW0nzU8MUNz3MC8zz403WTzY1lsTzy38S1zzb27kzzb1Xzzzg0kzzzcAADk0Dw3G0W0w8pTlyQABTbDwC3T7VwA0K3sAA1hVw8Q0TMy8Eo3yTMtv0zDMntk7ndnsw0ytykzU3w0EzY030lw"
 global QiaoGouEnergyText  := "|<>*96$356.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002"
 global QiaoGouEnhanceMode := "Q"
@@ -504,7 +494,7 @@ StartScript() {
 ;-----------------------------------------------------------
 CombatDetection() {
     global isInCombat, StatusText, UserPaused, isBBQMode, LastAction
-    global CombatCheckImage, ImageVariation, isScriptPaused, isCastingSkill, LastSkillTime
+    global ImageVariation, isScriptPaused, isCastingSkill, LastSkillTime
     
     ; 使用遊戲管理器檢查窗口是否激活
     gameWindow := GetGameConfig("WindowTitle")
@@ -803,7 +793,7 @@ CheckChiYinSkills() {
 
 CheckFeiRanSkills() {
     global LastAction, LastSkillTime, isCastingSkill
-    global FeiRanQImage, FeiRanQ1Image, FeiRanEImage, FeiRanE1Image, FeiRanFImage, FeiRanFEndImage
+    global FeiRanFEndImage
     
     FeiRanVariationNormal := 80
     FeiRanVariationStrict := 60
@@ -935,7 +925,7 @@ CheckFeiRanSkills() {
 
 CheckQiaoGouSkills() {
     global LastAction, LastSkillTime, isCastingSkill
-    global QiaoGouQImage, QiaoGouFImage, QiaoGouQ1Image, QiaoGouE1Image, QiaoGouEnhanceMode
+    global QiaoGouEnhanceMode
     
     QiaoGouVariationNormal := 110
     QiaoGouVariationStrict := 35
@@ -1046,7 +1036,6 @@ CheckQiaoGouSkills() {
 ;-----------------------------------------------------------
 CheckGengChenSkills() {
     global LastAction, LastSkillTime, isCastingSkill
-    global GengChenQImage, GengChenQ1Image
     
     ; 檢測紅色像素點 (怒氣充足判定)
     try {

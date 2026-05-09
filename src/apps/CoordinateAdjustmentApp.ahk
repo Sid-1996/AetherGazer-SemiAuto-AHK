@@ -45,7 +45,7 @@ global coordData := Map(
 
 ; 每個辨識項目的定義，包含：名稱、圖片路徑、座標ID、說明、類型
 global recognitionItems := [
-    {name: "戰鬥判定", image: GetCommonAssetPath("戰鬥判定.png"), coordId: "battle_check", desc: "戰鬥狀態判定區域", type: "image"},
+    {name: "戰鬥判定", image: "|<>*121$22.0Dzw0zzlzzz7sC41U004290M8wTk3lwkB00000UkM", coordId: "battle_check", desc: "戰鬥狀態判定區域", type: "findtext"},
     {name: "烤肉紅判定", image: "|<>*128$16.zzy00M01U0600M01U0600M01U0600M01U0600M01zzy", coordId: "bbq_red", desc: "烤肉模式紅色判定", type: "findtext"},
     {name: "烤肉藍判定", image: "|<>*180$19.zzzztzzwTzwDzy3zy1zy0Tz07z03zU0zU0Tk07k03k00s00A007zzz", coordId: "bbq_red", desc: "烤肉模式藍色判定", type: "findtext"},  ; 共享bbq_red座標
 
@@ -55,18 +55,18 @@ global recognitionItems := [
     {name: "魂羽F2", image: "|<>*134$61.z2Ds6Dzzz1zsbz1bzzzVzwHz0TzzzUzy7zX7zzzUTz3zVnzzzkDzUzkszzzs7zkTmADzzw7zs7u0Dzzw7zw1w03zyw3vy0y01zzS1wzky00Tzb0z7w7807znUzlw3Y03zskzsS1W01xwMTi7UlU0yS0T7UkMk0TbUA7kA4Q0Dtk07w20C0DwE0Dz0U707z00DzU07k3xk0Dzs0Hs1ww007y19y0yS003zkYz0SDU0DzzvTUDDs1zzzxzs77wDzk", coordId: "hunyu_f2", desc: "魂羽F技能判定2", type: "findtext"},
 
     ; 緋染角色
-    {name: "緋染Q", image: GetCharacterAssetPath("緋染", "緋染Q.png"), coordId: "faran_q", desc: "緋染Q技能", type: "image"},
-    {name: "緋染Q1", image: GetCharacterAssetPath("緋染", "緋染Q1.png"), coordId: "faran_q", desc: "緋染Q1技能", type: "image"},  ; 共享faran_q座標
-    {name: "緋染E", image: GetCharacterAssetPath("緋染", "緋染E.png"), coordId: "faran_q", desc: "緋染E技能", type: "image"},   ; 共享faran_q座標
-    {name: "緋染E1", image: GetCharacterAssetPath("緋染", "緋染E1.png"), coordId: "faran_q", desc: "緋染E1技能", type: "image"}, ; 共享faran_q座標
-    {name: "緋染F", image: GetCharacterAssetPath("緋染", "緋染F.png"), coordId: "faran_q", desc: "緋染F技能", type: "image"},   ; 共享faran_q座標
+    {name: "緋染Q", image: "|<>*122$49.zzzy7zzVzzzz3zzwTztj1zzz7zw7Vzzzvzy3kzzzzzz3kTzzXzzVsDzy7zzlw7zwDzzxy3zkTzzzy1zUzzzzz1y1zzzzzUw3zzzzzkMLzzw7zsBzzzw7zw7zzzy7zy3zzzz1zv1zzzzUzrUzzzzsD/kTzzzy3Rs7zzzzUyQ3zzzzsDi1zzzzy3r0zzzzzUtUTrzzzw7kDrzzk", coordId: "faran_q", desc: "緋染Q技能", type: "findtext"},
+    {name: "緋染Q1", image: "|<>*135$45.zzvzzzzzzyDzzzzzzFzzzzzzs7zzzzzzUzzzzzzy7zzzzzzszzzzzzzzzs0Tzzzzzy07zzzzy00zzzk0007zy00000zs000007k0zzzU0UTzzzzU3zzzzzz0zzzzzzs7zzzzzz1U", coordId: "faran_q", desc: "緋染Q1技能", type: "findtext"},  ; 共享faran_q座標
+    {name: "緋染E", image: "|<>*132$46.z7zlzzzzwzzXzwDznzzbz1zzjzz7w3zyzzzDsDzvzzyTwzzrzzwzzzzTwzxzzzzy7zvzxzy1zzzzby0Tzzzyy0000Dzr000000Cm000000nzU00TzyTzs3zzznzzy7zzyTzzzzzzXzzrzzzwTzzTzzzXzztzzzwTzzjzzz3zzwzzzsTzznzzy3zzzDzzUTzy", coordId: "faran_q", desc: "緋染E技能", type: "findtext"},   ; 共享faran_q座標
+    {name: "緋染E1", image: "|<>*136$37.zzwzzzzzwTzzzzw3zzzzw0zzzzy0zzzzz0zzzzzzzzzzzzzzzzzzs007zw00Tzz00Tzzs03zzzk0DzzzU0zzzzk0zzzzs0zzzzw0zzzzy8Tzzzz4DzzzzV7zzzzs1zzzzz0Tzzzzz3zzzz", coordId: "faran_q", desc: "緋染E1技能", type: "findtext"}, ; 共享faran_q座標
+    {name: "緋染F", image: "|<>*127$33.03rzzzk3zzzzk3zzzzk3zkyDU7zb7z0DzXza0ztzww1zTzbk7zzwzUTzz7y1zzszw7zz7zkLztzz4vzDzwZztzzsTzDzyDztzzWzzDzsrztzyDzyDzbzzlztzzyDyTzzVzjzzwDvzzzVzzzzwDzzzzVzxzzwDzDzzVzkTzwDw3zzlzUTTyDwDszlzrz3yDzzw", coordId: "faran_q", desc: "緋染F技能", type: "findtext"},   ; 共享faran_q座標
     {name: "緋染F_End", image: GetCharacterAssetPath("緋染", "緋染F End.png"), coordId: "faran_f_end", desc: "緋染F結束判定", type: "image"},
 
     ; 巧构角色
-    {name: "巧构Q", image: GetCharacterAssetPath("巧构", "巧构Q.png"), coordId: "qiaogu_q", desc: "巧构Q技能", type: "image"},
-    {name: "巧构F", image: GetCharacterAssetPath("巧构", "巧构F.png"), coordId: "qiaogu_q", desc: "巧构F技能", type: "image"},   ; 共享qiaogu_q座標
-    {name: "巧构Q1", image: GetCharacterAssetPath("巧构", "巧构Q1.png"), coordId: "qiaogu_q", desc: "巧构Q1技能", type: "image"}, ; 共享qiaogu_q座標
-    {name: "巧构E1", image: GetCharacterAssetPath("巧构", "巧构E1.png"), coordId: "qiaogu_q", desc: "巧构E1技能", type: "image"}, ; 共享qiaogu_q座標
+    {name: "巧构Q", image: "|<>*143$47.zttsTzzzzyDwTzzzzVTwS07zs1zsk07z0DzsU03s1zsN1w7U0071Tz600042000000EE0000002402E002880wU000U00700000000000Y000000102zzs00204Dys0Dwzyzzw07tzvzzz03nzDzz", coordId: "qiaogu_q", desc: "巧构Q技能", type: "findtext"},
+    {name: "巧构F", image: "|<>*126$54.zzzzxzzzzzzzzxzzzzzzzzxzzzzzzzzxzzzzzzzzszzzzzzzzssDzzzz0Tsy3zzzw03kT1zzzk00kTszzzzzy07yTzzzzk00TDzzzzk01zjzzzsT07UrzzzzzkTsLzzkzyEryDzy3Ds8UzbzsGT08U7yTlaU0BU0HDX040BU3kD79TsB0zVb6Pbz77zCrCnVzsTwSHCnk7kQ0SHCbs08U0y3y3s3wy0y6y3w7sz0w6z3wDsTkwAzXwTkDtsAznwz03tkMztxw00RUkzzW00003Uzz0bzzyC1zz83zzs03zzb000y0Dzzny07zz1zzlzzzzznzzszzzzzzzzw7zzzzzzzy0TzzzzzzzU0zzzzzzzk3zzzzU", coordId: "qiaogu_q", desc: "巧构F技能", type: "findtext"},   ; 共享qiaogu_q座標
+    {name: "巧构Q1", image: "|<>*131$26.Xg3yst0zj0M7ns21tyA0SRm077Q01nnUU0sM+0CW71b8k0VX620NszYAS413Dk01bw40lzU0Azw06Dz01bzs0HzV00XU", coordId: "qiaogu_q", desc: "巧构Q1技能", type: "findtext"}, ; 共享qiaogu_q座標
+    {name: "巧构E1", image: "|<>*150$37.QH7zzzd8tzzzoECTzzv837zsQW0nzU8MUNz3MC8zz403WTzY1lsTzy38S1zzb27kzzb1Xzzzg0kzzzcAADk0Dw3G0W0w8pTlyQABTbDwC3T7VwA0K3sAA1hVw8Q0TMy8Eo3yTMtv0zDMntk7ndnsw0ytykzU3w0EzY030lw", coordId: "qiaogu_q", desc: "巧构E1技能", type: "findtext"}, ; 共享qiaogu_q座標
     {name: "巧构能量檢測", image: "", coordId: "qiaogu_energy", desc: "巧构連段所需能量判定區域", type: "pixel"}, ; 像素搜索
 
     ; 庚辰角色
