@@ -3,7 +3,7 @@
 ## 🎯 版本說明
 
 ### 📦 使用者版本（推薦）
-**位置**：`releases/AetherGazer-AHK-v1.0.9/`
+**位置**：`releases/AetherGazer-AHK-v1.1.0/`
 
 **特色**：
 - ✅ 開箱即用，無需開發環境
@@ -29,7 +29,7 @@
 ## 🚀 使用者版本快速開始
 
 ### 方法 1：使用啟動腳本（推薦）
-1. 解壓縮 `AetherGazer-AHK-v1.0.9.zip`
+1. 解壓縮 `AetherGazer-AHK-v1.1.0.zip`
 2. 雙擊 `run-sid-ag.cmd`
 3. 腳本會自動偵測 AutoHotkey 並啟動
 
@@ -64,7 +64,7 @@
 ## 📁 使用者版本檔案結構
 
 ```
-AetherGazer-AHK-v1.0.9/
+AetherGazer-AHK-v1.1.0/
 ├── sid-ag.ahk              # 主程式（已修復路徑）
 ├── ProjectPaths.ahk         # 路徑管理模組
 ├── SidAgApp.ahk           # 主應用程式
@@ -158,7 +158,7 @@ Error: #Include file "ProjectPaths.ahk" cannot be opened
 
 ---
 
-**版本**：v1.0.9  
+**版本**：v1.1.0  
 **更新日期**：2026-05-09  
 **製作**：Sid  
 **特色**：巧构角色FindText轉換完成

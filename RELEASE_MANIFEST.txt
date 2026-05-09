@@ -1,4 +1,4 @@
-# AetherGazer AHK v1.0.9 發布清單
+# AetherGazer AHK v1.1.0 發布清單
 # 
 # 此檔案標示打包 EXE 時需要包含的檔案和目錄
 # 
@@ -72,28 +72,28 @@ CHANGELOG.md                   # 開發日誌
 ### 打包命令參考
 ```cmd
 # 創建發布目錄
-mkdir AetherGazer-AHK-v1.0.9
+mkdir AetherGazer-AHK-v1.1.0
 
 # 複製必要檔案
-xcopy sid-ag.ahk AetherGazer-AHK-v1.0.9\
-xcopy run-sid-ag.cmd AetherGazer-AHK-v1.0.9\
-xcopy config AetherGazer-AHK-v1.0.9\config\ /E /I
-xcopy assets AetherGazer-AHK-v1.0.9\assets\ /E /I
-xcopy lib AetherGazer-AHK-v1.0.9\lib\ /E /I
-copy LICENSE AetherGazer-AHK-v1.0.9\
+xcopy sid-ag.ahk AetherGazer-AHK-v1.1.0\
+xcopy run-sid-ag.cmd AetherGazer-AHK-v1.1.0\
+xcopy config AetherGazer-AHK-v1.1.0\config\ /E /I
+xcopy assets AetherGazer-AHK-v1.1.0\assets\ /E /I
+xcopy lib AetherGazer-AHK-v1.1.0\lib\ /E /I
+copy LICENSE AetherGazer-AHK-v1.1.0\
 
 # 編譯 EXE
-"C:\Program Files\AutoHotkey\Compiler\Ahk2Exe.exe" /in AetherGazer-AHK-v1.0.9\sid-ag.ahk
+"C:\Program Files\AutoHotkey\Compiler\Ahk2Exe.exe" /in AetherGazer-AHK-v1.1.0\sid-ag.ahk
 
 # 壓縮
-powershell Compress-Archive AetherGazer-AHK-v1.0.9 AetherGazer-AHK-v1.0.9.zip
+powershell Compress-Archive AetherGazer-AHK-v1.1.0 AetherGazer-AHK-v1.1.0.zip
 ```
 
 ## 🎯 使用者端檔案結構
 
 打包後，使用者解壓縮應該看到：
 ```
-AetherGazer-AHK-v1.0.9/
+AetherGazer-AHK-v1.1.0/
 ├── sid-ag.ahk              # 主程式腳本（已修復路徑）
 ├── ProjectPaths.ahk         # 路徑管理模組
 ├── SidAgApp.ahk           # 主應用程式

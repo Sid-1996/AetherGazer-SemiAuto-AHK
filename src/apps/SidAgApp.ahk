@@ -1,6 +1,6 @@
 ;===========================================================
-;  AetherGazer-emiAuto-AHK v1.0.9 - AutoHotkey v2版
-;  深空之眼 ‧ Sid半自動遊戲腳本 v1.0.9 - 正式版
+;  AetherGazer-emiAuto-AHK v1.1.0 - AutoHotkey v2版
+;  深空之眼 ‧ Sid半自動遊戲腳本 v1.1.0 - 正式版
 ;-----------------------------------------------------------
 SetWorkingDir(PROJECT_ROOT)
 CoordMode("Pixel", "Window")
@@ -1437,7 +1437,7 @@ CreateHelpGUI() {
 
     ; 版本信息
     HelpGUIObj.SetFont("c888888 s10")
-    HelpGUIObj.AddText("x20 y545 w350 Center", "版本 v1.0.9 正式版 | 製作 by Sid 2025")
+    HelpGUIObj.AddText("x20 y545 w350 Center", "版本 v1.1.0 正式版 | 製作 by Sid 2025")
     
     ; 修正GUI位置 - 確保在螢幕範圍內
     x := 50   ; 距離螢幕左邊50像素  

@@ -1,5 +1,22 @@
 # 更新日誌 (Changelog)
 
+## [v1.1.0] - 2026-05-09
+
+### Added
+- V技能偵測功能 (通用模式)
+- 按鍵設置參考圖片 (Button settings.png)
+- FindText轉換：BBQ紅/藍判定、庚辰Q/Q1、魂羽F1/E/F2技能
+
+### Changed
+- 刪除17個過時PNG文件，清理10個過時全域變數
+- 更新CoordinateAdjustmentApp辨識項目為FindText模式
+- 完成大部分角色的FindText轉換工作
+
+### Fixed
+- 修復V技能坐標範圍問題
+
+---
+
 ## [v1.0.9] - 2026-05-09
 
 ### 🎯 巧构角色完成轉換
