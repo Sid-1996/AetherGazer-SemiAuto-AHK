@@ -81,6 +81,12 @@ AutoHotkey v2 專案，用於《深空之眼》的半自動戰鬥、角色技能
 
 **設定路徑**：遊戲內 → 設定 → 界面 → 鍵位提示
 
+### 🎮 按鍵設置參考
+
+![按鍵設置](https://raw.githubusercontent.com/Sid-1996/AetherGazer-SemiAuto-AHK/main/assets/common/Button%20settings.png)
+
+**說明**：此圖顯示遊戲中的按鍵設置，例如滑鼠右鍵是閃避。請確保您的遊戲設置與此圖一致，以獲得最佳的自動化體驗。
+
 ## 主要功能
 
 - 自動普攻與戰鬥循環

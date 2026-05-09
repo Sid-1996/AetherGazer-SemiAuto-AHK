@@ -572,6 +572,12 @@ CombatLoop() {
         LastAction := "通用模式：偵測到 R 技能亮起 → 已發送 R 鍵"
         return
     }
+    ; V技能 - 次優先級
+    if (CheckSkillReady(1447,312,1529,375)) {
+        CastSkill("v")
+        LastAction := "通用模式：偵測到 V 技能亮起 → 已發送 V 鍵"
+        return
+    }
 
     ; F技能 - 第二優先級 (庚辰模式時跳過)
     if (CurrentCharacter != "庚辰" && CheckSkillReady(1384,772,1462,851)) {
