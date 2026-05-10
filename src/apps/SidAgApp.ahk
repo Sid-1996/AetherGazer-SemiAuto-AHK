@@ -1,6 +1,6 @@
 ;===========================================================
-;  AetherGazer-emiAuto-AHK v1.1.0 - AutoHotkey v2版
-;  深空之眼 ‧ Sid半自動遊戲腳本 v1.1.0 - 正式版
+;  AetherGazer-emiAuto-AHK v1.1.1 - AutoHotkey v2版
+;  深空之眼 ‧ Sid半自動遊戲腳本 v1.1.1 - 正式版
 ;-----------------------------------------------------------
 SetWorkingDir(PROJECT_ROOT)
 CoordMode("Pixel", "Window")
@@ -31,7 +31,7 @@ if !A_IsAdmin {
 CheckSystemEnvironment()
 
 ;=== 腳本版本資訊 ===
-global SCRIPT_VERSION := GetConfig("Script", "Version", "1.1.0")
+global SCRIPT_VERSION := GetConfig("Script", "Version", "1.1.1")
 
 ;=== 從配置文件載入參數 ===
 global ColorVariation     := GetConfig("Game", "ColorVariation", 15)
@@ -116,7 +116,7 @@ SetTimer(CheckForUpdates, -1000) ; 延遲1秒執行，避免阻塞啟動
 
 CheckForUpdates() {
     ; 從配置中獲取版本號，如果沒有則使用預設值
-    currentVersion := GetConfig("Script", "Version", "1.1.0") 
+    currentVersion := GetConfig("Script", "Version", "1.1.1") 
     updater := UpdateChecker(currentVersion, "Sid-1996", "AetherGazer-SemiAuto-AHK")
     updater.Check(true) ; true 表示靜默檢查，沒有新版本就不提示
 }
@@ -249,7 +249,7 @@ ManualCheckForUpdates() {
     LastAction := "手動檢查更新中..."
     ShowCenteredToolTip("正在檢查更新...", 2000)
     
-    currentVersion := GetConfig("Script", "Version", "1.1.0")
+    currentVersion := GetConfig("Script", "Version", "1.1.1")
     updater := UpdateChecker(currentVersion, "Sid-1996", "AetherGazer-SemiAuto-AHK")
     updater.Check(false) ; false 表示非靜默，即使是最新版也會提示
 }
@@ -1437,7 +1437,7 @@ CreateHelpGUI() {
 
     ; 版本信息
     HelpGUIObj.SetFont("c888888 s10")
-    HelpGUIObj.AddText("x20 y545 w350 Center", "版本 v1.1.0 正式版 | 製作 by Sid 2025")
+    HelpGUIObj.AddText("x20 y545 w350 Center", "版本 v1.1.1 正式版 | 製作 by Sid 2025")
     
     ; 修正GUI位置 - 確保在螢幕範圍內
     x := 50   ; 距離螢幕左邊50像素  
