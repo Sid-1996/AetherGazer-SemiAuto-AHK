@@ -31,7 +31,7 @@ if !A_IsAdmin {
 CheckSystemEnvironment()
 
 ;=== 腳本版本資訊 ===
-global SCRIPT_VERSION := GetConfig("Script", "Version", "1.0.9")
+global SCRIPT_VERSION := GetConfig("Script", "Version", "1.1.0")
 
 ;=== 從配置文件載入參數 ===
 global ColorVariation     := GetConfig("Game", "ColorVariation", 15)
@@ -116,7 +116,7 @@ SetTimer(CheckForUpdates, -1000) ; 延遲1秒執行，避免阻塞啟動
 
 CheckForUpdates() {
     ; 從配置中獲取版本號，如果沒有則使用預設值
-    currentVersion := GetConfig("Script", "Version", "1.0.9") 
+    currentVersion := GetConfig("Script", "Version", "1.1.0") 
     updater := UpdateChecker(currentVersion, "Sid-1996", "AetherGazer-SemiAuto-AHK")
     updater.Check(true) ; true 表示靜默檢查，沒有新版本就不提示
 }
@@ -249,7 +249,7 @@ ManualCheckForUpdates() {
     LastAction := "手動檢查更新中..."
     ShowCenteredToolTip("正在檢查更新...", 2000)
     
-    currentVersion := GetConfig("Script", "Version", "1.0.9")
+    currentVersion := GetConfig("Script", "Version", "1.1.0")
     updater := UpdateChecker(currentVersion, "Sid-1996", "AetherGazer-SemiAuto-AHK")
     updater.Check(false) ; false 表示非靜默，即使是最新版也會提示
 }
