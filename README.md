@@ -88,14 +88,6 @@ Dailymotion:
 
 ---
 
-  # 📹 Demo Showcase / 示範影片
-
-Dailymotion:
-
-[https://www.dailymotion.com/video/xa9cau2](https://www.dailymotion.com/video/xa9cyg0)
-
----
-
 ### 🖼️ 鍵位提示設定參考
 
 ![鍵位提示設定](https://raw.githubusercontent.com/Sid-1996/AetherGazer-SemiAuto-AHK/main/assets/common/AetherGazer%20UI%20set.png)
