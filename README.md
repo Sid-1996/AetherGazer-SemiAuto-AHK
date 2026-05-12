@@ -1,5 +1,11 @@
 # 深空之眼 Sid 半自動腳本
 
+[![Release](https://img.shields.io/github/release/Sid-1996/AetherGazer-SemiAuto-AHK.svg)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/Sid-1996/AetherGazer-SemiAuto-AHK/total.svg)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases)
+[![License](https://img.shields.io/github/license/Sid-1996/AetherGazer-SemiAuto-AHK.svg)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/blob/main/LICENSE)
+[![Last Commit](https://img.shields.io/github/last-commit/Sid-1996/AetherGazer-SemiAuto-AHK.svg)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/commits/main)
+[![Issues](https://img.shields.io/github/issues/Sid-1996/AetherGazer-SemiAuto-AHK.svg)](https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/issues)
+
 AutoHotkey v2 專案，用於《深空之眼》的半自動戰鬥、角色技能判定、視窗調整與座標校正。
 
 ## 目前結構
@@ -75,6 +81,14 @@ AutoHotkey v2 專案，用於《深空之眼》的半自動戰鬥、角色技能
    - F11：重新載入
    - F12：退出
 
+  # 📹 Demo Showcase / 示範影片
+
+Dailymotion:
+
+[https://www.dailymotion.com/video/xa9cau2](https://www.dailymotion.com/video/xa9cyg0)
+
+---
+
 ### 🖼️ 鍵位提示設定參考
 
 ![鍵位提示設定](https://raw.githubusercontent.com/Sid-1996/AetherGazer-SemiAuto-AHK/main/assets/common/AetherGazer%20UI%20set.png)
@@ -149,7 +163,11 @@ AutoHotkey v2 專案，用於《深空之眼》的半自動戰鬥、角色技能
   - 緋染Q、緋染Q1、緋染E、緋染E1、緋染F、緋染F End
 - ✅ **巧构角色**：全部技能已轉換為 FindText
   - 巧构Q、巧构F、巧构Q1、巧构E1、能量檢測
-- 📋 其他角色：魂羽、庚辰等待轉換
+- ✅ **魂羽角色**：全部技能已轉換為 FindText
+  - 魂羽F1、魂羽E、魂羽F2
+- ✅ **庚辰角色**：全部技能已轉換為 FindText
+  - 庚辰Q、庚辰Q1
+- ✅ **BBQ模式**：紅/藍判定已轉換為 FindText
 
 ## 目前版本管理狀態
 
