@@ -229,13 +229,13 @@ ToggleBBQMode() {
     isScriptPaused := isBBQMode
 
     if (isBBQMode) {
-        LastAction := "進入烤肉模式"
-        ShowCenteredToolTip("烤肉模式啟用", 1000)
+        LastAction := "進入小遊戲模式"
+        ShowCenteredToolTip("小遊戲模式啟用", 1000)
         SetTimer(BBQLoop, 50)
     } else {
         SetTimer(BBQLoop, 0)
-        LastAction := "退出烤肉模式"
-        ShowCenteredToolTip("烤肉模式關閉", 1000)
+        LastAction := "退出小遊戲模式"
+        ShowCenteredToolTip("小遊戲模式關閉", 1000)
     }
 }
 
@@ -608,7 +608,7 @@ CombatLoop() {
 }
 
 ;-----------------------------------------------------------
-; 烤肉模式循環
+; 小遊戲模式循環
 ;-----------------------------------------------------------
 BBQLoop() {
     global isBBQMode, LastAction, ImageVariation
@@ -625,7 +625,7 @@ BBQLoop() {
         
         if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, Text:="|<>*128$16.zzy00M01U0600M01U0600M01U0600M01U0600M01zzy")) {
             Send("{e}")
-            LastAction := "偵測到紅色烤肉 → 已發送 E 鍵"
+            LastAction := "偵測到紅色打擊圖示 → 已發送 E 鍵"
             return
         }
     } catch {
@@ -639,7 +639,7 @@ BBQLoop() {
         
         if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.1, 0.1, Text:="|<>*180$19.zzzztzzwTzwDzy3zy1zy0Tz07z03zU0zU0Tk07k03k00s00A007zzz")) {
             Send("{q}")
-            LastAction := "偵測到藍色烤肉 → 已發送 Q 鍵"
+            LastAction := "偵測到藍色打擊圖示 → 已發送 Q 鍵"
             return
         }
     } catch {
@@ -694,13 +694,13 @@ F6:: {
     isScriptPaused := isBBQMode
 
     if (isBBQMode) {
-        LastAction := "進入烤肉模式"
-        ShowCenteredToolTip("烤肉模式啟用", 1000)
+        LastAction := "進入小遊戲模式"
+        ShowCenteredToolTip("小遊戲模式啟用", 1000)
         SetTimer(BBQLoop, 50)
     } else {
         SetTimer(BBQLoop, 0)
-        LastAction := "退出烤肉模式"
-        ShowCenteredToolTip("烤肉模式關閉", 1000)
+        LastAction := "退出小遊戲模式"
+        ShowCenteredToolTip("小遊戲模式關閉", 1000)
     }
 }
 
@@ -1194,7 +1194,7 @@ UpdateStatusDisplay() {
     
     gameWindow := GetGameConfig("WindowTitle")
     combatStatus := isInCombat ? "戰鬥中" : "非戰鬥"
-    modeStatus := isBBQMode ? "烤肉模式" : (isScriptPaused ? "暫停中" : "運行中")
+    modeStatus := isBBQMode ? "小遊戲模式" : (isScriptPaused ? "暫停中" : "運行中")
 
     ; 獲取遊戲窗口位置和大小（用於動態定位GUI）
     try {
@@ -1295,7 +1295,7 @@ UpdateCentralStatusDisplay() {
     ; 根據當前狀態決定顯示的文字
     statusMessage := ""
     if (isBBQMode) {
-        statusMessage := "烤肉模式運行中..."
+        statusMessage := "小遊戲模式運行中..."
     } else if (isInCombat) {
         if (IsManualIntervention) {
             statusMessage := "手動介入中..."
@@ -1391,7 +1391,7 @@ CreateHelpGUI() {
     HelpGUIObj.AddText("x30 y135", "F3  - 開啟/關閉此熱鍵說明面板 (ESC也可關閉)")
     HelpGUIObj.AddText("x30 y155", "F4  - 手動暫停腳本 (戰鬥時自動恢復)")
     HelpGUIObj.AddText("x30 y175", "F5  - 開啟角色選擇面板")
-    HelpGUIObj.AddText("x30 y195", "F6  - 切換烤肉模式 (自動按E/Q)")
+    HelpGUIObj.AddText("x30 y195", "F6  - 切換小遊戲模式 (自動按E/Q)")
     HelpGUIObj.AddText("x30 y215", "F7  - 手動檢查版本更新")
     HelpGUIObj.AddText("x30 y235", "F8  - 切換輸入監測調試模式")
     

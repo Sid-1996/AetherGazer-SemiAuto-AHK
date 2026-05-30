@@ -3543,105 +3543,105 @@ Lang(text:="", getLang:=0)
   {
     s:="
     (
-Myww       = Width = Adjust the width of the capture range
-Myhh       = Height = Adjust the height of the capture range
-AddFunc    = Add = Additional FindText() in Copy
-NowHotkey  = Hotkey = Current screenshot hotkey
-SetHotkey1 = = First sequence Screenshot hotkey
-SetHotkey2 = = Second sequence Screenshot hotkey
-Apply      = Apply = Apply new screenshot hotkey
-CutU2      = CutU = Cut the Upper Edge of the text in the edit box below
-CutL2      = CutL = Cut the Left Edge of the text in the edit box below
-CutR2      = CutR = Cut the Right Edge of the text in the edit box below
-CutD2      = CutD = Cut the Lower Edge of the text in the edit box below
-Update     = Update = Update the text in the edit box below to the line of Code
-GetRange   = GetRange = Get screen range to Clipboard and update the search range of the Code
-GetOffset  = GetOffset = Get position offset relative to the Text from the Code and update FindText().Click()
-GetClipOffset  = GetOffset2 = Get position offset relative to the Text from the Left Box
-Capture    = Capture = Initiate Image Capture Sequence
-CaptureS   = CaptureS = Restore the Saved ScreenShot by Hotkey and then start capturing
-Test       = Test = Test the Text from the Code to see if it can be found on the screen
-TestClip   = Test2 = Test the Text from the Left Box and copy the result to Clipboard
-Paste      = Paste = Paste the Text from Clipboard to the Left Box
-CopyOffset = Copy2 = Copy the Offset to Clipboard
-Copy       = Copy = Copy the selected or all of the code to the clipboard
-Reset      = Reset = Reset to Original Captured Image
-SplitAdd   = SplitAdd = Using Markup Segmentation to Generate Text Library
-AllAdd     = AllAdd = Append Another FindText Search Text into Previously Generated Code
-Gray2Two      = Gray2Two = Converts Image Pixels from Gray Threshold to Black or White
-GrayDiff2Two  = GrayDiff2Two = Converts Image Pixels from Gray Difference to Black or White
-Color2Two     = Color2Two = Converts Image Pixels from Color List to Black or White
-ColorPos2Two  = ColorPos2Two = Converts Image Pixels from Color Position to Black or White
-SelGray    = Gray = Gray value of the selected color
-SelColor   = Color = The selected color
-SelR       = R = Red component of the selected color
-SelG       = G = Green component of the selected color
-SelB       = B = Blue component of the selected color
-RepU       = -U = Undo Cut the Upper Edge by 1
-CutU       = U = Cut the Upper Edge by 1
-CutU3      = U3 = Cut the Upper Edge by 3
-RepL       = -L = Undo Cut the Left Edge by 1
-CutL       = L = Cut the Left Edge by 1
-CutL3      = L3 = Cut the Left Edge by 3
-Auto       = Auto = Automatic Cut Edge after image has been converted to black and white
-RepR       = -R = Undo Cut the Right Edge by 1
-CutR       = R = Cut the Right Edge by 1
-CutR3      = R3 = Cut the Right Edge by 3
-RepD       = -D = Undo Cut the Lower Edge by 1
-CutD       = D = Cut the Lower Edge by 1
-CutD3      = D3 = Cut the Lower Edge by 3
-Modify     = Modify = Allows Modify the Black and White Image
-MultiColor = FindMultiColor = Click multiple colors with the mouse, then Click OK button
-FindShape  = FindShape = Click multiple colors, it will be binarized based on the first color
-Undo       = Undo = Undo the last selected color
-Undo2      = Undo = Undo the last added color in Color List
-Comment    = Comment = Optional Comment used to Label Code ( Within <> )
-Threshold  = Gray Threshold = Gray Threshold which Determines Black or White Pixel Conversion (0-255)
-GrayDiff   = Gray Difference = Gray Difference which Determines Black or White Pixel Conversion (0-255)
-Similar1   = Similarity = Adjust color similarity as Equivalent to The Selected Color
-Similar2   = Similarity = Adjust color similarity as Equivalent to The Selected Color
-Similar3   = Similarity = Adjust color similarity as Equivalent to The Selected Color
-AddColorSim  = Add = Add Color to Color List and Run Color2Two
-AddColorDiff = Add = Add Color to Color List and Run Color2Two
-ColorList  = = Color list for converting black and white images
-DiffRGB    = R/G/B = Determine the allowed R/G/B Error (0-255) when Find MultiColor
-DiffRGB2   = R/G/B = Determine the allowed R/G/B Error (0-255)
-Bind0      = BindWin1 = Bind the window and Use GetDCEx() to get the image of background window
-Bind1      = BindWin1+ = Bind the window Use GetDCEx() and Modify the window to support transparency
-Bind2      = BindWin2 = Bind the window and Use PrintWindow() to get the image of background window
-Bind3      = BindWin2+ = Bind the window Use PrintWindow() and Modify the window to support transparency
-Bind4      = BindWin3 = Bind the window and Use PrintWindow(,,3) to get the image of background window
-OK         = OK = Create New FindText Code for Testing
-OK2        = OK = Restore this ScreenShot then Capturing
-Cancel     = Cancel = Close the Window Don't Do Anything
-Cancel2    = Cancel = Close the Window Don't Do Anything
-ClearAll   = ClearAll = Clean up all saved ScreenShots
-OpenDir    = OpenDir = Open the saved screenshots directory
-SavePic    = SavePic = Select a range and save as a picture
-SavePic2   = SavePic = Save the trimmed original image as a picture
-LoadPic    = LoadPic = Load a picture as Capture image
-ClipText   = = Displays the Text data from clipboard
-Offset     = = Displays the results of GetOffset2 or GetRange
-SelectBox  = = Select a screenshot to display in the upper left corner of the screen
-s1  = FindText
-s2  = Gray|GrayDiff|Color|ColorPos|MultiColor
-s3  = Capture Image To Text
-s4  = Capture Image To Text and Find Text Tool
-s5  = Direction keys to fine tune\nFirst click RButton(or Ctrl)\nMove the mouse away\nSecond click RButton(or Ctrl)
-s6  = Unbind Window using
-s7  = Drag a range with LButton(or Ctrl)\nCoordinates are copied to clipboard
-s8  = Found|Time|ms|Pos|Result|value can be get from|Wait 3 seconds for appear|Wait indefinitely for disappear
-s9  = Success
-s10 = The Capture Position|Perspective binding window\nRight click to finish capture
-s11 = Please Set Gray Difference First !
-s12 = Please select the core color first !
-s13 = Please convert the image to black or white first !
-s14 = Can't be used in ColorPos mode, because it can cause position errors
-s15 = Are you sure about the scope of your choice ?\n\nIf not, you can choose again
-s16 = Please add colors to the color list first !
-s17 = The picture you want to open was not found !
-s18 = Capture|ScreenShot
-s19 = Are you sure to delete all screenshots ?
+Myww = 寬度 = 調整抓圖範圍的寬度
+Myhh = 高度 = 調整抓圖範圍的高度
+AddFunc = 附加 = 複製時帶 FindText() 函數
+NowHotkey = 截圖熱鍵 = 當前的截圖熱鍵
+SetHotkey1 = = 第一優先順序的截圖熱鍵
+SetHotkey2 = = 第二優先順序的截圖熱鍵
+Apply = 應用 = 應用新的截圖熱鍵
+CutU2 = 上刪 = 裁切下方編輯框中文字的上緣
+CutL2 = 左刪 = 裁切下方編輯框中文字的左邊緣
+CutR2 = 右刪 = 裁切下面編輯框中文字的右邊緣
+CutD2 = 下刪 = 裁切下方編輯框中文字的下緣
+Update = 更新 = 更新下方編輯框中文字到代碼行中
+GetRange = 獲取屏幕範圍 = 獲取屏幕範圍到剪貼板並替換代碼中的範圍參數
+GetOffset = 取得相對坐標 = 取得相對圖像位置的偏移坐標並取代代碼中的點擊坐標
+GetClipOffset = 取得相對坐標2 = 取得相對左邊編輯框的圖像的偏移坐標
+Capture = 抓圖 = 開始螢幕抓圖
+CaptureS = 截圖抓圖 = 先截圖，然後顯示截圖圖像，再手動選擇圖像內的範圍抓圖
+Test = 測試 = 測試產生的代碼是否可以找到成功
+TestClip = 測試2 = 測試左邊文字方塊中的文字是否可以找到成功，結果複製到剪貼板
+Paste = 粘貼 = 粘貼剪貼板的文字數據
+CopyOffset = 複製2 = 複製左邊的偏移坐標到剪貼板
+Copy = 複製 = 複製代碼到剪貼板
+Reset = 重讀 = 重新讀取原始的彩色圖像
+SplitAdd = 分割添加 = 點擊黃色的標籤來分割圖像為多個圖像數據，並添加到舊代碼中
+AllAdd = 整體添加 = 將文字資料整體新增至舊代碼中
+Gray2Two = 灰階閾值二值化 = 灰階小於閾值的為黑色其餘白色
+GrayDiff2Two = 灰階差值二值化 = 某點與周圍灰階之差大於差值的為黑色其餘白色
+Color2Two = 顏色二值化 = 透過顏色列表來轉換圖像為黑白圖
+ColorPos2Two = 顏色位置二值化 = 指定顏色及相似色為黑色其餘白色，但記錄該色的位置
+SelGray = 灰階 = 選取顏色的灰階值 (0-255)
+SelColor = 顏色 = 選取顏色的RGB顏色值
+SelR = 紅色 = 選取顏色的紅色分量
+SelG = 綠色 = 選取顏色的綠色分量
+SelB = 藍色 = 選取顏色的藍色分量
+RepU = -上 = 撤銷裁剪上緣1個像素
+CutU = 上 = 裁切上緣1個像素
+CutU3 = 上3 = 裁切上緣3個像素
+RepL = -左 = 撤銷裁切左邊緣1個像素
+CutL = 左 = 裁切左邊緣1個像素
+CutL3 = 左3 = 裁切左邊緣3個像素
+Auto = 自動 = 二值化之後自動裁切空白邊緣
+RepR = -右 = 撤銷裁剪右邊緣1個像素
+CutR = 右 = 裁切右邊緣1個像素
+CutR3 = 右3 = 裁切右邊緣3個像素
+RepD = -下 = 撤銷裁剪下緣1個像素
+CutD = 下 = 裁切下緣1個像素
+CutD3 = 下3 = 裁切下緣3個像素
+Modify = 修改 = 二值化後可以用鼠標在預覽區點擊手動修改黑白點
+MultiColor = 多點找色 = 鼠標選擇多種顏色，之後點擊「確定」按鈕
+FindShape = 找形狀 = 鼠標選擇多種顏色，會基於第一點的顏色二值化
+Undo = 撤銷 = 撤銷上一次選擇的顏色
+Undo2 = 撤銷 = 撤銷上一次新增到顏色清單的顏色
+Comment = 識別文字 = 識別文字 (包含在<>)，分割新增時也會分解成單一文字
+Threshold = 灰階閾值 = 灰階閾值 (0-255)
+GrayDiff = 灰階差值 = 灰階差值 (0-255)
+Similar1 = 相似度 = 與選取顏色的相似度
+Similar2 = 相似度 = 與選取顏色的相似度
+Similar3 = 相似度 = 與選取顏色的相似度
+AddColorSim = 新增 = 顏色相似模式加入到顏色清單中再運行顏色二值化
+AddColorDiff = 新增 = 顏色偏色模式加入顏色清單中再運行顏色二值化
+ColorList = = 顏色清單用於轉換圖像為二值圖
+DiffRGB = 紅/綠/藍 = 多色查找時各分量允許的偏差 (0-255)
+DiffRGB2 = 紅/綠/藍 = 多色查找時各分量允許的偏差 (0-255)
+Bind0 = 綁定視窗1 = 綁定視窗使用GetDCEx()取得後台視窗圖像
+Bind1 = 綁定視窗1+ = 綁定視窗使用GetDCEx()並修改視窗透明度
+Bind2 = 綁定視窗2 = 綁定視窗使用PrintWindow()取得後台視窗圖像
+Bind3 = 綁定視窗2+ = 綁定視窗使用PrintWindow()並修改視窗透明度
+Bind4 = 綁定視窗3 = 綁定視窗使用PrintWindow(,,3)取得後台視窗圖像
+OK = 確定 = 產生全新的代碼替換舊代碼
+OK2 = 確定 = 恢復截圖到螢幕然後再抓圖
+Cancel = 取消 = 關閉視窗不做任何事
+Cancel2 = 取消 = 關閉視窗不做任何事
+ClearAll = 清空 = 清空所有已儲存的截圖
+OpenDir = 打開目錄 = 開啟儲存螢幕截圖的目錄
+SavePic = 儲存圖片 = 選擇一個範圍儲存為圖片
+SavePic2 = 儲存圖片 = 將修剪後的原始圖像儲存為圖片
+LoadPic = 載入圖片 = 載入一張圖片作為抓取的圖像
+ClipText = = 顯示貼上的文字數據
+Offset = = 顯示「取得相對坐標2」或「取得屏幕範圍」的結果
+SelectBox = = 選擇截圖顯示到屏幕左上角
+s1 = FindText找字工具
+s2 = 灰階閾值|灰階差值|顏色|顏色位置|多色查找
+s3 = 影像二值化及分割
+s4 = 抓圖產生字庫及找字代碼
+s5 = 方向鍵微調選框\n先點擊右鍵(Ctrl)一次\n把鼠標移開\n再點擊右鍵(Ctrl)一次
+s6 = 解綁視窗使用
+s7 = 左鍵(Ctrl)拖曳選擇範圍\n坐標複製到剪貼板
+s8 = 找到|時間|毫秒|位置|結果|值可以這樣獲取|等待3秒等圖像出現|無限等待等圖像消失
+s9 = 截圖成功
+s10 = 鼠標位置|穿透顯示綁定視窗\n點擊右鍵完成抓圖
+s11 = 請先設定灰階差值！
+s12 = 請先選擇核心顏色！
+s13 = 請先將圖像二值化！
+s14 = 不能用於顏色位置二值化模式, 因為分割後會導致位置錯誤
+s15 = 你確定選擇的範圍嗎？ \n\n如果不確定，可以重新選擇
+s16 = 請先將顏色加到顏色清單！
+s17 = 你想打開的圖片沒找到！
+s18 = 捕獲|截圖
+s19 = 你確定要刪除所有的截圖嗎？
     )"
     Lang1:=Map(), Lang1.Default:="", Lang2:=Map(), Lang2.Default:=""
     Loop Parse, s, "`n", "`r"
