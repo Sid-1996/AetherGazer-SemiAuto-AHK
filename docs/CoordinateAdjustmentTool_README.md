@@ -194,7 +194,7 @@ LoadCustomCoordinates() {
 1. 檢查 `config/coordinates_config.json` 文件格式是否正確
 2. 確認遊戲視窗大小和解析度設置
 3. 查看工具的錯誤提示訊息
-4. 參考主腳本的 `AHK_MODULES.md` 文檔
+4. 參考主腳本的 `NEW_INTELLIGENT_DOCS.md` 文檔
 
 ---
 

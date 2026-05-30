@@ -138,10 +138,9 @@ Dailymotion:
 
 ## 文件
 
-- `docs/PROJECT_OVERVIEW.md`
-- `docs/AHK_MODULES.md`
-- `docs/CoordinateAdjustmentTool_README.md`
-- `docs/FINDTEXT_GUIDE.md` - **FindText 整合指南（重要）**
+- `docs/NEW_INTELLIGENT_DOCS.md` - 技術主文件
+- `docs/USER_GUIDE.md` - 使用者指南
+- `docs/CoordinateAdjustmentTool_README.md` - 座標調整工具
 
 ## FindText 圖像辨識
 
@@ -154,8 +153,8 @@ Dailymotion:
 
 ### 座標系統
 - **重要**：本專案使用特殊的座標轉換機制
-- 所有 FindText 使用都必須遵循 `docs/FINDTEXT_GUIDE.md` 中的標準流程
 - 已實現視窗座標到螢幕座標的自動轉換
+- 相關規則統一收斂在 `docs/NEW_INTELLIGENT_DOCS.md`
 
 ### 已實現案例
 - ✅ **緋染角色**：全部技能已轉換為 FindText
@@ -166,11 +165,13 @@ Dailymotion:
   - 魂羽F1、魂羽E、魂羽F2
 - ✅ **庚辰角色**：全部技能已轉換為 FindText
   - 庚辰Q、庚辰Q1
+- ✅ **武羅角色**：已加入主程式角色邏輯
+- ✅ **詩蔻蒂角色**：已加入主程式角色邏輯
 - ✅ **BBQ模式**：紅/藍判定已轉換為 FindText
 
 ## 目前版本管理狀態
 
-**當前版本：v1.1.1 (2026-05-10)**
+**當前版本：v1.1.2 (2026-05-30)**
 
 已建立 git 倉庫並完成結構整理。
 
@@ -181,10 +182,8 @@ Dailymotion:
 - 整理成 `src / config / assets / docs / releases` 結構
 - 加入固定 AutoHotkey 路徑的啟動批次檔
 - **新增 FindText 圖像辨識整合 (緋染角色完成)**
-- **v1.1.1 更新內容**：
-  - 修複版本設置不一致問題 (v1.0.9 殘留在配置和預設值)
-  - 完成 FindText 轉換：BBQ紅/藍判定、庚辰Q/Q1、魂羽F1/E/F2技能
-  - 刪除17個過時PNG文件，清理10個過時全域變數
-  - 更新CoordinateAdjustmentApp辨識項目為FindText模式
-  - 新增V技能偵測功能
-  - 新增按鍵設置參考圖片
+- **v1.1.2 更新內容**：
+  - 新增武羅、詩蔻蒂角色邏輯與角色切換選項
+  - 統一版本號到 1.1.2，修正啟動 UI 與更新檢查顯示
+  - 收斂重複文檔，保留技術主文件與必要使用者文件
+  - 整理更新日誌與發行清單，對齊新的專案內容

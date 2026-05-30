@@ -3,7 +3,7 @@ chcp 65001 >nul
 echo Starting deployment to user folder...
 
 set devFolder=c:\Code play first\AetherGazer ahk
-set userFolder=c:\Code play first\AetherGazer ahk\releases\AetherGazer-AHK-v1.1.1
+set userFolder=c:\Code play first\AetherGazer ahk\releases\AetherGazer-AHK-v1.1.2
 
 echo Creating target directories...
 if not exist "%userFolder%" mkdir "%userFolder%"

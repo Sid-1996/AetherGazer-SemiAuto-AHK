@@ -1,5 +1,20 @@
 # 更新日誌 (Changelog)
 
+## [v1.1.2] - 2026-05-30
+
+### Added
+- 新增武羅、詩蔻蒂角色邏輯與角色選單項目
+
+### Changed
+- 統一版本號到 1.1.2，更新啟動 UI 與更新檢查顯示
+- 收斂重複文檔，保留技術主文件、使用者指南與座標工具說明
+- 更新發行清單與打包腳本版本目標
+
+### Fixed
+- 移除多餘的版本註記，降低文件搜尋雜訊
+
+---
+
 ## [v1.1.1] - 2026-05-10
 
 ### Fixed
@@ -65,12 +80,12 @@
 - ✅ **緋染F End**：從 ImageSearch 轉換為 FindText
 
 ### 📚 文檔系統完善
-- **新增 `docs/FINDTEXT_GUIDE.md`**：FindText 整合完整指南
+- **新增 FindText 整合指南**：後續已收斂到主技術文件
   - 詳細的座標轉換機制說明
   - Agent 修改標準流程
   - 完整的實際案例參考
-- **更新 `docs/AHK_MODULES.md`**：新增座標轉換功能說明
-- **更新 `README.md`**：FindText 功能特色和進度說明
+- **更新模組說明**：補上座標轉換功能說明
+- **更新 README.md**：FindText 功能特色和進度說明
 
 ### 🔄 技術改進
 - **座標轉換函數**：`WindowToScreen()` 和 `ScreenToWindow()`
@@ -90,7 +105,7 @@
 ### 📝 版本更新
 - sid-ag.ahk: v1.0.7 → v1.0.8
 - 新增 lib/FindText.ahk 核心函式庫
-- 新增 docs/FINDTEXT_GUIDE.md 整合指南
+- 新增 FindText 整合指南
 
 ---
 
