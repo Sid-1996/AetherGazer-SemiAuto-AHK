@@ -44,12 +44,12 @@ global CharacterList      := ["通用模式", "魂羽", "赤音", "緋染", "巧
 global CurrentCharacterIndex := 1
 
 global LastShiKouDiQTime := 0
+global ShiKouDiLastSkillTime := 0
 
 ;=== 全域狀態變量 ===
 global isScriptPaused     := false
 global isAutoAttack       := false
 global isCastingSkill     := false
-global isBBQMode          := false
 global isInCombat         := false
 global LastSkillTime      := 0
 global StatusText         := "等待戰鬥開始..."
@@ -70,7 +70,6 @@ global IsManualIntervention := false
 global LastUserInputTime := 0
 global ManualInterventionTimeout := 1000  ; 3秒後恢復自動模式
 global InputHookObj := ""
-global EnableInputDebug := false  ; 設為true可以看到輸入監測調試信息
 
 ;=== GUI 對象引用 ===
 global StartupGuiObj      := ""
@@ -164,9 +163,7 @@ RegisterHotkeys() {
         HotKey("~Esc", (*) => CloseHelpGUIIfOpen()) ; 新增ESC關閉幫助GUI，保持原功能
         HotKey(GetConfig("Hotkeys", "Pause", "F4"), (*) => TogglePause())
         HotKey(GetConfig("Hotkeys", "CharacterSelect", "F5"), (*) => ShowCharacterSelect())
-        HotKey(GetConfig("Hotkeys", "BBQMode", "F6"), (*) => ToggleBBQMode())
         HotKey("F7", (*) => ManualCheckForUpdates()) ; 新增手動檢查更新熱鍵
-        HotKey("F8", (*) => ToggleInputDebug()) ; 新增調試模式切換熱鍵
         HotKey(GetConfig("Hotkeys", "Reload", "F11"), (*) => ReloadScript())
         HotKey(GetConfig("Hotkeys", "Exit", "F12"), (*) => ExitScript())
         ; 新增快速切換角色熱鍵
@@ -185,9 +182,7 @@ RegisterDefaultHotkeys() {
     HotKey("~Esc", (*) => CloseHelpGUIIfOpen()) ; 新增ESC關閉幫助GUI，保持原功能
     HotKey("F4", (*) => TogglePause())
     HotKey("F5", (*) => ShowCharacterSelect())
-    HotKey("F6", (*) => ToggleBBQMode())
     HotKey("F7", (*) => ManualCheckForUpdates()) ; 新增手動檢查更新熱鍵
-    HotKey("F8", (*) => ToggleInputDebug()) ; 新增調試模式切換熱鍵
     HotKey("F11", (*) => ReloadScript())
     HotKey("F12", (*) => ExitScript())
     ; 新增快速切換角色熱鍵
@@ -234,26 +229,6 @@ ShowCharacterSelect() {
     CreateCharacterSelectGUI()
 }
 
-ToggleBBQMode() {
-    global LastHotkeyPress, isBBQMode, isScriptPaused, LastAction
-    if (A_TickCount - LastHotkeyPress < 300)
-        return
-    LastHotkeyPress := A_TickCount
-
-    isBBQMode := !isBBQMode
-    isScriptPaused := isBBQMode
-
-    if (isBBQMode) {
-        LastAction := "進入小遊戲模式"
-        ShowCenteredToolTip("小遊戲模式啟用", 1000)
-        SetTimer(BBQLoop, 50)
-    } else {
-        SetTimer(BBQLoop, 0)
-        LastAction := "退出小遊戲模式"
-        ShowCenteredToolTip("小遊戲模式關閉", 1000)
-    }
-}
-
 ; 新增手動檢查更新的函數
 ManualCheckForUpdates() {
     global LastHotkeyPress, LastAction
@@ -267,14 +242,6 @@ ManualCheckForUpdates() {
     currentVersion := GetConfig("Script", "Version", "1.1.2")
     updater := UpdateChecker(currentVersion, "Sid-1996", "AetherGazer-SemiAuto-AHK")
     updater.Check(false) ; false 表示非靜默，即使是最新版也會提示
-}
-
-; 新增輸入調試模式切換函數
-ToggleInputDebug() {
-    global EnableInputDebug, LastAction
-    EnableInputDebug := !EnableInputDebug
-    LastAction := "輸入調試模式: " . (EnableInputDebug ? "開啟" : "關閉")
-    ShowCenteredToolTip("輸入調試模式" . (EnableInputDebug ? "已開啟" : "已關閉"), 1500)
 }
 
 ; 快速切換角色 - 向前（Ctrl+左方向鍵）
@@ -417,7 +384,7 @@ PollUserInput() {
 }
 
 UserInputDetected(inputType) {
-    global LastUserInputTime, IsManualIntervention, isInCombat, EnableInputDebug
+    global LastUserInputTime, IsManualIntervention, isInCombat
     
     ; 只有在戰鬥中才監測手動介入
     if (!isInCombat) {
@@ -434,11 +401,6 @@ UserInputDetected(inputType) {
     LastUserInputTime := A_TickCount
     IsManualIntervention := true
     
-    ; 調試輸出 (可通過EnableInputDebug變數啟用)
-    if (EnableInputDebug) {
-        ToolTip("偵測到輸入: " . inputType . "`n手動介入已啟動", 100, 100)
-        SetTimer(() => ToolTip(), -1000)
-    }
 }
 
 CheckManualIntervention() {
@@ -508,7 +470,7 @@ StartScript() {
 ; 戰鬥狀態檢測
 ;-----------------------------------------------------------
 CombatDetection() {
-    global isInCombat, StatusText, UserPaused, isBBQMode, LastAction
+    global isInCombat, StatusText, UserPaused, LastAction
     global ImageVariation, isScriptPaused, isCastingSkill, LastSkillTime
     
     ; 使用遊戲管理器檢查窗口是否激活
@@ -546,11 +508,11 @@ CombatDetection() {
 ; 戰鬥核心循環 - 並行運行版
 ;-----------------------------------------------------------
 CombatLoop() {
-    global isBBQMode, isInCombat, isScriptPaused
+    global isInCombat, isScriptPaused
     global LastSkillTime, SkillLockTime, isAutoAttack, isCastingSkill, LastAction, CurrentCharacter
     
     gameWindow := GetGameConfig("WindowTitle")
-    if (isBBQMode || !isInCombat || isScriptPaused || !WinActive(gameWindow))
+    if (!isInCombat || isScriptPaused || !WinActive(gameWindow))
         return
 
     isMoving := GetKeyState("w","P") || GetKeyState("a","P") || GetKeyState("s","P") || GetKeyState("d","P")
@@ -579,8 +541,7 @@ CombatLoop() {
         if (CheckWuLuoSkills())
             return
     } else if (CurrentCharacter = "詩蔻蒂") {
-        if (CheckShiKouDiSkills())
-            return
+        CheckShiKouDiSkills()
     }
 
     ; ╔══ 階段2: 通用模式並行運行 (顏色識別) ══╗
@@ -600,22 +561,22 @@ CombatLoop() {
         return
     }
 
-    ; F技能 - 第二優先級 (庚辰模式時跳過)
-    if (CurrentCharacter != "庚辰" && CheckSkillReady(1384,772,1462,851)) {
+    ; F技能 - 第二優先級 (庚辰/詩蔻蒂模式時跳過，由角色專屬邏輯處理)
+    if (CurrentCharacter != "庚辰" && CurrentCharacter != "詩蔻蒂" && CheckSkillReady(1384,772,1462,851)) {
         CastSkill("f")
         LastAction := "通用模式：偵測到 F 技能亮起 → 已發送 F 鍵"
         return
     }
 
-    ; Q技能 - 第三優先級 (巧构和庚辰模式時跳過)
-    if (CurrentCharacter != "巧构" && CurrentCharacter != "庚辰" && CheckSkillReady(1232,770,1304,850)) {
+    ; Q技能 - 第三優先級 (巧构/庚辰/詩蔻蒂模式時跳過，由角色專屬邏輯處理)
+    if (CurrentCharacter != "巧构" && CurrentCharacter != "庚辰" && CurrentCharacter != "詩蔻蒂" && CheckSkillReady(1232,770,1304,850)) {
         CastSkill("q")
         LastAction := "通用模式：偵測到 Q 技能亮起 → 已發送 Q 鍵"
         return
     }
 
-    ; E技能 - 第四優先級 (巧构和庚辰模式時跳過)
-    if (CurrentCharacter != "巧构" && CurrentCharacter != "庚辰" && CheckSkillReady(1308,768,1386,866)) {
+    ; E技能 - 第四優先級 (巧构/庚辰/詩蔻蒂模式時跳過，由角色專屬邏輯處理)
+    if (CurrentCharacter != "巧构" && CurrentCharacter != "庚辰" && CurrentCharacter != "詩蔻蒂" && CheckSkillReady(1308,768,1386,866)) {
         CastSkill("e")
         LastAction := "通用模式：偵測到 E 技能亮起 → 已發送 E 鍵"
         return
@@ -625,46 +586,6 @@ CombatLoop() {
     if (isAutoAttack && !isCastingSkill && !GetKeyState("LButton","P")) {
         Click()
         Sleep(10)
-    }
-}
-
-;-----------------------------------------------------------
-; 小遊戲模式循環
-;-----------------------------------------------------------
-BBQLoop() {
-    global isBBQMode, LastAction, ImageVariation
-    gameWindow := GetGameConfig("WindowTitle")
-    if (!isBBQMode || !WinActive(gameWindow)) {
-        SetTimer(BBQLoop, 0)
-        return
-    }
-
-    try {
-        ; 轉換視窗座標為螢幕座標以供 FindText 使用
-        screenCoords := WindowToScreen(811, 188)
-        screenCoords2 := WindowToScreen(874, 237)
-        
-        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, Text:="|<>*128$16.zzy00M01U0600M01U0600M01U0600M01U0600M01zzy")) {
-            Send("{e}")
-            LastAction := "偵測到紅色打擊圖示 → 已發送 E 鍵"
-            return
-        }
-    } catch {
-        ; 圖片搜索失敗時的處理
-    }
-
-    try {
-        ; 轉換視窗座標為螢幕座標以供 FindText 使用
-        screenCoords := WindowToScreen(811, 188)
-        screenCoords2 := WindowToScreen(874, 237)
-        
-        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, Text:="|<>*180$19.zzzztzzwTzwDzy3zy1zy0Tz07z03zU0zU0Tk07k03k00s00A007zzz")) {
-            Send("{q}")
-            LastAction := "偵測到藍色打擊圖示 → 已發送 Q 鍵"
-            return
-        }
-    } catch {
-        ; 圖片搜索失敗時的處理
     }
 }
 
@@ -703,26 +624,6 @@ F5:: {
         return
     LastHotkeyPress := A_TickCount
     CreateCharacterSelectGUI()
-}
-
-F6:: {
-    global LastHotkeyPress, isBBQMode, isScriptPaused, LastAction
-    if (A_TickCount - LastHotkeyPress < 300)
-        return
-    LastHotkeyPress := A_TickCount
-
-    isBBQMode := !isBBQMode
-    isScriptPaused := isBBQMode
-
-    if (isBBQMode) {
-        LastAction := "進入小遊戲模式"
-        ShowCenteredToolTip("小遊戲模式啟用", 1000)
-        SetTimer(BBQLoop, 50)
-    } else {
-        SetTimer(BBQLoop, 0)
-        LastAction := "退出小遊戲模式"
-        ShowCenteredToolTip("小遊戲模式關閉", 1000)
-    }
 }
 
 F11::Reload()
@@ -1215,7 +1116,11 @@ CheckWuLuoSkills() {
 ; 詩蔻蒂角色技能檢查函數
 ;-----------------------------------------------------------
 CheckShiKouDiSkills() {
-    global LastAction, LastSkillTime, isCastingSkill, LastShiKouDiQTime
+    global LastAction, LastShiKouDiQTime, isInCombat, ShiKouDiLastSkillTime
+
+    ; 內部防連發 (僅阻斷同函式內技能快速重複，不影響通用技能與普攻)
+    if (A_TickCount - ShiKouDiLastSkillTime < 150)
+        return
 
     screenCoords := WindowToScreen(1200, 750)
     screenCoords2 := WindowToScreen(1450, 900)
@@ -1223,12 +1128,10 @@ CheckShiKouDiSkills() {
     ; E1 技能判定
     try {
         if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, ShiKouDiE1Text)) {
-            isCastingSkill := true
-            LastSkillTime := A_TickCount
+            ShiKouDiLastSkillTime := A_TickCount
             Send("{e}")
             LastAction := "詩蔻蒂模式：偵測到E1技能 → 已發送 E 鍵"
-            SetTimer(ResetSkillCasting, -300)
-            return true
+            return
         }
     } catch {
         ; 圖片搜索失敗
@@ -1237,12 +1140,10 @@ CheckShiKouDiSkills() {
     ; F1 技能判定
     try {
         if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, ShiKouDiF1Text)) {
-            isCastingSkill := true
-            LastSkillTime := A_TickCount
+            ShiKouDiLastSkillTime := A_TickCount
             Send("{f}")
             LastAction := "詩蔻蒂模式：偵測到F1技能 → 已發送 F 鍵"
-            SetTimer(ResetSkillCasting, -300)
-            return true
+            return
         }
     } catch {
         ; 圖片搜索失敗
@@ -1251,12 +1152,10 @@ CheckShiKouDiSkills() {
     ; F2 技能判定
     try {
         if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, ShiKouDiF2Text)) {
-            isCastingSkill := true
-            LastSkillTime := A_TickCount
+            ShiKouDiLastSkillTime := A_TickCount
             Send("{f}")
             LastAction := "詩蔻蒂模式：偵測到F2技能 → 已發送 F 鍵"
-            SetTimer(ResetSkillCasting, -300)
-            return true
+            return
         }
     } catch {
         ; 圖片搜索失敗
@@ -1265,12 +1164,10 @@ CheckShiKouDiSkills() {
     ; F3 技能判定
     try {
         if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, ShiKouDiF3Text)) {
-            isCastingSkill := true
-            LastSkillTime := A_TickCount
+            ShiKouDiLastSkillTime := A_TickCount
             Send("{f}")
             LastAction := "詩蔻蒂模式：偵測到F3技能 → 已發送 F 鍵"
-            SetTimer(ResetSkillCasting, -300)
-            return true
+            return
         }
     } catch {
         ; 圖片搜索失敗
@@ -1279,31 +1176,24 @@ CheckShiKouDiSkills() {
     ; F4 長按判定
     try {
         if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, ShiKouDiF4Text)) {
-            isCastingSkill := true
-            LastSkillTime := A_TickCount
+            ShiKouDiLastSkillTime := A_TickCount
             Send("{F down}")
-            Sleep(1000)
+            Sleep(500)
             Send("{F up}")
-            LastAction := "詩蔻蒂模式：偵測到F4技能 → 長按 F 1 秒"
-            SetTimer(ResetSkillCasting, -300)
-            return true
+            LastAction := "詩蔻蒂模式：偵測到F4技能 → 長按 F 0.5 秒"
+            return
         }
     } catch {
         ; 圖片搜索失敗
     }
 
-    ; 如果沒有任何技能辨識到，每4秒使用一次 Q
-    if (A_TickCount - LastShiKouDiQTime >= 4000) {
+    ; 如果沒有任何技能辨識到，每4秒使用一次 Q（僅在戰鬥中，不阻斷普攻流程）
+    if (isInCombat && A_TickCount - LastShiKouDiQTime >= 4000) {
         LastShiKouDiQTime := A_TickCount
-        isCastingSkill := true
-        LastSkillTime := A_TickCount
+        ShiKouDiLastSkillTime := A_TickCount
         Send("{q}")
         LastAction := "詩蔻蒂模式：4秒自動Q触發"
-        SetTimer(ResetSkillCasting, -300)
-        return true
     }
-
-    return false
 }
 
 ;-----------------------------------------------------------
@@ -1399,12 +1289,12 @@ CharacterCancel(*) {
 ; 狀態顯示與黑色遮擋 (使用遊戲管理器配置)
 ;-----------------------------------------------------------
 UpdateStatusDisplay() {
-    global IsStatusGUICreated, isInCombat, isBBQMode, isScriptPaused, LastAction, isAutoAttack, CurrentCharacter
+    global IsStatusGUICreated, isInCombat, isScriptPaused, LastAction, isAutoAttack, CurrentCharacter
     global StatusDisplayX, StatusDisplayY, IsBlackOverlayCreated, StatusGUIObj, BlackOverlayObj
     
     gameWindow := GetGameConfig("WindowTitle")
     combatStatus := isInCombat ? "戰鬥中" : "非戰鬥"
-    modeStatus := isBBQMode ? "小遊戲模式" : (isScriptPaused ? "暫停中" : "運行中")
+    modeStatus := isScriptPaused ? "暫停中" : "運行中"
 
     ; 獲取遊戲窗口位置和大小（用於動態定位GUI）
     try {
@@ -1486,7 +1376,7 @@ UpdateStatusDisplay() {
 ;-----------------------------------------------------------
 UpdateCentralStatusDisplay() {
     global IsCentralStatusGUICreated, CentralStatusGUIObj
-    global isInCombat, isScriptPaused, isBBQMode, UserPaused, IsManualIntervention
+    global isInCombat, isScriptPaused, UserPaused, IsManualIntervention
     
     gameWindow := GetGameConfig("WindowTitle")
     
@@ -1504,9 +1394,7 @@ UpdateCentralStatusDisplay() {
     
     ; 根據當前狀態決定顯示的文字
     statusMessage := ""
-    if (isBBQMode) {
-        statusMessage := "小遊戲模式運行中..."
-    } else if (isInCombat) {
+    if (isInCombat) {
         if (IsManualIntervention) {
             statusMessage := "手動介入中..."
         } else if (isScriptPaused || UserPaused) {
@@ -1601,53 +1489,51 @@ CreateHelpGUI() {
     HelpGUIObj.AddText("x30 y135", "F3  - 開啟/關閉此熱鍵說明面板 (ESC也可關閉)")
     HelpGUIObj.AddText("x30 y155", "F4  - 手動暫停腳本 (戰鬥時自動恢復)")
     HelpGUIObj.AddText("x30 y175", "F5  - 開啟角色選擇面板")
-    HelpGUIObj.AddText("x30 y195", "F6  - 切換小遊戲模式 (自動按E/Q)")
-    HelpGUIObj.AddText("x30 y215", "F7  - 手動檢查版本更新")
-    HelpGUIObj.AddText("x30 y235", "F8  - 切換輸入監測調試模式")
+    HelpGUIObj.AddText("x30 y195", "F7  - 手動檢查版本更新")
     
     HelpGUIObj.SetFont("cFF9900 s12 bold")
-    HelpGUIObj.AddText("x20 y265", "系統熱鍵：")
+    HelpGUIObj.AddText("x20 y235", "系統熱鍵：")
     
     HelpGUIObj.SetFont("cFFFFFF s12 norm")
-    HelpGUIObj.AddText("x30 y290", "F11 - 重新載入腳本")
-    HelpGUIObj.AddText("x30 y310", "F12 - 結束腳本")
+    HelpGUIObj.AddText("x30 y260", "F11 - 重新載入腳本")
+    HelpGUIObj.AddText("x30 y280", "F12 - 結束腳本")
     
     ; 注意事項
     HelpGUIObj.SetFont("cFF6666 s12 bold")
-    HelpGUIObj.AddText("x20 y340", "注意事項：")
+    HelpGUIObj.AddText("x20 y315", "注意事項：")
     
     HelpGUIObj.SetFont("cFFFFFF s12 norm")
-    HelpGUIObj.AddText("x30 y365", "• 腳本支持通過ini文件配置遊戲設定")
-    HelpGUIObj.AddText("x30 y385", "• 需將Setting等資料夾放在腳本同目錄")
-    HelpGUIObj.AddText("x30 y405", "• 此面板不影響腳本正常運行")
+    HelpGUIObj.AddText("x30 y340", "• 腳本支持通過ini文件配置遊戲設定")
+    HelpGUIObj.AddText("x30 y360", "• 需將Setting等資料夾放在腳本同目錄")
+    HelpGUIObj.AddText("x30 y380", "• 此面板不影響腳本正常運行")
     
     ; 贊助資訊區塊
     HelpGUIObj.SetFont("c00CCFF s12 bold")
-    HelpGUIObj.AddText("x20 y435", "快速連結：(下方可點擊前往)")
+    HelpGUIObj.AddText("x20 y410", "快速連結：(下方可點擊前往)")
     
     ; 綠界科技贊助連結
     HelpGUIObj.SetFont("c28a745 s11 underline") ; 清新綠
-    sponsorLink1 := HelpGUIObj.AddText("x30 y460", "💚 綠界科技贊助（支持作者）")
+    sponsorLink1 := HelpGUIObj.AddText("x30 y435", "💚 綠界科技贊助（支持作者）")
     sponsorLink1.OnEvent("Click", (*) => Run("https://p.ecpay.com.tw/E0E3A"))
 
     ; Buy Me a Coffee
     HelpGUIObj.SetFont("cf39c12 s11 underline") ; 活力橙
-    sponsorLink2 := HelpGUIObj.AddText("x30 y480", "☕ [ ko-fi ] 請作者喝咖啡")
+    sponsorLink2 := HelpGUIObj.AddText("x30 y455", "☕ [ ko-fi ] 請作者喝咖啡")
     sponsorLink2.OnEvent("Click", (*) => Run("https://ko-fi.com/sid1996"))
 
     ; 支持此專案 - PayPal
     HelpGUIObj.SetFont("c1f75fe s11 underline") ; 熱情紅
-    sponsorLink3 := HelpGUIObj.AddText("x30 y500", "🔗 支持專案：PayPal 贊助")
+    sponsorLink3 := HelpGUIObj.AddText("x30 y475", "🔗 支持專案：PayPal 贊助")
     sponsorLink3.OnEvent("Click", (*) => Run("https://www.paypal.com/ncp/payment/GJS4D5VTSVWG4"))
 
     ; GitHub 連結 (放最下面)
     HelpGUIObj.SetFont("c3498db s11 underline") ; 科技藍
-    githubLink := HelpGUIObj.AddText("x30 y520", "💻 GitHub：深空之眼 Sid 半自動腳本")
+    githubLink := HelpGUIObj.AddText("x30 y495", "💻 GitHub：深空之眼 Sid 半自動腳本")
     githubLink.OnEvent("Click", (*) => Run("https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK"))
 
     ; 版本信息
     HelpGUIObj.SetFont("c888888 s10")
-    HelpGUIObj.AddText("x20 y545 w350 Center", "製作 by Sid 2025")
+    HelpGUIObj.AddText("x20 y520 w350 Center", "製作 by Sid 2025")
     
     ; 修正GUI位置 - 確保在螢幕範圍內
     x := 50   ; 距離螢幕左邊50像素  
@@ -1655,7 +1541,7 @@ CreateHelpGUI() {
     
     ; 調整GUI整體高度，避免文字擠壓
     guiWidth := 390
-    guiHeight := 580  ; 增加高度以容納新的F8說明
+    guiHeight := 555
     
     ; 獲取螢幕尺寸確保GUI不會跑出螢幕
     MonitorGet(1, &Left, &Top, &Right, &Bottom)

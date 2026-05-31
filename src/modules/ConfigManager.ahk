@@ -62,7 +62,6 @@ class ConfigManager {
                         this.config[section]["Help"] := this._ReadIni(section, "Help", "F3")
                         this.config[section]["Pause"] := this._ReadIni(section, "Pause", "F4")
                         this.config[section]["CharacterSelect"] := this._ReadIni(section, "CharacterSelect", "F5")
-                        this.config[section]["BBQMode"] := this._ReadIni(section, "BBQMode", "F6")
                         this.config[section]["CheckUpdate"] := this._ReadIni(section, "CheckUpdate", "F7")
                         this.config[section]["Reload"] := this._ReadIni(section, "Reload", "F11")
                         this.config[section]["Exit"] := this._ReadIni(section, "Exit", "F12")
@@ -122,7 +121,6 @@ WindowResize=F2
 Help=F3
 Pause=F4
 CharacterSelect=F5
-BBQMode=F6
 CheckUpdate=F7
 Reload=F11
 Exit=F12
@@ -168,7 +166,6 @@ Exit=F12
             "Help", "F3",
             "Pause", "F4",
             "CharacterSelect", "F5",
-            "BBQMode", "F6",
             "CheckUpdate", "F7",
             "Reload", "F11",
             "Exit", "F12"

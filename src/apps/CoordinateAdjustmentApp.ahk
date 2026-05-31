@@ -33,7 +33,6 @@ global dragOffsetY := 0
 ; 座標數據：按ID分組，允許項目共享座標
 global coordData := Map(
     "battle_check", [88, 853, 150, 888],
-    "bbq_red", [811, 188, 874, 237],  ; 紅藍判定共享
     "hunyu_f1", [1045, 684, 1565, 880],  ; F1和E技能共享
     "hunyu_f2", [1043, 748, 1170, 868],
     "faran_q", [1162, 764, 1468, 885],   ; 多個緋染技能共享
@@ -46,8 +45,6 @@ global coordData := Map(
 ; 每個辨識項目的定義，包含：名稱、圖片路徑、座標ID、說明、類型
 global recognitionItems := [
     {name: "戰鬥判定", image: "|<>*121$22.0Dzw0zzlzzz7sC41U004290M8wTk3lwkB00000UkM", coordId: "battle_check", desc: "戰鬥狀態判定區域", type: "findtext"},
-    {name: "烤肉紅判定", image: "|<>*128$16.zzy00M01U0600M01U0600M01U0600M01U0600M01zzy", coordId: "bbq_red", desc: "烤肉模式紅色判定", type: "findtext"},
-    {name: "烤肉藍判定", image: "|<>*180$19.zzzztzzwTzwDzy3zy1zy0Tz07z03zU0zU0Tk07k03k00s00A007zzz", coordId: "bbq_red", desc: "烤肉模式藍色判定", type: "findtext"},  ; 共享bbq_red座標
 
     ; 魂羽角色
     {name: "魂羽F1", image: "|<>*137$37.1kV8ss0sVaAQ0AlnXA02Vts43kEQs8DsN6Ma7syNt7lszWN7wMzshDzDzy67zzzz37zzzx5UDzztUkHzzkwMsTzkSSS3z0TiT0C0DnDk30Dtbs00Twnz0E", coordId: "hunyu_f1", desc: "魂羽F技能判定1", type: "findtext"},
@@ -291,7 +288,6 @@ LoadCoordinates() {
 
     ; 舊coordId到新coordId的映射表（處理配置文件兼容性）
     coordIdMapping := Map(
-        "bbq_blue", "bbq_red",
         "hunyu_e", "hunyu_f1",
         "faran_q1", "faran_q",
         "faran_e", "faran_q",

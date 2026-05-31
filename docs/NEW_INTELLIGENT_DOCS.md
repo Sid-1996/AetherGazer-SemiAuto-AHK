@@ -191,9 +191,9 @@ flowchart TD
 
 常見類別如下：
 
-- 腳本狀態：`isScriptPaused`、`isAutoAttack`、`isCastingSkill`、`isBBQMode`、`isInCombat`
+- 腳本狀態：`isScriptPaused`、`isAutoAttack`、`isCastingSkill`、`isInCombat`
 - 角色狀態：`CurrentCharacter`、`CharacterList`、`CurrentCharacterIndex`
-- 輸入監控：`IsManualIntervention`、`LastUserInputTime`、`EnableInputDebug`
+- 輸入監控：`IsManualIntervention`、`LastUserInputTime`
 - GUI 狀態：`IsStatusGUICreated`、`IsHelpGUICreated`、`IsCentralStatusGUICreated`
 - 時間控制：`LastSkillTime`、`LastHotkeyPress`
 
@@ -338,7 +338,6 @@ if (FindText(&fx, &fy
 - `Help`
 - `Pause`
 - `CharacterSelect`
-- `BBQMode`
 - `CheckUpdate`
 - `Reload`
 - `Exit`
@@ -400,7 +399,7 @@ if (FindText(&fx, &fy
 主程式提供兩種狀態視覺化：
 
 - 左上角小型 overlay：顯示腳本狀態、戰鬥狀態、當前動作、模式、普攻與角色。
-- 中央大字提示：顯示目前是戰鬥、自動、手動介入、還是小遊戲模式。
+- 中央大字提示：顯示目前是戰鬥、自動或手動介入。
 
 ### 幫助面板
 
