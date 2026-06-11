@@ -1,19 +1,29 @@
 # 更新日誌 (Changelog)
 
-## [v1.1.2] - 2026-05-30
+## [v1.1.2] - 2026-06-11
 
 ### Added
-- 新增武羅、詩蔻蒂角色邏輯與角色選單項目
+- **武羅角色**：新增完整技能邏輯 (`CheckWuLuoSkills`)，支援 Q1/Q2/E1/E2/F 共 5 組 FindText 辨識
+- **詩蔻蒂角色**：新增完整技能邏輯 (`CheckShiKouDiSkills`)，支援 E1/F1/F2/F3/F4 共 5 組 FindText 辨識，含戰鬥中每 4 秒自動 Q
+- **GitHub Pages 部署工作流程**：`.github/workflows/deploy-pages.yml`
+- **整合技術文檔**：`docs/NEW_INTELLIGENT_DOCS.md` (461 行)，統一收斂模組說明、FindText 指南與專案概覽
 
 ### Changed
-- 統一版本號到 1.1.2，更新啟動 UI 與更新檢查顯示
-- 收斂重複文檔，保留技術主文件、使用者指南與座標工具說明
-- 更新發行清單與打包腳本版本目標
+- **FindText 中文化**：`lib/FindText.ahk` 所有 UI 字串翻譯為繁體中文 (按鈕、提示、說明等)
+- **FindText 相似度**：所有角色技能的 FindText 相似度門檻從 `0.1` → `0.2` (提高容錯)
+- **庚辰 PixelSearch**：怒氣判定顏色變異 `25` → `30` (提高容錯)
+- **通用模式技能跳過邏輯**：F/Q/E 技能新增跳過詩蔻蒂模式 (由角色專屬邏輯處理)
+- **版本號統一**：Config.ini、啟動 UI、更新檢查、UISequenceManager 全部更新為 v1.1.2
+- **文檔重整**：刪除 `AHK_MODULES.md`、`FINDTEXT_GUIDE.md`、`PROJECT_OVERVIEW.md` 3 份舊文檔，整合為單一技術主文件
+- **幫助 GUI 更新**：移除 F6/F8 說明，移除版本字串，調整元件佈局與高度
+- **熱鍵預設值**：ConfigManager 移除 F6=BBQMode 與 F8=ToggleInputDebug 預設值
+- **coordinate_config.json**：移除 bbq_red/bbq_blue 座標項目，保留角色辨識區域
 
 ### Removed
-- 移除小遊戲模式開關與相關判定流程
-- 移除輸入監測調試模式熱鍵與提示輸出
-- 移除赤音 (ChiYin) 殘留程式碼與角色選單項目
+- **烤肉模式 (BBQ)**：完全移除 ToggleBBQMode、BBQLoop 循環、F6 熱鍵、bbq_red/bbq_blue 座標辨識、相關全域變數與狀態顯示
+- **輸入監測調試模式**：完全移除 ToggleInputDebug、F8 熱鍵、EnableInputDebug 變數與偵測提示輸出
+- **赤音 (ChiYin)**：移除殘留的 CharacterList 項目、CombatLoop 分支、空函數 `CheckChiYinSkills`、角色選單選項與「功能開發中」提示
+- **版本號註記**：從原始碼標頭註解、幫助 GUI 等處移除硬編碼版本字串
 
 ### Fixed
 - 移除多餘的版本註記，降低文件搜尋雜訊
