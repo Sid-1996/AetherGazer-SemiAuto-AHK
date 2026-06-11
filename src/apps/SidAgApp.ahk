@@ -40,7 +40,7 @@ global SkillCooldown      := GetConfig("Game", "SkillCooldown", 150)
 global SkillLockTime      := GetConfig("Game", "SkillLockTime", 300)
 
 ;=== 快速切換角色配置變數 ===
-global CharacterList      := ["通用模式", "魂羽", "赤音", "緋染", "巧构", "庚辰", "武羅", "詩蔻蒂"]
+global CharacterList      := ["通用模式", "魂羽", "緋染", "巧构", "庚辰", "武羅", "詩蔻蒂"]
 global CurrentCharacterIndex := 1
 
 global LastShiKouDiQTime := 0
@@ -525,9 +525,6 @@ CombatLoop() {
     if (CurrentCharacter = "魂羽") {
         if (CheckHunYuSkills())
             return
-    } else if (CurrentCharacter = "赤音") {
-        if (CheckChiYinSkills())
-            return
     } else if (CurrentCharacter = "緋染") {
         if (CheckFeiRanSkills())
             return
@@ -711,11 +708,6 @@ CheckHunYuSkills() {
         ; 圖片搜索失敗
     }
     
-    return false
-}
-
-CheckChiYinSkills() {
-    ; 赤音專用技能檢查 - 待開發
     return false
 }
 
@@ -1234,7 +1226,7 @@ CreateCharacterSelectGUI() {
     CharacterSelectGuiObj.SetFont("cCCCCCC s10 norm")
     CharacterSelectGuiObj.AddText("x20 y45 w80", "當前角色:")
 
-    CharacterOptions := ["通用模式", "魂羽", "赤音", "緋染", "巧构", "庚辰", "武羅", "詩蔻蒂"]
+    CharacterOptions := ["通用模式", "魂羽", "緋染", "巧构", "庚辰", "武羅", "詩蔻蒂"]
     ChoiceIndex := 1
     Loop CharacterOptions.Length {
         if (CharacterOptions[A_Index] = CurrentCharacter) {
@@ -1251,9 +1243,8 @@ CreateCharacterSelectGUI() {
     btnCancel := CharacterSelectGuiObj.AddButton("x130 y80 w50 h25", "取消")
     btnCancel.OnEvent("Click", CharacterCancel)
     CharacterSelectGuiObj.SetFont("c888888 s8")
-    CharacterSelectGuiObj.AddText("x20 y115 w200 Center", "赤音功能開發中")
     CharacterSelectGuiObj.OnEvent("Close", CharacterCancel)
-    CharacterSelectGuiObj.Show("w240 h145")
+    CharacterSelectGuiObj.Show("w240 h110")
 }
 
 CharacterConfirm(*) {
