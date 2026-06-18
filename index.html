@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>深空之眼 半自動腳本 | AetherGazer Semi-Auto AHK</title>
+  <meta name="description" content="深空之眼 (Aether Gazer) AHK 半自動戰鬥腳本。支援 FindText 圖像辨識、多角色技能判定、視窗調整、座標校正工具。開源免費，持續更新。">
+  <meta name="keywords" content="深空之眼, AetherGazer, AHK, AutoHotkey, 半自動, 腳本, 自動戰鬥, FindText, 圖像辨識, 遊戲輔助, 開源">
+  <meta name="author" content="Sid">
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+  <link rel="canonical" href="https://sid-1996.github.io/AetherGazer-SemiAuto-AHK/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sid-1996.github.io/AetherGazer-SemiAuto-AHK/">
+  <meta property="og:title" content="深空之眼 半自動腳本 | AetherGazer Semi-Auto AHK">
+  <meta property="og:description" content="深空之眼 (Aether Gazer) AHK 半自動戰鬥腳本。支援 FindText 圖像辨識、多角色技能判定、視窗調整、座標校正工具。">
+  <meta property="og:image" content="https://raw.githubusercontent.com/Sid-1996/AetherGazer-SemiAuto-AHK/main/assets/common/AetherGazer%20UI%20set.png">
+  <meta property="og:locale" content="zh_TW">
+  <meta property="og:site_name" content="AetherGazer-SemiAuto-AHK">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="深空之眼 半自動腳本 | AetherGazer Semi-Auto AHK">
+  <meta name="twitter:description" content="深空之眼 (Aether Gazer) AHK 半自動戰鬥腳本。支援 FindText 圖像辨識、多角色技能判定、視窗調整、座標校正工具。">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "AetherGazer-SemiAuto-AHK",
+    "alternateName": "深空之眼半自動腳本",
+    "description": "深空之眼 (Aether Gazer) 的 AutoHotkey v2 半自動戰鬥腳本。支援 FindText 圖像辨識、多角色技能判定、視窗調整與座標校正。",
+    "applicationCategory": "GameApplication",
+    "operatingSystem": "Windows",
+    "softwareVersion": "1.1.2",
+    "author": {
+      "@type": "Person",
+      "name": "Sid"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "TWD"
+    }
+  }
+  </script>
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#1a1a2e">
+
+  <style>
+    :root {
+      --bg-primary: #0f0f23;
+      --bg-secondary: #1a1a2e;
+      --bg-card: #16213e;
+      --accent: #e94560;
+      --accent-hover: #ff6b81;
+      --text-primary: #eaeaea;
+      --text-secondary: #a0a0b0;
+      --text-muted: #6c6c80;
+      --border: #2a2a4a;
+      --gradient: linear-gradient(135deg, #e94560, #0f3460);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    a:hover { color: var(--accent-hover); }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Nav */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 15, 35, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.8rem 0;
+    }
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    nav .logo {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    nav .logo span { color: var(--accent); }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+    }
+    nav ul li a {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    nav ul li a:hover { color: var(--accent); }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 5rem 0 4rem;
+      background: var(--gradient);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 40px,
+        rgba(255,255,255,0.02) 40px,
+        rgba(255,255,255,0.02) 80px
+      );
+      pointer-events: none;
+    }
+    .hero .container { position: relative; z-index: 1; }
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      letter-spacing: 1px;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      color: rgba(255,255,255,0.85);
+      max-width: 700px;
+      margin: 0 auto 2rem;
+    }
+    .hero .subtitle {
+      display: inline-block;
+      background: rgba(0,0,0,0.3);
+      padding: 0.4rem 1.2rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 2rem;
+    }
+    .hero .actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.25s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: #fff;
+      color: var(--bg-primary);
+    }
+    .btn-primary:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+    .btn-outline {
+      background: transparent;
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.5);
+    }
+    .btn-outline:hover {
+      border-color: #fff;
+      background: rgba(255,255,255,0.1);
+      transform: translateY(-2px);
+    }
+    .btn-sm {
+      padding: 0.5rem 1.2rem;
+      font-size: 0.85rem;
+    }
+
+    /* Section */
+    section { padding: 4rem 0; }
+    section h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    section .section-desc {
+      text-align: center;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      font-size: 1.05rem;
+    }
+
+    /* Features */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.8rem 1.5rem;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+    .feature-card .icon {
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+    }
+    .feature-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+    }
+
+    /* Characters */
+    .char-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+    .char-tag {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem 1.4rem;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    .char-tag:hover {
+      border-color: var(--accent);
+      background: rgba(233, 69, 96, 0.1);
+    }
+    .char-tag .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      background: #2ecc71;
+      color: #fff;
+      border-radius: 10px;
+      padding: 0.1rem 0.5rem;
+      margin-left: 0.4rem;
+      vertical-align: middle;
+    }
+
+    /* Hotkeys */
+    .hotkey-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.8rem;
+    }
+    .hotkey-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.7rem 1rem;
+    }
+    .hotkey-item kbd {
+      display: inline-block;
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.2rem 0.6rem;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+      min-width: 2.2rem;
+      text-align: center;
+    }
+    .hotkey-item span { font-size: 0.92rem; color: var(--text-secondary); }
+
+    /* Download */
+    .download-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+    }
+    .download-box .version {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+    }
+    .download-box .meta {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin: 0.5rem 0 1.5rem;
+    }
+    .download-box .actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* Requirements */
+    .req-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .req-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.2rem;
+      text-align: center;
+    }
+    .req-card .req-icon { font-size: 1.5rem; margin-bottom: 0.4rem; }
+    .req-card h4 { font-size: 0.95rem; margin-bottom: 0.3rem; }
+    .req-card p { font-size: 0.85rem; color: var(--text-muted); }
+
+    /* FAQ */
+    .faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 0.8rem;
+      overflow: hidden;
+    }
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 1rem 1.2rem;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: inherit;
+    }
+    .faq-question::after {
+      content: '+';
+      font-size: 1.3rem;
+      color: var(--accent);
+      transition: transform 0.2s;
+    }
+    .faq-question[aria-expanded="true"]::after {
+      content: '−';
+    }
+    .faq-answer {
+      padding: 0 1.2rem 1rem;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      display: none;
+    }
+    .faq-answer.open { display: block; }
+    .faq-answer a { color: var(--accent); }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    footer .links { margin-bottom: 0.5rem; }
+    footer .links a { margin: 0 0.5rem; font-size: 0.9rem; }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 1.8rem; }
+      .hero p { font-size: 1rem; }
+      nav ul { gap: 0.8rem; }
+      nav ul li a { font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="container">
+      <a href="#" class="logo">AetherGazer <span>AHK</span></a>
+      <ul>
+        <li><a href="#features">功能</a></li>
+        <li><a href="#characters">角色</a></li>
+        <li><a href="#quickstart">使用</a></li>
+        <li><a href="#download">下載</a></li>
+        <li><a href="#faq">常見問題</a></li>
+        <li><a href="https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK" target="_blank">GitHub</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="subtitle">AutoHotkey v2 &middot; 開源免費 &middot; v1.1.2</div>
+      <h1>深空之眼 半自動腳本</h1>
+      <p>基於 FindText 圖像辨識的半自動戰鬥腳本。支援多角色技能判定、視窗調整、座標校正，讓你的日常刷關更加輕鬆。</p>
+      <div class="actions">
+        <a href="#download" class="btn btn-primary">下載最新版本</a>
+        <a href="https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK" target="_blank" class="btn btn-outline">GitHub 原始碼</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features">
+    <div class="container">
+      <h2>核心功能</h2>
+      <p class="section-desc">專為深空之眼設計，涵蓋戰鬥、辨識、視窗與維護的完整工具鏈。</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="icon">⚔️</div>
+          <h3>半自動戰鬥</h3>
+          <p>自動普攻循環與技能判定，支援 F1 一鍵開關，讓你專注於走位與策略。</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🔍</div>
+          <h3>FindText 圖像辨識</h3>
+          <p>採用 FindText 函式庫取代傳統 ImageSearch，在複雜 UI 下提供更穩定的辨識效果。</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🖥️</div>
+          <h3>視窗自動調整</h3>
+          <p>F2 一鍵將遊戲視窗調整為 1600×900，並內建進程監控與座標轉換機制。</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">📐</div>
+          <h3>座標校正工具</h3>
+          <p>內建視覺化座標調整工具，支援拖拽、即時預覽、JSON 配置保存，免去手動改檔。</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🔄</div>
+          <h3>自動更新檢查</h3>
+          <p>啟動時自動檢查 GitHub Releases，有新版本立即通知，保持腳本始終最新。</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon">🧩</div>
+          <h3>模組化架構</h3>
+          <p>Config、Window、UI、Update 各模組職責分明，易於維護與擴充新角色。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Characters -->
+  <section id="characters">
+    <div class="container">
+      <h2>已支援角色</h2>
+      <p class="section-desc">持續新增中，所有角色均使用 FindText 或 ImageSearch 進行技能判定。</p>
+      <div class="char-list">
+        <span class="char-tag">緋染 <span class="badge">FindText</span></span>
+        <span class="char-tag">巧构 <span class="badge">FindText</span></span>
+        <span class="char-tag">魂羽 <span class="badge">FindText</span></span>
+        <span class="char-tag">庚辰 <span class="badge">FindText</span></span>
+        <span class="char-tag">武羅 <span class="badge">FindText</span></span>
+        <span class="char-tag">詩蔻蒂 <span class="badge">FindText</span></span>
+      </div>
+      <p style="text-align:center;margin-top:2rem;color:var(--text-muted);font-size:0.9rem;">
+        角色技能素材位於 <code>assets/characters/角色名/</code>，可自行擴充。
+      </p>
+    </div>
+  </section>
+
+  <!-- Quick Start -->
+  <section id="quickstart">
+    <div class="container">
+      <h2>快速開始</h2>
+      <p class="section-desc">在開始之前，請先確認你的系統符合以下要求。</p>
+
+      <div class="req-grid" style="margin-bottom:2.5rem;">
+        <div class="req-card">
+          <div class="req-icon">🖥️</div>
+          <h4>桌面解析度</h4>
+          <p>1920 × 1080</p>
+        </div>
+        <div class="req-card">
+          <div class="req-icon">🎮</div>
+          <h4>遊戲視窗</h4>
+          <p>1600 × 900</p>
+        </div>
+        <div class="req-card">
+          <div class="req-icon">🔤</div>
+          <h4>DPI 縮放</h4>
+          <p>100%</p>
+        </div>
+        <div class="req-card">
+          <div class="req-icon">🏷️</div>
+          <h4>視窗標題</h4>
+          <p>" AetherGazer"</p>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;">
+        <div class="download-box" style="text-align:left;">
+          <h3 style="margin-bottom:0.5rem;">📦 使用者版本（推薦）</h3>
+          <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:1rem;">
+            解壓縮即可使用，內含所有必要檔案，無需安裝開發環境。
+          </p>
+          <ol style="padding-left:1.2rem;color:var(--text-secondary);font-size:0.9rem;line-height:2;">
+            <li>下載最新版本的 <code>releases/</code> 壓縮檔</li>
+            <li>解壓縮到任意資料夾</li>
+            <li>執行 <code>run-sid-ag.cmd</code>（或雙擊 <code>sid-ag.ahk</code>）</li>
+            <li>按下 F2 調整遊戲視窗</li>
+            <li>按下 F1 開始自動攻擊</li>
+          </ol>
+        </div>
+        <div class="download-box" style="text-align:left;">
+          <h3 style="margin-bottom:0.5rem;">🛠️ 開發者版本</h3>
+          <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:1rem;">
+            完整原始碼，適合想修改功能或參與開發的使用者。
+          </p>
+          <ol style="padding-left:1.2rem;color:var(--text-secondary);font-size:0.9rem;line-height:2;">
+            <li><code>git clone</code> 或下載 ZIP</li>
+            <li>安裝 <a href="https://www.autohotkey.com/" target="_blank">AutoHotkey v2</a></li>
+            <li>執行根目錄的 <code>sid-ag.ahk</code></li>
+            <li>或使用批次檔 <code>run-sid-ag.cmd</code></li>
+          </ol>
+        </div>
+      </div>
+
+      <div style="margin-top:2rem;background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;">
+        <h3 style="margin-bottom:1rem;">⌨️ 熱鍵一覽</h3>
+        <div class="hotkey-grid">
+          <div class="hotkey-item"><kbd>F1</kbd><span>自動攻擊開關</span></div>
+          <div class="hotkey-item"><kbd>F2</kbd><span>調整遊戲視窗</span></div>
+          <div class="hotkey-item"><kbd>F3</kbd><span>顯示說明</span></div>
+          <div class="hotkey-item"><kbd>F4</kbd><span>暫停 / 恢復</span></div>
+          <div class="hotkey-item"><kbd>F5</kbd><span>角色選擇</span></div>
+          <div class="hotkey-item"><kbd>F7</kbd><span>檢查更新</span></div>
+          <div class="hotkey-item"><kbd>F11</kbd><span>重新載入腳本</span></div>
+          <div class="hotkey-item"><kbd>F12</kbd><span>結束腳本</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Download -->
+  <section id="download">
+    <div class="container">
+      <h2>下載</h2>
+      <p class="section-desc">最新穩定版本，歡迎下載使用或貢獻原始碼。</p>
+      <div class="download-box">
+        <div class="version">v1.1.2</div>
+        <div class="meta">2026-06-11 發布 &middot; FindText 完整整合 &middot; 支援 6 名角色</div>
+        <div class="actions">
+          <a href="https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases/tag/v1.1.2" target="_blank" class="btn btn-primary">下載 v1.1.2</a>
+          <a href="https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases" target="_blank" class="btn btn-outline">所有版本</a>
+          <a href="https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/archive/refs/heads/main.zip" target="_blank" class="btn btn-outline">原始碼 ZIP</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <h2>常見問題</h2>
+      <p class="section-desc">初次使用前建議先閱讀，多數問題都能在這裡找到解答。</p>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">執行時出現「找不到檔案」錯誤？</button>
+        <div class="faq-answer">
+          請確保所有檔案都在同一目錄，不要單獨移動任何檔案。使用 <code>run-sid-ag.cmd</code> 啟動可自動修正路徑。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">FindText 功能沒有反應？</button>
+        <div class="faq-answer">
+          請依序檢查：<br>
+          1. 確認 <code>lib/FindText.ahk</code> 存在<br>
+          2. 確認角色是否已支援 FindText（見上方角色列表）<br>
+          3. 確認遊戲視窗標題為 " AetherGazer"<br>
+          4. 確認桌面解析度 1920×1080、DPI 100%
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">需要安裝 AutoHotkey 嗎？</button>
+        <div class="faq-answer">
+          使用者版本已包含編譯好的 <code>sid-ag.exe</code>，無需安裝 AutoHotkey 即可執行。開發者版本則需要安裝 <a href="https://www.autohotkey.com/" target="_blank">AutoHotkey v2</a>。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">如何設定鍵位提示？</button>
+        <div class="faq-answer">
+          腳本需要遊戲內的「鍵位提示」功能才能正確判斷戰鬥狀態。<br>
+          設定路徑：遊戲內 → 設定 → 界面 → 開啟鍵位提示。<br>
+          參考圖片請見 <a href="https://raw.githubusercontent.com/Sid-1996/AetherGazer-SemiAuto-AHK/main/assets/common/AetherGazer%20UI%20set.png" target="_blank">此圖</a>。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">座標偏移了怎麼辦？</button>
+        <div class="faq-answer">
+          使用內建的座標調整工具：執行 <code>CoordinateAdjustmentTool.ahk</code>，按 F8 進入調整模式，在遊戲視窗上拖拽紅色框到正確位置，按 F9 保存即可。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">如何回報問題或提出建議？</button>
+        <div class="faq-answer">
+          請到 <a href="https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/issues" target="_blank">GitHub Issues</a> 建立新 issue，描述你的問題或建議。歡迎貢獻程式碼！
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="links">
+        <a href="https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK" target="_blank">GitHub</a>
+        <a href="https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/releases" target="_blank">Releases</a>
+        <a href="https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/issues" target="_blank">Issues</a>
+        <a href="https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK/blob/main/LICENSE" target="_blank">License</a>
+      </div>
+      <p>&copy; 2026 Sid &middot; Released under the MIT License &middot; 深空之眼 &copy; Yongshi Technology</p>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', !expanded);
+        btn.nextElementSibling.classList.toggle('open');
+      });
+    });
+  </script>
+</body>
+</html>
