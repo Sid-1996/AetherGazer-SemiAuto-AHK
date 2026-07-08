@@ -19,8 +19,7 @@
 ├── src/
 │   ├── ProjectPaths.ahk
 │   ├── apps/
-│   │   ├── SidAgApp.ahk
-│   │   └── CoordinateAdjustmentApp.ahk
+│   │   └── SidAgApp.ahk
 │   └── modules/
 │       ├── ConfigManager.ahk
 │       ├── GameWindowManager.ahk
@@ -30,14 +29,13 @@
 │   └── FindText.ahk
 ├── config/
 │   ├── Config.ini
-│   ├── GameConfig.ini
-│   └── coordinates_config.json
+│   └── GameConfig.ini
 ├── assets/
 │   ├── common/
 │   └── characters/
 └── docs/
     ├── USER_GUIDE.md
-    └── CoordinateAdjustmentTool_README.md
+    └── NEW_INTELLIGENT_DOCS.md
 ```
 
 ## 3. 啟動鏈
@@ -89,7 +87,7 @@ flowchart TD
 
 1. 開發版與發布版共用同一套路徑規則。
 2. 角色資源可以按資料夾拆分，不需要在主程式寫死絕對路徑。
-3. `CoordinateAdjustmentApp.ahk`、`SidAgApp.ahk`、`GameWindowManager.ahk` 都能用一致的方式取得檔案。
+3. `SidAgApp.ahk`、`GameWindowManager.ahk` 都能用一致的方式取得檔案。
 
 ## 5. 模組責任邊界
 

@@ -26,4 +26,5 @@ config/coordinates_config.local.json
 .git-broken/
 
 # Release bundles and build artifacts
+*.7z
 releases/

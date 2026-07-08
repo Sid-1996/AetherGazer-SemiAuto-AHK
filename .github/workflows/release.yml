@@ -1,0 +1,53 @@
+name: Build and Release
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup AutoHotkey v2
+        shell: powershell
+        run: |
+          Invoke-WebRequest -Uri https://www.autohotkey.com/download/ahk-v2.zip -OutFile ahk.zip
+          Expand-Archive -Path ahk.zip -DestinationPath ahk
+
+      - name: Compile sid-ag.ahk
+        shell: powershell
+        run: |
+          .\ahk\Compiler\Ahk2Exe.exe /in sid-ag.ahk /out sid-ag.exe
+
+      - name: Install 7zip
+        shell: powershell
+        run: choco install 7zip -y --limit-output
+
+      - name: Build release package
+        shell: powershell
+        run: |
+          $tag = $env:GITHUB_REF_NAME
+          $pkg = "AetherGazer-AHK-$tag"
+          $build = ".\$pkg"
+          New-Item -ItemType Directory -Force -Path $build | Out-Null
+
+          Copy-Item sid-ag.ahk, sid-ag.exe, run-sid-ag.cmd, README.md, CHANGELOG.md, LICENSE -Destination $build
+
+          Copy-Item src -Recurse -Destination $build
+          Copy-Item lib -Recurse -Destination $build
+          Copy-Item config -Recurse -Destination $build
+          Copy-Item assets -Recurse -Destination $build
+
+          & "C:\Program Files\7-Zip\7z.exe" a -mx=9 "$pkg.7z" ".\$pkg\*"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: AetherGazer-AHK-*.7z
+          generate_release_notes: true

@@ -12,32 +12,26 @@ AutoHotkey v2 專案，用於《深空之眼》的半自動戰鬥、角色技能
 
 - `sid-ag.ahk`
   - 主程式入口 launcher
-- `CoordinateAdjustmentTool.ahk`
-  - 座標校正工具入口 launcher
 - `src/`
   - 程式主體與共用路徑定義
 - `config/`
-  - `Config.ini`、`GameConfig.ini`、`coordinates_config.json`
+  - `Config.ini`、`GameConfig.ini`
 - `assets/`
   - 共用判定圖片與角色技能素材
 - `docs/`
   - 模組說明與工具文件
-- `releases/`
-  - 編譯後的 exe 與封裝檔
 
 ## 啟動方式
 
 ### 方式 1：直接執行 launcher
 
 - `sid-ag.ahk`
-- `CoordinateAdjustmentTool.ahk`
 
 ### 方式 2：使用固定 AutoHotkey 路徑的啟動批次檔
 
-如果系統 PATH 常常抓不到 AutoHotkey，直接用這兩個：
+如果系統 PATH 常常抓不到 AutoHotkey，直接用這個：
 
 - `run-sid-ag.cmd`
-- `run-coordinate-tool.cmd`
 
 它們會優先使用：
 
@@ -79,7 +73,7 @@ AutoHotkey v2 專案，用於《深空之眼》的半自動戰鬥、角色技能
    - F7：檢查更新
    - F11：重新載入
    - F12：退出
-  # 📹 Demo Showcase / 示範影片
+## 📹 Demo Showcase / 示範影片
 
 Dailymotion:
 
@@ -106,7 +100,6 @@ Dailymotion:
 - 遊戲視窗調整
 - 啟動畫面與狀態顯示
 - GitHub 版本更新檢查
-- 座標調整工具與座標保存
 
 ## 常用熱鍵
 
@@ -122,7 +115,7 @@ Dailymotion:
 ## 角色與素材
 
 - 共用素材：`assets/common/`
-- 角色素材：`assets/characters/魂羽/`、`assets/characters/緋染/`、`assets/characters/巧构/`、`assets/characters/庚辰/`
+- 角色素材：`assets/characters/魂羽/`、`assets/characters/緋染/`、`assets/characters/巧构/`、`assets/characters/庚辰/`、`assets/characters/武羅/`、`assets/characters/詩蔻蒂/`
 
 ## 設定檔
 
@@ -130,14 +123,12 @@ Dailymotion:
   - 主腳本設定
 - `config/GameConfig.ini`
   - 遊戲視窗與進程設定
-- `config/coordinates_config.json`
-  - 座標校正工具輸出的區域資料
 
 ## 文件
 
 - `docs/NEW_INTELLIGENT_DOCS.md` - 技術主文件
 - `docs/USER_GUIDE.md` - 使用者指南
-- `docs/CoordinateAdjustmentTool_README.md` - 座標調整工具
+
 
 ## FindText 圖像辨識
 
@@ -166,7 +157,7 @@ Dailymotion:
 - ✅ **詩蔻蒂角色**：已加入主程式角色邏輯
 ## 目前版本管理狀態
 
-**當前版本：v1.1.2 (2026-05-30)**
+**當前版本：v1.1.2 (2026-06-11)**
 
 已建立 git 倉庫並完成結構整理。
 
