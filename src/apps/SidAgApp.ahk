@@ -66,7 +66,7 @@ global IsBlackOverlayCreated := false
 ;=== 手動介入監測變數 ===
 global IsManualIntervention := false
 global LastUserInputTime := 0
-global ManualInterventionTimeout := 1000  ; 3秒後恢復自動模式
+global ManualInterventionTimeout := 1000  ; 1秒後恢復自動模式
 global InputHookObj := ""
 
 ;=== GUI 對象引用 ===
@@ -164,8 +164,8 @@ RegisterHotkeys() {
         HotKey(GetConfig("Hotkeys", "Reload", "F11"), (*) => ReloadScript())
         HotKey(GetConfig("Hotkeys", "Exit", "F12"), (*) => ExitScript())
         ; 新增快速切換角色熱鍵
-        HotKey("^Left", (*) => CycleCharacterNext())  ; Ctrl+左方向鍵（向前/來）
-        HotKey("^Right", (*) => CycleCharacterPrev())  ; Ctrl+右方向鍵（向後/回）
+        HotKey("^Left", (*) => CycleCharacter(1))  ; Ctrl+左方向鍵（向前/來）
+        HotKey("^Right", (*) => CycleCharacter(-1))  ; Ctrl+右方向鍵（向後/回）
     } catch Error as e {
         ; 熱鍵註冊失敗時使用預設熱鍵
         MsgBox("熱鍵註冊部分失敗，將使用預設設定: " . e.Message, "警告", 48)
@@ -183,8 +183,8 @@ RegisterDefaultHotkeys() {
     HotKey("F11", (*) => ReloadScript())
     HotKey("F12", (*) => ExitScript())
     ; 新增快速切換角色熱鍵
-    HotKey("^Left", (*) => CycleCharacterNext())  ; Ctrl+左方向鍵（向前/來）
-    HotKey("^Right", (*) => CycleCharacterPrev())  ; Ctrl+右方向鍵（向後/回）
+    HotKey("^Left", (*) => CycleCharacter(1))  ; Ctrl+左方向鍵（向前/來）
+    HotKey("^Right", (*) => CycleCharacter(-1))  ; Ctrl+右方向鍵（向後/回）
 }
 
 ;-----------------------------------------------------------
@@ -241,8 +241,8 @@ ManualCheckForUpdates() {
     updater.Check(false) ; false 表示非靜默，即使是最新版也會提示
 }
 
-; 快速切換角色 - 向前（Ctrl+左方向鍵）
-CycleCharacterNext() {
+; 快速切換角色 (direction: 1=向前, -1=向後)
+CycleCharacter(direction := 1) {
     global LastHotkeyPress, CurrentCharacter, CurrentCharacterIndex, CharacterList, LastAction
     if (A_TickCount - LastHotkeyPress < 300)
         return
@@ -263,44 +263,11 @@ CycleCharacterNext() {
             }
         }
         
-        ; 向前循環
-        CurrentCharacterIndex++
+        ; 依方向循環
+        CurrentCharacterIndex += direction
         if (CurrentCharacterIndex > CharacterList.Length)
             CurrentCharacterIndex := 1
-        
-        CurrentCharacter := CharacterList[CurrentCharacterIndex]
-        LastAction := "切換角色: " . CurrentCharacter
-        ShowCenteredToolTip("已切換到: " . CurrentCharacter, 1500)
-    } catch Error as e {
-        ShowCenteredToolTip("快速切換錯誤: " . e.Message, 1500)
-    }
-}
-
-; 快速切換角色 - 向後（Ctrl+右方向鍵）
-CycleCharacterPrev() {
-    global LastHotkeyPress, CurrentCharacter, CurrentCharacterIndex, CharacterList, LastAction
-    if (A_TickCount - LastHotkeyPress < 300)
-        return
-    LastHotkeyPress := A_TickCount
-    
-    try {
-        if (!IsSet(CharacterList) || CharacterList.Length = 0) {
-            ShowCenteredToolTip("角色列表未初始化", 1500)
-            return
-        }
-        
-        ; 找到當前角色的索引
-        CurrentCharacterIndex := 1
-        Loop CharacterList.Length {
-            if (CharacterList[A_Index] = CurrentCharacter) {
-                CurrentCharacterIndex := A_Index
-                break
-            }
-        }
-        
-        ; 向後循環
-        CurrentCharacterIndex--
-        if (CurrentCharacterIndex < 1)
+        else if (CurrentCharacterIndex < 1)
             CurrentCharacterIndex := CharacterList.Length
         
         CurrentCharacter := CharacterList[CurrentCharacterIndex]
@@ -469,6 +436,7 @@ StartScript() {
 CombatDetection() {
     global isInCombat, StatusText, UserPaused, LastAction
     global ImageVariation, isScriptPaused, isCastingSkill, LastSkillTime
+    sc1 := WindowToScreen(88, 853), sc2 := WindowToScreen(150, 888)
     
     ; 使用遊戲管理器檢查窗口是否激活
     gameWindow := GetGameConfig("WindowTitle")
@@ -479,11 +447,8 @@ CombatDetection() {
     }
 
     try {
-        ; 轉換視窗座標為螢幕座標以供 FindText 使用
-        screenCoords := WindowToScreen(88, 853)
-        screenCoords2 := WindowToScreen(150, 888)
         
-        if (FindText(&FoundX, &FoundY, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, CombatCheckText)) {
+        if (FindText(&FoundX, &FoundY, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, CombatCheckText)) {
             if (!isInCombat) {
                 isInCombat := true
                 isCastingSkill := false
@@ -615,13 +580,11 @@ ResetSkillCasting() {
 CheckHunYuSkills() {
     global HunYuF1Text, HunYuF2Text, HunYuEText
     global ImageVariation, LastAction, LastSkillTime, isCastingSkill, SkillCooldown
+    sc1 := WindowToScreen(1045, 684), sc2 := WindowToScreen(1464, 865)
 
     try {
-        ; 轉換視窗座標為螢幕座標以供 FindText 使用
-        screenCoords := WindowToScreen(1045, 684)
-        screenCoords2 := WindowToScreen(1565, 880)
-        
-        if (FindText(&FoundX, &FoundY, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, HunYuF1Text)) {
+
+        if (FindText(&FoundX, &FoundY, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, HunYuF1Text)) {
             Send("{f}")
             LastAction := "魂羽模式：偵測到F判定1 → 已發送 F 鍵"
             LastSkillTime := A_TickCount
@@ -634,11 +597,9 @@ CheckHunYuSkills() {
     }
 
     try {
-        ; 轉換視窗座標為螢幕座標以供 FindText 使用
-        screenCoords := WindowToScreen(1045, 684)
-        screenCoords2 := WindowToScreen(1565, 880)
-        
-        if (FindText(&FoundX, &FoundY, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, HunYuEText)) {
+        sc1 := WindowToScreen(1043, 748), sc2 := WindowToScreen(1468, 899)
+
+        if (FindText(&FoundX, &FoundY, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, HunYuEText)) {
             Send("{e}")
             LastAction := "魂羽模式：偵測到E判定 → 已發送 E 鍵"
             LastSkillTime := A_TickCount
@@ -651,11 +612,9 @@ CheckHunYuSkills() {
     }
 
     try {
-        ; 轉換視窗座標為螢幕座標以供 FindText 使用
-        screenCoords := WindowToScreen(1043, 748)
-        screenCoords2 := WindowToScreen(1170, 868)
-        
-        if (FindText(&FoundX, &FoundY, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, HunYuF2Text)) {
+        sc1 := WindowToScreen(1045, 684), sc2 := WindowToScreen(1464, 865)
+
+        if (FindText(&FoundX, &FoundY, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, HunYuF2Text)) {
             Send("{LButton}")
             LastAction := "魂羽模式：偵測到F判定2 → 已發送左鍵"
             Sleep(25)
@@ -673,13 +632,12 @@ CheckFeiRanSkills() {
     global FeiRanFEndImage
     
     FeiRanVariationStrict := 60
+    sc1 := WindowToScreen(1162, 764), sc2 := WindowToScreen(1468, 885)
 
     try {
-        ; 轉換視窗座標為螢幕座標以供 FindText 使用
-        screenCoords := WindowToScreen(1162, 764)
-        screenCoords2 := WindowToScreen(1468, 885)
+
         
-        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, FeiRanQText)) {
+        if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, FeiRanQText)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{q}")
@@ -692,11 +650,9 @@ CheckFeiRanSkills() {
     }
 
     try {
-        ; 轉換視窗座標為螢幕座標以供 FindText 使用
-        screenCoords := WindowToScreen(1162, 764)
-        screenCoords2 := WindowToScreen(1468, 885)
+
         
-        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, FeiRanQ1Text)) {
+        if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, FeiRanQ1Text)) {
             isCastingSkill := true
             LastAction := "緋染模式：偵測到Q1 → 執行連段"
             Send("{q}")
@@ -721,11 +677,9 @@ CheckFeiRanSkills() {
     }
 
     try {
-        ; 轉換視窗座標為螢幕座標以供 FindText 使用
-        screenCoords := WindowToScreen(1162, 764)
-        screenCoords2 := WindowToScreen(1468, 885)
+
         
-        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, FeiRanEText)) {
+        if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, FeiRanEText)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{e}")
@@ -738,11 +692,9 @@ CheckFeiRanSkills() {
     }
 
     try {
-        ; 轉換視窗座標為螢幕座標以供 FindText 使用
-        screenCoords := WindowToScreen(1162, 764)
-        screenCoords2 := WindowToScreen(1468, 885)
+
         
-        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, FeiRanE1Text)) {
+        if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, FeiRanE1Text)) {
             isCastingSkill := true
             LastAction := "緋染模式：偵測到E1 → 執行連段"
             Send("{e}")
@@ -767,11 +719,9 @@ CheckFeiRanSkills() {
     }
 
     try {
-        ; 轉換視窗座標為螢幕座標以供 FindText 使用
-        screenCoords := WindowToScreen(1162, 764)
-        screenCoords2 := WindowToScreen(1468, 885)
+
         
-        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, FeiRanFText)) {
+        if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, FeiRanFText)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{f}")
@@ -802,21 +752,17 @@ CheckFeiRanSkills() {
 CheckQiaoGouSkills() {
     global LastAction, LastSkillTime, isCastingSkill
     global QiaoGouEnhanceMode
+    sc1 := WindowToScreen(1210, 760), sc2 := WindowToScreen(1470, 861)
     
     ; 檢測能量是否充足 (連段所需能量判定)
     try {
-        ; 轉換視窗座標為螢幕座標以供 FindText 使用
-        screenCoords := WindowToScreen(583,835)
-        screenCoords2 := WindowToScreen(1016,852)
+        sc1e := WindowToScreen(583,835), sc2e := WindowToScreen(1016,852)
         
-        if (FindText(&FoundX, &FoundY, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, QiaoGouEnergyText)) {
+        if (FindText(&FoundX, &FoundY, sc1e.x, sc1e.y, sc2e.x, sc2e.y, 0.2, 0.2, QiaoGouEnergyText)) {
             ; 能量充足，優先檢查Q技能判定
             try {
-                ; 轉換視窗座標為螢幕座標以供 FindText 使用
-                screenCoords := WindowToScreen(1210,760)
-                screenCoords2 := WindowToScreen(1470,861)
                 
-                if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, QiaoGouQText)) {
+                if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, QiaoGouQText)) {
                     isCastingSkill := true
                     LastSkillTime := A_TickCount
                     LastAction := "巧构模式：偵測到能量充足 → 執行 Q-E-Q-E 連段"
@@ -842,11 +788,8 @@ CheckQiaoGouSkills() {
 
     ; 檢測F技能
     try {
-        ; 轉換視窗座標為螢幕座標以供 FindText 使用
-        screenCoords := WindowToScreen(1210,760)
-        screenCoords2 := WindowToScreen(1470,861)
         
-        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, QiaoGouFText)) {
+        if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, QiaoGouFText)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{f}")
@@ -862,11 +805,8 @@ CheckQiaoGouSkills() {
     if (QiaoGouEnhanceMode = "Q") {
         ; 當前輪到強化Q，只檢測強化Q
         try {
-            ; 轉換視窗座標為螢幕座標以供 FindText 使用
-            screenCoords := WindowToScreen(1210,760)
-            screenCoords2 := WindowToScreen(1470,861)
             
-            if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, QiaoGouQ1Text)) {
+            if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, QiaoGouQ1Text)) {
                 isCastingSkill := true
                 LastSkillTime := A_TickCount
                 Send("{q}")
@@ -882,11 +822,8 @@ CheckQiaoGouSkills() {
     } else if (QiaoGouEnhanceMode = "E") {
         ; 當前輪到強化E，只檢測強化E
         try {
-            ; 轉換視窗座標為螢幕座標以供 FindText 使用
-            screenCoords := WindowToScreen(1210,760)
-            screenCoords2 := WindowToScreen(1470,861)
             
-            if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, QiaoGouE1Text)) {
+            if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, QiaoGouE1Text)) {
                 isCastingSkill := true
                 LastSkillTime := A_TickCount
                 Send("{e}")
@@ -909,23 +846,21 @@ CheckQiaoGouSkills() {
 ;-----------------------------------------------------------
 CheckGengChenSkills() {
     global LastAction, LastSkillTime, isCastingSkill
+    sc1 := WindowToScreen(1219, 768), sc2 := WindowToScreen(1462, 881)
     
     ; 檢測紅色像素點 (怒氣充足判定)
     try {
         if (PixelSearch(&FoundX, &FoundY, 883, 837, 899, 853, 0xEE2727, 30)) {
             ; 有紅色像素點時，怒氣充足，檢查Q技能圖片判定
             try {
-                ; 轉換視窗座標為螢幕座標以供 FindText 使用
-                screenCoords := WindowToScreen(1219, 768)
-                screenCoords2 := WindowToScreen(1462, 881)
                 
-                if (FindText(&FoundX, &FoundY, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, GengChenQText)) {
+                if (FindText(&FoundX, &FoundY, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, GengChenQText)) {
                     LastAction := "庚辰模式：偵測到怒氣充足 → 執行技能連段"
                     ExecuteGengChenActions()
                     return true
                 }
                 ; 如果第一張圖片沒找到，嘗試搜尋第二張圖片 (庚辰Q1)
-                else if (FindText(&FoundX, &FoundY, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, GengChenQ1Text)) {
+                else if (FindText(&FoundX, &FoundY, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, GengChenQ1Text)) {
                     LastAction := "庚辰模式：偵測到怒氣充足 → 執行技能連段"
                     ExecuteGengChenActions()
                     return true
@@ -968,13 +903,13 @@ ExecuteGengChenActions() {
 ;-----------------------------------------------------------
 CheckWuLuoSkills() {
     global LastAction, LastSkillTime, isCastingSkill
+    sc1 := WindowToScreen(1200, 750), sc2 := WindowToScreen(1450, 900)
     
     ; 檢測Q1技能
     try {
-        screenCoords := WindowToScreen(1200, 750)
-        screenCoords2 := WindowToScreen(1450, 900)
+
         
-        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, WuLuoQ1Text)) {
+        if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, WuLuoQ1Text)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{q}")
@@ -988,10 +923,9 @@ CheckWuLuoSkills() {
 
     ; 檢測Q2技能
     try {
-        screenCoords := WindowToScreen(1200, 750)
-        screenCoords2 := WindowToScreen(1450, 900)
+
         
-        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, WuLuoQ2Text)) {
+        if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, WuLuoQ2Text)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{q}")
@@ -1005,10 +939,9 @@ CheckWuLuoSkills() {
 
     ; 檢測E1技能
     try {
-        screenCoords := WindowToScreen(1200, 750)
-        screenCoords2 := WindowToScreen(1450, 900)
+
         
-        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, WuLuoE1Text)) {
+        if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, WuLuoE1Text)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{e}")
@@ -1022,10 +955,9 @@ CheckWuLuoSkills() {
 
     ; 檢測E2技能
     try {
-        screenCoords := WindowToScreen(1200, 750)
-        screenCoords2 := WindowToScreen(1450, 900)
+
         
-        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, WuLuoE2Text)) {
+        if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, WuLuoE2Text)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{e}")
@@ -1039,10 +971,9 @@ CheckWuLuoSkills() {
 
     ; 檢測F技能
     try {
-        screenCoords := WindowToScreen(1200, 750)
-        screenCoords2 := WindowToScreen(1450, 900)
+
         
-        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, WuLuoFText)) {
+        if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, WuLuoFText)) {
             isCastingSkill := true
             LastSkillTime := A_TickCount
             Send("{f}")
@@ -1062,17 +993,15 @@ CheckWuLuoSkills() {
 ;-----------------------------------------------------------
 CheckShiKouDiSkills() {
     global LastAction, LastShiKouDiQTime, isInCombat, ShiKouDiLastSkillTime
+    sc1 := WindowToScreen(1200, 750), sc2 := WindowToScreen(1450, 900)
 
     ; 內部防連發 (僅阻斷同函式內技能快速重複，不影響通用技能與普攻)
     if (A_TickCount - ShiKouDiLastSkillTime < 150)
         return
 
-    screenCoords := WindowToScreen(1200, 750)
-    screenCoords2 := WindowToScreen(1450, 900)
-
     ; E1 技能判定
     try {
-        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, ShiKouDiE1Text)) {
+        if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, ShiKouDiE1Text)) {
             ShiKouDiLastSkillTime := A_TickCount
             Send("{e}")
             LastAction := "詩蔻蒂模式：偵測到E1技能 → 已發送 E 鍵"
@@ -1084,7 +1013,7 @@ CheckShiKouDiSkills() {
 
     ; F1 技能判定
     try {
-        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, ShiKouDiF1Text)) {
+        if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, ShiKouDiF1Text)) {
             ShiKouDiLastSkillTime := A_TickCount
             Send("{f}")
             LastAction := "詩蔻蒂模式：偵測到F1技能 → 已發送 F 鍵"
@@ -1096,7 +1025,7 @@ CheckShiKouDiSkills() {
 
     ; F2 技能判定
     try {
-        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, ShiKouDiF2Text)) {
+        if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, ShiKouDiF2Text)) {
             ShiKouDiLastSkillTime := A_TickCount
             Send("{f}")
             LastAction := "詩蔻蒂模式：偵測到F2技能 → 已發送 F 鍵"
@@ -1108,7 +1037,7 @@ CheckShiKouDiSkills() {
 
     ; F3 技能判定
     try {
-        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, ShiKouDiF3Text)) {
+        if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, ShiKouDiF3Text)) {
             ShiKouDiLastSkillTime := A_TickCount
             Send("{f}")
             LastAction := "詩蔻蒂模式：偵測到F3技能 → 已發送 F 鍵"
@@ -1120,7 +1049,7 @@ CheckShiKouDiSkills() {
 
     ; F4 長按判定
     try {
-        if (FindText(&fx, &fy, screenCoords.x, screenCoords.y, screenCoords2.x, screenCoords2.y, 0.2, 0.2, ShiKouDiF4Text)) {
+        if (FindText(&fx, &fy, sc1.x, sc1.y, sc2.x, sc2.y, 0.2, 0.2, ShiKouDiF4Text)) {
             ShiKouDiLastSkillTime := A_TickCount
             Send("{F down}")
             Sleep(500)
