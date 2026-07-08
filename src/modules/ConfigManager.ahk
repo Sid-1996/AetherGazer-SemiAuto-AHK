@@ -41,11 +41,8 @@ class ConfigManager {
                         this.config[section]["TimeoutSeconds"] := this._ReadIniInt(section, "TimeoutSeconds", 15)
                         this.config[section]["CheckInterval"] := this._ReadIniInt(section, "CheckInterval", 0)
                     
-                    case "Game":
-                        this.config[section]["WindowTitle"] := this._ReadIni(section, "WindowTitle", " AetherGazer")
-                        this.config[section]["WindowWidth"] := this._ReadIniInt(section, "WindowWidth", 1600)
-                        this.config[section]["WindowHeight"] := this._ReadIniInt(section, "WindowHeight", 900)
-                        this.config[section]["SkillCooldown"] := this._ReadIniInt(section, "SkillCooldown", 150)
+                case "Game":
+                    this.config[section]["SkillCooldown"] := this._ReadIniInt(section, "SkillCooldown", 150)
                         this.config[section]["SkillLockTime"] := this._ReadIniInt(section, "SkillLockTime", 300)
                         this.config[section]["ColorVariation"] := this._ReadIniInt(section, "ColorVariation", 15)
                         this.config[section]["ImageVariation"] := this._ReadIniInt(section, "ImageVariation", 80)
@@ -96,11 +93,6 @@ TimeoutSeconds=15
 CheckInterval=0
 
 [Game]
-; 遊戲視窗設定
-WindowTitle= AetherGazer
-WindowWidth=1600
-WindowHeight=900
-
 ; 技能相關設定
 SkillCooldown=150
 SkillLockTime=300
@@ -146,9 +138,6 @@ Exit=F12
             "CheckInterval", 0
         )
         this.config["Game"] := Map(
-            "WindowTitle", " AetherGazer",
-            "WindowWidth", 1600,
-            "WindowHeight", 900,
             "SkillCooldown", 150,
             "SkillLockTime", 300,
             "ColorVariation", 15,
@@ -224,24 +213,6 @@ Exit=F12
         }
     }
     
-    ; 獲取更新檢查器選項
-    GetUpdateOptions() {
-        return {
-            checkOnStart: this.Get("UpdateChecker", "CheckOnStart", true),
-            silentCheck: this.Get("UpdateChecker", "SilentCheck", true),
-            autoUpdate: this.Get("UpdateChecker", "AutoUpdate", false),
-            timeout: this.Get("UpdateChecker", "TimeoutSeconds", 15) * 1000,
-            checkInterval: this.Get("UpdateChecker", "CheckInterval", 0)
-        }
-    }
-    
-    ; 驗證GitHub設定
-    ValidateGitHubConfig() {
-        user := this.Get("UpdateChecker", "GitHubUser", "")
-        repo := this.Get("UpdateChecker", "GitHubRepo", "")
-        return (user != "" && repo != "")
-    }
-    
     ; 內部輔助方法：讀取INI字串值
     _ReadIni(section, key, defaultValue := "") {
         try {
@@ -289,13 +260,4 @@ GetConfig(section, key, defaultValue := "") {
         return ConfigInstance.Get(section, key, defaultValue)
     }
     return defaultValue
-}
-
-; 設置配置值（便捷函數）
-SetConfig(section, key, value) {
-    global ConfigInstance
-    if (ConfigInstance) {
-        return ConfigInstance.Set(section, key, value)
-    }
-    return false
 }

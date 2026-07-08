@@ -73,7 +73,6 @@ flowchart TD
   - `COMMON_ASSETS_DIR`
   - `CHARACTER_ASSETS_DIR`
   - `DOCS_DIR`
-  - `RELEASES_DIR`
 
 ### 路徑 helper
 
@@ -99,8 +98,8 @@ flowchart TD
 
 - 啟動時自動讀取設定。
 - 缺檔時自動建立預設 INI。
-- 提供 `Get()`、`Set()`、`SaveConfig()`、`GetUpdateOptions()`。
-- 提供 `InitializeConfig()`、`GetConfig()`、`SetConfig()` 這些便捷函式給主程式使用。
+- 提供 `Get()`、`Set()`、`SaveConfig()`。
+- 提供 `InitializeConfig()`、`GetConfig()` 這些便捷函式給主程式使用。
 
 可讀取的主要區段：
 
@@ -131,10 +130,7 @@ flowchart TD
 - `SetGameExitCallback(callback)`
 - `SetGameStartCallback(callback)`
 - `GetGameConfig(key)`
-- `ReloadGameConfig()`
-- `IsGameRunning()`
 - `WindowToScreen(winX, winY)`
-- `ScreenToWindow(screenX, screenY)`
 
 ### `src/modules/UISequenceManager.ahk`
 

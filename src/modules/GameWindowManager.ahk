@@ -171,18 +171,6 @@ GetGameConfig(key) {
     return GameConfig.Has(key) ? GameConfig[key] : ""
 }
 
-;=== 重新載入配置 ===
-ReloadGameConfig() {
-    LoadGameConfig()
-    SetTimer(CheckGameProcess, GameConfig["CheckInterval"])
-}
-
-;=== 檢查遊戲是否運行 ===
-IsGameRunning() {
-    global GameConfig
-    return ProcessExist(GameConfig["ProcessName"]) ? true : false
-}
-
 ;=== 自動退出 ===
 AutoExit() {
     ExitApp()
@@ -202,15 +190,4 @@ WindowToScreen(winX, winY) {
     return {x: clientX + winX, y: clientY + winY}
 }
 
-; 將螢幕絕對座標轉換為視窗相對座標  
-ScreenToWindow(screenX, screenY) {
-    global GameConfig
-    windowTitle := GameConfig["WindowTitle"]
-    
-    if (!WinExist(windowTitle)) {
-        return {x: screenX, y: screenY}
-    }
-    
-    WinGetPos(&clientX, &clientY, &clientWidth, &clientHeight, windowTitle)
-    return {x: screenX - clientX, y: screenY - clientY}
-}
+

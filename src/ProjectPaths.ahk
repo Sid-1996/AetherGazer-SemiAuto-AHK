@@ -22,7 +22,6 @@ global ASSETS_DIR := PROJECT_ROOT . "\assets"
 global COMMON_ASSETS_DIR := ASSETS_DIR . "\common"
 global CHARACTER_ASSETS_DIR := ASSETS_DIR . "\characters"
 global DOCS_DIR := PROJECT_ROOT . "\docs"
-global RELEASES_DIR := PROJECT_ROOT . "\releases"
 
 GetProjectPath(relativePath := "") {
     return relativePath = "" ? PROJECT_ROOT : PROJECT_ROOT . "\" . relativePath

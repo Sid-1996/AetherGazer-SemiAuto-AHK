@@ -55,7 +55,6 @@ global LastSkillTime      := 0
 global StatusText         := "等待戰鬥開始..."
 global LastHotkeyPress    := 0
 global IsStatusGUICreated := false
-global StartupGUI         := GetConfig("UI", "ShowStartupGUI", true)
 global StatusDisplayX     := GetConfig("UI", "StatusDisplayX", 10)
 global StatusDisplayY     := GetConfig("UI", "StatusDisplayY", 10)
 global UserPaused         := false
@@ -63,7 +62,6 @@ global LastAction         := "尚未執行任何動作"
 global CurrentCharacter   := "通用模式"
 global IsCharacterGUIOpen := false
 global IsBlackOverlayCreated := false
-global StartupGUI         := true  ; 添加這行，初始化為 true
 
 ;=== 手動介入監測變數 ===
 global IsManualIntervention := false
@@ -94,7 +92,6 @@ global FeiRanQ1Text := "|<>*135$45.zzvzzzzzzyDzzzzzzFzzzzzzs7zzzzzzUzzzzzzy7zzzz
 global FeiRanEText := "|<>*132$46.z7zlzzzzwzzXzwDznzzbz1zzjzz7w3zyzzzDsDzvzzyTwzzrzzwzzzzTwzxzzzzy7zvzxzy1zzzzby0Tzzzyy0000Dzr000000Cm000000nzU00TzyTzs3zzznzzy7zzyTzzzzzzXzzrzzzwTzzTzzzXzztzzzwTzzjzzz3zzwzzzsTzznzzy3zzzDzzUTzy"
 global FeiRanE1Text := "|<>*136$37.zzwzzzzzwTzzzzw3zzzzw0zzzzy0zzzzz0zzzzzzzzzzzzzzzzzzs007zw00Tzz00Tzzs03zzzk0DzzzU0zzzzk0zzzzs0zzzzw0zzzzy8Tzzzz4DzzzzV7zzzzs1zzzzz0Tzzzzz3zzzz"
 global FeiRanFText := "|<>*127$33.03rzzzk3zzzzk3zzzzk3zkyDU7zb7z0DzXza0ztzww1zTzbk7zzwzUTzz7y1zzszw7zz7zkLztzz4vzDzwZztzzsTzDzyDztzzWzzDzsrztzyDzyDzbzzlztzzyDyTzzVzjzzwDvzzzVzzzzwDzzzzVzxzzwDzDzzVzkTzwDw3zzlzUTTyDwDszlzrz3yDzzw"
-global FeiRanFEndText := "|<>*149$20.0000000000000000000000000000000000000003003w07y0Tz1zzU"
 global CombatCheckText := "|<>*121$22.0Dzw0zzlzzz7sC41U004290M8wTk3lwkB00000UkM"
 
 global QiaoGouQText       := "|<>*143$47.zttsTzzzzyDwTzzzzVTwS07zs1zsk07z0DzsU03s1zsN1w7U0071Tz600042000000EE0000002402E002880wU000U00700000000000Y000000102zzs00204Dys0Dwzyzzw07tzvzzz03nzDzz"
@@ -587,46 +584,6 @@ CombatLoop() {
 }
 
 ;-----------------------------------------------------------
-; 熱鍵功能 (移除F2，由遊戲管理器處理)
-;-----------------------------------------------------------
-F1:: {
-    global isAutoAttack, LastAction
-    isAutoAttack := !isAutoAttack
-    LastAction := "自動普攻: " . (isAutoAttack ? "開啟" : "關閉")
-}
-
-; F2 由遊戲管理器自動註冊，無需在這裡定義
-
-F4:: {
-    global LastHotkeyPress, UserPaused, isScriptPaused, isCastingSkill, LastAction
-    if (A_TickCount - LastHotkeyPress < 300)
-        return
-    LastHotkeyPress := A_TickCount
-
-    UserPaused := !UserPaused
-    isScriptPaused := UserPaused
-    if (UserPaused) {
-        LastAction := "手動暫停腳本 (戰鬥時自動恢復)"
-        ShowCenteredToolTip("手動暫停中（戰鬥時自動恢復）", 1200)
-    } else {
-        isCastingSkill := false
-        LastAction := "恢復自動模式"
-        ShowCenteredToolTip("已恢復自動模式", 1200)
-    }
-}
-
-F5:: {
-    global LastHotkeyPress
-    if (A_TickCount - LastHotkeyPress < 300)
-        return
-    LastHotkeyPress := A_TickCount
-    CreateCharacterSelectGUI()
-}
-
-F11::Reload()
-F12::ExitApp()
-
-;-----------------------------------------------------------
 ;  核心功能函數 (保持原有功能不變)
 ;-----------------------------------------------------------
 CheckSkillReady(x1, y1, x2, y2) {
@@ -715,7 +672,6 @@ CheckFeiRanSkills() {
     global LastAction, LastSkillTime, isCastingSkill
     global FeiRanFEndImage
     
-    FeiRanVariationNormal := 80
     FeiRanVariationStrict := 60
 
     try {
@@ -847,9 +803,6 @@ CheckQiaoGouSkills() {
     global LastAction, LastSkillTime, isCastingSkill
     global QiaoGouEnhanceMode
     
-    QiaoGouVariationNormal := 110
-    QiaoGouVariationStrict := 35
-
     ; 檢測能量是否充足 (連段所需能量判定)
     try {
         ; 轉換視窗座標為螢幕座標以供 FindText 使用
