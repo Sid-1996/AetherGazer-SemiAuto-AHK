@@ -6,7 +6,7 @@
 - **武羅角色**：新增完整技能邏輯 (`CheckWuLuoSkills`)，支援 Q1/Q2/E1/E2/F 共 5 組 FindText 辨識
 - **詩蔻蒂角色**：新增完整技能邏輯 (`CheckShiKouDiSkills`)，支援 E1/F1/F2/F3/F4 共 5 組 FindText 辨識，含戰鬥中每 4 秒自動 Q
 - **GitHub Pages 部署工作流程**：`.github/workflows/deploy-pages.yml`
-- **整合技術文檔**：`docs/NEW_INTELLIGENT_DOCS.md` (461 行)，統一收斂模組說明、FindText 指南與專案概覽
+- **整合技術文檔**：`docs/NEW_INTELLIGENT_DOCS.md` (455 行)，統一收斂模組說明、FindText 指南與專案概覽
 
 ### Changed
 - **FindText 中文化**：`lib/FindText.ahk` 所有 UI 字串翻譯為繁體中文 (按鈕、提示、說明等)

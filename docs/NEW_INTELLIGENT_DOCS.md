@@ -225,7 +225,7 @@ flowchart TD
 ### 角色專屬邏輯
 
 - `魂羽`：以 FindText 判定特定技能狀態，再搭配左鍵連擊或按鍵輸出。
-- `緋染`：已全面用 FindText 條件檢查關鍵 UI；其中 `F` 仍保留 ImageSearch fallback。
+- `緋染`：已全面用 FindText 條件檢查關鍵 UI；其中 `F End` 偵測仍保留 ImageSearch fallback。
 - `巧构`：先判定能量，再走 `Q/E` 的強化連段。
 - `庚辰`：先用像素判定怒氣，再用 FindText 確認狀態，最後執行固定連段。
 - `武羅`：已加入 `Q1/Q2/E1/E2/F` 的 FindText 檢查與輸入鏈。
@@ -309,13 +309,12 @@ if (FindText(&fx, &fy
 
 #### `Game`
 
-- `WindowTitle`
-- `WindowWidth`
-- `WindowHeight`
-- `SkillCooldown`
-- `SkillLockTime`
 - `ColorVariation`
 - `ImageVariation`
+- `SkillCooldown`
+- `SkillLockTime`
+
+> 注意：`WindowTitle`、`TargetWidth`、`TargetHeight` 位於 `config/GameConfig.ini`，不在本檔案中。
 
 #### `UI`
 
@@ -362,12 +361,11 @@ if (FindText(&fx, &fy
 
 角色資源透過 `GetCharacterAssetPath(characterName, fileName)` 取得，資料夾結構要跟角色名稱一致。
 
-例如：
+目前實際存在的素材資料夾：
 
-- `assets/characters/緋染/`
-- `assets/characters/巧构/`
-- `assets/characters/庚辰/`
-- `assets/characters/魂羽/`
+- `assets/characters/緋染/` — 包含 `緋染F End.png`（ImageSearch fallback 用）
+
+其餘角色（魂羽、巧构、庚辰、武羅、詩蔻蒂）的技能判定皆以 FindText 字串常數直接實作於 `SidAgApp.ahk` 中，不依賴素材資料夾與圖片檔案。
 
 ### 新增角色時應該做的事
 

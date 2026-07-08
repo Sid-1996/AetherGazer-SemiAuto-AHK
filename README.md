@@ -114,8 +114,8 @@ Dailymotion:
 
 ## 角色與素材
 
-- 共用素材：`assets/common/`
-- 角色素材：`assets/characters/魂羽/`、`assets/characters/緋染/`、`assets/characters/巧构/`、`assets/characters/庚辰/`、`assets/characters/武羅/`、`assets/characters/詩蔻蒂/`
+- 共用參考圖片：`assets/common/`（UI 設定截圖）
+- 角色素材：`assets/characters/緋染/`（目前僅此角色有素材資料夾，其餘角色技能判定以 FindText 字串常數實現於 `SidAgApp.ahk`，無需額外素材檔案）
 
 ## 設定檔
 

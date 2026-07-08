@@ -466,11 +466,6 @@
           <p>F2 一鍵將遊戲視窗調整為 1600×900，並內建進程監控與座標轉換機制。</p>
         </div>
         <div class="feature-card">
-          <div class="icon">📐</div>
-          <h3>座標校正工具</h3>
-          <p>內建視覺化座標調整工具，支援拖拽、即時預覽、JSON 配置保存，免去手動改檔。</p>
-        </div>
-        <div class="feature-card">
           <div class="icon">🔄</div>
           <h3>自動更新檢查</h3>
           <p>啟動時自動檢查 GitHub Releases，有新版本立即通知，保持腳本始終最新。</p>
@@ -498,7 +493,7 @@
         <span class="char-tag">詩蔻蒂 <span class="badge">FindText</span></span>
       </div>
       <p style="text-align:center;margin-top:2rem;color:var(--text-muted);font-size:0.9rem;">
-        角色技能素材位於 <code>assets/characters/角色名/</code>，可自行擴充。
+        所有角色技能判定以 FindText 字串常數實作於原始碼中，無需額外素材檔案。
       </p>
     </div>
   </section>
@@ -630,13 +625,6 @@
           腳本需要遊戲內的「鍵位提示」功能才能正確判斷戰鬥狀態。<br>
           設定路徑：遊戲內 → 設定 → 界面 → 開啟鍵位提示。<br>
           參考圖片請見 <a href="https://raw.githubusercontent.com/Sid-1996/AetherGazer-SemiAuto-AHK/main/assets/common/AetherGazer%20UI%20set.png" target="_blank">此圖</a>。
-        </div>
-      </div>
-
-      <div class="faq-item">
-        <button class="faq-question" aria-expanded="false">座標偏移了怎麼辦？</button>
-        <div class="faq-answer">
-          使用內建的座標調整工具：執行 <code>CoordinateAdjustmentTool.ahk</code>，按 F8 進入調整模式，在遊戲視窗上拖拽紅色框到正確位置，按 F9 保存即可。
         </div>
       </div>
 
