@@ -77,7 +77,7 @@ AutoHotkey v2 專案，用於《深空之眼》的半自動戰鬥、角色技能
 
 Dailymotion:
 
-[https://www.dailymotion.com/video/xa9cau2](https://www.dailymotion.com/video/xa9cyg0)
+[https://www.dailymotion.com/video/xa9cyg0](https://www.dailymotion.com/video/xa9cyg0)
 
 ---
 
