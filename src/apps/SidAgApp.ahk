@@ -1392,21 +1392,26 @@ CreateHelpGUI() {
     ; Buy Me a Coffee
     HelpGUIObj.SetFont("cf39c12 s11 underline") ; 活力橙
     sponsorLink2 := HelpGUIObj.AddText("x30 y455", "☕ [ ko-fi ] 請作者喝咖啡")
-    sponsorLink2.OnEvent("Click", (*) => Run("https://ko-fi.com/sid1996"))
+    sponsorLink2.OnEvent("Click", (*) => Run("https://ko-fi.com/K3K11KMXOL"))
 
     ; 支持此專案 - PayPal
     HelpGUIObj.SetFont("c1f75fe s11 underline") ; 熱情紅
     sponsorLink3 := HelpGUIObj.AddText("x30 y475", "🔗 支持專案：PayPal 贊助")
     sponsorLink3.OnEvent("Click", (*) => Run("https://www.paypal.com/ncp/payment/GJS4D5VTSVWG4"))
 
+    ; 愛發電贊助
+    HelpGUIObj.SetFont("c946CE6 s11 underline") ; 紫色
+    sponsorLink4 := HelpGUIObj.AddText("x30 y495", "⚡ 愛發電贊助（支持作者）")
+    sponsorLink4.OnEvent("Click", (*) => Run("https://afdian.com/a/sid-1996"))
+
     ; GitHub 連結 (放最下面)
     HelpGUIObj.SetFont("c3498db s11 underline") ; 科技藍
-    githubLink := HelpGUIObj.AddText("x30 y495", "💻 GitHub：深空之眼 Sid 半自動腳本")
+    githubLink := HelpGUIObj.AddText("x30 y515", "💻 GitHub：深空之眼 Sid 半自動腳本")
     githubLink.OnEvent("Click", (*) => Run("https://github.com/Sid-1996/AetherGazer-SemiAuto-AHK"))
 
     ; 版本信息
     HelpGUIObj.SetFont("c888888 s10")
-    HelpGUIObj.AddText("x20 y520 w350 Center", "製作 by Sid 2025")
+    HelpGUIObj.AddText("x20 y540 w350 Center", "製作 by Sid 2025")
     
     ; 修正GUI位置 - 確保在螢幕範圍內
     x := 50   ; 距離螢幕左邊50像素  
@@ -1414,7 +1419,7 @@ CreateHelpGUI() {
     
     ; 調整GUI整體高度，避免文字擠壓
     guiWidth := 390
-    guiHeight := 555
+    guiHeight := 575
     
     ; 獲取螢幕尺寸確保GUI不會跑出螢幕
     MonitorGet(1, &Left, &Top, &Right, &Bottom)
